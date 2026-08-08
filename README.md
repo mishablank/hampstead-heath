@@ -3,7 +3,7 @@
 **https://hampstead-heath.blankm.workers.dev**
 
 A twenty-stop loop from Hampstead Underground station, over the top of the
-Heath to Kenwood and back down past the swimming ponds. 23 tracks, 36 minutes,
+Heath to Kenwood and back down past the swimming ponds. 23 tracks, 43 minutes,
 plus the full transcript.
 
 Every track opens with where you should be standing and closes by telling you
@@ -30,19 +30,29 @@ The macOS system voices are licensed for personal, non-commercial use only
 their output. That rules them out for anything on a website, commercial or
 not.
 
-The build uses Google Cloud Chirp 3: HD instead. Commercial use is covered by
-the standard Google Cloud terms, and the monthly free allowance for HD voices
-is roughly thirty times the size of this script, so a rebuild is usually free.
+The build uses Amazon Polly's generative engine instead. Commercial use is
+covered by the AWS customer agreement, and the free tier covers 100,000
+generative characters a month for the first year – near enough three times the
+size of this script, so a rebuild is usually free. After that it is $30 per
+million characters, which is about $1.09 a rebuild.
 
 ```bash
-export GOOGLE_API_KEY=...         # or GOOGLE_ACCESS_TOKEN for a bearer token
-python3 build.py --voices         # the en-GB Chirp 3: HD voices
-export GOOGLE_VOICE=en-GB-Chirp3-HD-Charon
+aws configure                     # once; region eu-west-2
+python3 build.py --voices         # the en-GB generative voices
+export POLLY_VOICE=Amy            # or Brian; those are the two en-GB ones
 python3 build.py --sample         # one track, to hear it before committing
 python3 build.py                  # all 23, then rebuilds the page
 ```
 
-Two other engines are available. `TTS_ENGINE=elevenlabs` (with
+The region matters. Polly's generative engine runs in nine regions only, and
+`eu-north-1` is not among them; `PL_REGION` defaults to `eu-west-2`, which is
+both close and, for this walk, the right city. The pace is an SSML `prosody`
+tag rather than a parameter, because the generative engine has no speed
+control of its own.
+
+Three other engines are available. `TTS_ENGINE=google` is Chirp 3: HD, needing
+`GOOGLE_API_KEY` or `GOOGLE_ACCESS_TOKEN`, an open Cloud billing account and
+the Text-to-Speech API enabled. `TTS_ENGINE=elevenlabs` (with
 `ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`) costs about 36,000 credits per
 rebuild and sounds better; every paid ElevenLabs plan grants commercial
 rights, and they survive cancelling the plan. `TTS_ENGINE=say` is the Mac
@@ -52,14 +62,15 @@ voice, for drafting only. Do not publish it.
 same track on two of them and compare.
 
 The continuous full-walk file is spliced from the finished tracks rather than
-synthesised again, which halves the credits and guarantees it matches. Pace,
-model and stability are the `EL_*` constants at the top of `build.py`.
+synthesised again, which halves the credits and guarantees it matches. Voice,
+engine, region and pace are the `PL_*` constants at the top of `build.py`.
 `voice.json` records which voice actually made the audio in the repo, and the
 colophon reads from it, so the page cannot claim a voice it did not use.
 
 ## Rebuilding
 
-Needs macOS (`say`) and `mutagen`; the cover also needs `pillow`.
+Needs macOS (`afconvert`), `mutagen` and `boto3`; the cover also needs
+`pillow`.
 
 ```bash
 python3 build.py            # audio, then the page

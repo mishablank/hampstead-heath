@@ -1,0 +1,9 @@
+{
+ "engine": "polly",
+ "name": "Brian",
+ "voice_id": "Brian",
+ "model": "generative",
+ "region": "eu-west-2",
+ "pace": "94% of its natural pace",
+ "note": "a British English generative voice from Amazon Polly"
+}

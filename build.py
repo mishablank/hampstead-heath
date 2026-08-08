@@ -13,7 +13,7 @@ out of step with the recording.
     python3 build.py --sample     render one track so you can hear the voice
     python3 build.py --cost       how many credits a full rebuild costs
 
-Needs macOS (afconvert) and mutagen. The voice comes from ElevenLabs by
+Needs macOS (afconvert) and mutagen. The voice comes from Amazon Polly by
 default; see the ENGINE note below for why, and for the local alternative.
 """
 
@@ -29,6 +29,11 @@ import time
 # --------------------------------------------------------------------------
 # the voice.
 #
+# "polly"       Amazon Polly's generative engine. Commercial use under the AWS
+#               customer agreement, and the free tier covers 100,000
+#               generative characters a month for the first year, near enough
+#               three times this script. Needs credentials in ~/.aws, and a
+#               region that actually has the generative engine: see PL_REGION.
 # "elevenlabs"  every paid ElevenLabs plan grants commercial rights to the
 #               audio you generate on it. Needs ELEVENLABS_API_KEY and a voice
 #               id: run `python3 build.py --voices` to list them.
@@ -40,7 +45,7 @@ import time
 # "google"      Chirp 3: HD. Commercial use under the standard Google Cloud
 #               terms, and ~1M HD characters a month are free, which is about
 #               thirty times this script.
-ENGINE = os.environ.get("TTS_ENGINE", "google")
+ENGINE = os.environ.get("TTS_ENGINE", "polly")
 
 VOICE = "Jamie (Premium)"        # macOS voice, when ENGINE is "say"
 RATE = 168                       # words per minute, when ENGINE is "say"
@@ -56,6 +61,11 @@ EL_API = "https://api.elevenlabs.io/v1"
 GG_VOICE = os.environ.get("GOOGLE_VOICE", "en-GB-Chirp3-HD-Charon")
 GG_SPEED = 0.94                  # 1.0 is normal; 0.25 to 2.0 allowed
 GG_API = "https://texttospeech.googleapis.com/v1"
+
+PL_VOICE = os.environ.get("POLLY_VOICE", "Brian")   # en-GB generative: Brian or Amy
+PL_ENGINE = os.environ.get("POLLY_ENGINE", "generative")
+PL_REGION = os.environ.get("AWS_REGION", "eu-west-2")
+PL_RATE = 94                     # per cent of natural pace; 20 to 200 allowed
 
 AAC_BITRATE = "48000"     # mono speech; 64k is twice what this needs
 
@@ -852,6 +862,8 @@ def el_get(path):
 
 def list_voices():
     """Print the voices this account can use, so you can pick one."""
+    if ENGINE == "polly":
+        return pl_voices()
     if ENGINE == "google":
         return gg_voices()
     if ENGINE == "say":
@@ -974,6 +986,50 @@ def google(text, path):
     os.remove(mp3)
 
 
+def pl_client():
+    """Credentials come from ~/.aws, the usual AWS_* variables, or an instance
+    role, whichever boto3 finds first. Nothing is read from this file."""
+    try:
+        import boto3
+    except ImportError:
+        sys.exit("Polly needs boto3: pip install boto3 (or TTS_ENGINE=say to draft locally).")
+    return boto3.client("polly", region_name=PL_REGION)
+
+
+def pl_voices():
+    """The en-GB voices this region offers for the engine in PL_ENGINE. The
+    generative engine is in nine regions only, so an empty list here usually
+    means the region rather than the account."""
+    rows = [v for v in pl_client().describe_voices(LanguageCode="en-GB")["Voices"]
+            if PL_ENGINE in v.get("SupportedEngines", [])]
+    print("%-14s %-8s %s" % ("VOICE ID", "GENDER", "ENGINES"))
+    for v in sorted(rows, key=lambda v: v["Id"]):
+        print("%-14s %-8s %s" % (v["Id"], v["Gender"], ", ".join(sorted(v["SupportedEngines"]))))
+    print("\n%d en-GB %s voices in %s. Pick one and: export POLLY_VOICE=<id>"
+          % (len(rows), PL_ENGINE, PL_REGION))
+    if not rows:
+        print("None came back. Try AWS_REGION=eu-west-2, which has the generative voices.")
+
+
+def polly(text, path):
+    """One track. The pace is an SSML prosody tag rather than a parameter,
+    because the generative engine has no speed control of its own; it allows
+    prosody around whole sentences only, which is all this text is. Paragraphs
+    become <p> so the pauses between them survive the trip."""
+    paras = "".join("<p>%s</p>" % _html.escape(p, quote=False)
+                    for p in text.split("\n\n"))
+    out = pl_client().synthesize_speech(
+        Text='<speak><prosody rate="%d%%">%s</prosody></speak>' % (PL_RATE, paras),
+        TextType="ssml", VoiceId=PL_VOICE, Engine=PL_ENGINE,
+        OutputFormat="mp3", SampleRate="24000",
+    )
+    mp3 = path.replace(".m4a", ".mp3")
+    open(mp3, "wb").write(out["AudioStream"].read())
+    subprocess.run(["afconvert", "-f", "m4af", "-d", "aac", "-b", AAC_BITRATE, mp3, path],
+                   check=True)
+    os.remove(mp3)
+
+
 def say(text, path):
     """macOS. Drafting only: see the licence note at the top of this file."""
     subprocess.run(
@@ -982,7 +1038,7 @@ def say(text, path):
     )
 
 
-ENGINES = {"google": google, "elevenlabs": elevenlabs, "say": say}
+ENGINES = {"polly": polly, "google": google, "elevenlabs": elevenlabs, "say": say}
 
 
 def speak(text, path):
@@ -1050,6 +1106,8 @@ def cost():
     print("%d characters of narration across %d tracks." % (n, len(STOPS)))
     print("The continuous file is spliced from the finished tracks, not synthesised")
     print("again, so a rebuild costs exactly that once.\n")
+    print("  polly       generative is $30 per million characters, so about $%.2f," % (30 * n / 10**6))
+    print("              but the first year is free up to 100,000 a month, %.1fx this." % (10**5 / n))
     print("  google      Chirp 3: HD is billed per character, but the monthly free")
     print("              allowance is around a million HD characters, roughly %dx this." % (10**6 // n))
     print("  elevenlabs  about %d credits; Starter is 30,000 a month, Creator 100,000." % n)
@@ -1080,7 +1138,8 @@ def sample(i=4):
     them side by side and actually choose. Track 4 is a good test: 75 seconds,
     a date, a proper noun and a dry last line."""
     stop = STOPS[i]
-    voice = {"google": GG_VOICE, "elevenlabs": EL_VOICE or "unset", "say": VOICE}[ENGINE]
+    voice = {"polly": PL_VOICE, "google": GG_VOICE,
+             "elevenlabs": EL_VOICE or "unset", "say": VOICE}[ENGINE]
     out = os.path.join(HERE, "sample-%s-%s.m4a" % (ENGINE, slug(voice)))
     speak(spoken(stop), out)
     print("  %s  (%.1fs)" % (os.path.basename(out), length(out)))
@@ -1113,7 +1172,12 @@ def build_audio():
         m["covr"] = [MP4Cover(art, imageformat=MP4Cover.FORMAT_JPEG)]
     m.save()
 
-    if ENGINE == "google":
+    if ENGINE == "polly":
+        note = {"engine": "polly", "name": PL_VOICE, "voice_id": PL_VOICE,
+                "model": PL_ENGINE, "region": PL_REGION,
+                "pace": "%d%% of its natural pace" % PL_RATE,
+                "note": "a British English %s voice from Amazon Polly" % PL_ENGINE}
+    elif ENGINE == "google":
         # en-GB-Chirp3-HD-Charon -> Charon
         note = {"engine": "google", "name": GG_VOICE.split("-")[-1], "voice_id": GG_VOICE,
                 "pace": "%g of its natural pace" % GG_SPEED,
@@ -1941,7 +2005,7 @@ def render(tracks):
     w('<meta charset="utf-8">')
     w('<meta name="viewport" content="width=device-width, initial-scale=1">')
     w('<meta name="description" content="A twenty-stop walking audio guide to Hampstead Heath '
-      'and its village: 23 tracks, 36 minutes, with the full transcript, a map and a photograph '
+      'and its village: 23 tracks, 43 minutes, with the full transcript, a map and a photograph '
       'for every stop.">')
     w('<meta name="color-scheme" content="light dark">')
     w("<title>The Audio Guide &#8211; Hampstead Heath &amp; Its Village</title>")
@@ -2205,7 +2269,7 @@ def build_cover():
     d.text((S / 2, 1122), "& its village", font=disp_i, fill=green, anchor="mm")
 
     d.line([(S / 2 - 200, 1236), (S / 2 + 200, 1236)], fill=soft, width=2)
-    spaced("TWENTY STOPS  ·  36 MINUTES", caps_s, 1266, soft)
+    spaced("TWENTY STOPS  ·  43 MINUTES", caps_s, 1266, soft)
 
     img.save(os.path.join(HERE, "cover.jpg"), quality=92)
     print("  cover.jpg")
