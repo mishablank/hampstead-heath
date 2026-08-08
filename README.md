@@ -20,8 +20,32 @@ listening.
 - `fetch_images.py` – re-fetches the photographs from Wikimedia Commons
 - `fetch_map.py` – re-fetches the map geometry from OpenStreetMap
 
-Narration is synthesised speech (Jamie (Premium) at 168 wpm). Opening hours were
-checked in August 2026 and are the first thing that will change.
+Narration is synthesised speech. Opening hours were checked in August 2026 and
+are the first thing that will change.
+
+## The voice, and why it is not a Mac voice
+
+The macOS system voices are licensed for personal, non-commercial use only
+(macOS SLA §2.F), and the same clause forbids publishing or public sharing of
+their output. That rules them out for anything on a website, commercial or
+not. So the build uses ElevenLabs, where every paid plan grants commercial
+rights to the audio you generate.
+
+```bash
+export ELEVENLABS_API_KEY=sk_...
+python3 build.py --voices        # pick one, note the id
+export ELEVENLABS_VOICE_ID=...
+python3 build.py --cost          # what a full rebuild will spend
+python3 build.py                 # ~36k credits, then rebuilds the page
+```
+
+`TTS_ENGINE=say` falls back to the Mac voice for drafting. Do not publish it.
+
+The continuous full-walk file is spliced from the finished tracks rather than
+synthesised again, which halves the credits and guarantees it matches. Pace,
+model and stability are the `EL_*` constants at the top of `build.py`.
+`voice.json` records which voice actually made the audio in the repo, and the
+colophon reads from it, so the page cannot claim a voice it did not use.
 
 ## Rebuilding
 

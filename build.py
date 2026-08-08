@@ -9,9 +9,11 @@ out of step with the recording.
     python3 build.py              audio, then the page
     python3 build.py --page       page only, timed from the audio already there
     python3 build.py --cover      redraw cover.jpg
+    python3 build.py --voices     list the ElevenLabs voices on your account
+    python3 build.py --cost       how many credits a full rebuild costs
 
-Requires macOS (say, afconvert) and mutagen. Change VOICE and RATE and the
-whole set rebuilds in about a minute.
+Needs macOS (afconvert) and mutagen. The voice comes from ElevenLabs by
+default; see the ENGINE note below for why, and for the local alternative.
 """
 
 import html as _html
@@ -21,13 +23,38 @@ import os
 import re
 import subprocess
 import sys
+import time
 
-VOICE = "Jamie (Premium)"
-RATE = 168                       # words per minute; slower than conversation
+# --------------------------------------------------------------------------
+# the voice.
+#
+# "elevenlabs"  every paid ElevenLabs plan grants commercial rights to the
+#               audio you generate on it. Needs ELEVENLABS_API_KEY and a voice
+#               id: run `python3 build.py --voices` to list them.
+# "say"         a macOS system voice. Free and offline, but the macOS licence
+#               (SLA 2.F) allows System Voices only for personal,
+#               non-commercial use and forbids publishing them, which rules
+#               out putting them on a website. Drafting only.
+# --------------------------------------------------------------------------
+ENGINE = os.environ.get("TTS_ENGINE", "elevenlabs")
+
+VOICE = "Jamie (Premium)"        # macOS voice, when ENGINE is "say"
+RATE = 168                       # words per minute, when ENGINE is "say"
+
+EL_VOICE = os.environ.get("ELEVENLABS_VOICE_ID", "")
+EL_MODEL = os.environ.get("ELEVENLABS_MODEL", "eleven_multilingual_v2")
+EL_FORMAT = "mp3_44100_128"      # 192 needs Creator or above
+EL_SPEED = 0.94                  # 1.0 is their default; this is a walking pace
+EL_STABILITY = 0.55
+EL_SIMILARITY = 0.8
+EL_API = "https://api.elevenlabs.io/v1"
+AAC_BITRATE = "48000"     # mono speech; 64k is twice what this needs
+
 ALBUM = "Hampstead Heath - a walking gazetteer"
 HERE = os.path.dirname(os.path.abspath(__file__))
 AUDIO = os.path.join(HERE, "audio")
 FULL = os.path.join(HERE, "hampstead-heath-full-walk.m4a")
+STAMP = os.path.join(HERE, "voice.json")   # what actually made the audio here
 
 # --------------------------------------------------------------------------
 # the narration. body = spoken paragraphs; walk = the "walk on" instruction,
@@ -801,11 +828,145 @@ def spoken(stop):
     return "\n\n".join(parts)
 
 
+def key():
+    k = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+    if not k:
+        sys.exit("Set ELEVENLABS_API_KEY (or TTS_ENGINE=say to draft locally).")
+    return k
+
+
+def el_get(path):
+    import urllib.request
+    req = urllib.request.Request(EL_API + path, headers={"xi-api-key": key()})
+    return json.load(urllib.request.urlopen(req, timeout=60))
+
+
+def list_voices():
+    """Print the voices this account can use, so you can pick one."""
+    voices = el_get("/voices").get("voices", [])
+    print("%-26s %-24s %s" % ("NAME", "VOICE ID", "LABELS"))
+    for v in sorted(voices, key=lambda v: v.get("name", "")):
+        lab = v.get("labels") or {}
+        bits = " ".join("%s=%s" % (k, lab[k]) for k in
+                        ("accent", "gender", "age", "use_case", "description") if lab.get(k))
+        print("%-26s %-24s %s" % (v.get("name", "?")[:26], v.get("voice_id", ""), bits[:74]))
+    print("\nPick one and: export ELEVENLABS_VOICE_ID=<id>")
+
+
+def elevenlabs(text, path):
+    """One track. Returns MP3, which afconvert turns into the AAC the page
+    already expects."""
+    import urllib.error
+    import urllib.request
+    if not EL_VOICE:
+        sys.exit("Set ELEVENLABS_VOICE_ID. Run `python3 build.py --voices` to see them.")
+    body = json.dumps({
+        "text": text,
+        "model_id": EL_MODEL,
+        "voice_settings": {"stability": EL_STABILITY, "similarity_boost": EL_SIMILARITY,
+                           "speed": EL_SPEED, "use_speaker_boost": True},
+    }).encode()
+    url = "%s/text-to-speech/%s?output_format=%s" % (EL_API, EL_VOICE, EL_FORMAT)
+    req = urllib.request.Request(url, data=body, headers={
+        "xi-api-key": key(), "content-type": "application/json", "accept": "audio/mpeg"})
+
+    for attempt in range(5):
+        try:
+            audio = urllib.request.urlopen(req, timeout=300).read()
+            break
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf8", "replace")[:300]
+            if e.code in (401, 403):
+                sys.exit("ElevenLabs rejected the key: %s" % detail)
+            if e.code == 422:
+                sys.exit("ElevenLabs rejected the request (voice id or model?): %s" % detail)
+            if e.code == 429 or e.code >= 500:
+                time.sleep(6 * (attempt + 1))
+                continue
+            sys.exit("ElevenLabs error %d: %s" % (e.code, detail))
+    else:
+        sys.exit("ElevenLabs kept refusing; try again later.")
+
+    mp3 = path.replace(".m4a", ".mp3")
+    open(mp3, "wb").write(audio)
+    subprocess.run(["afconvert", "-f", "m4af", "-d", "aac", "-b", AAC_BITRATE, mp3, path],
+                   check=True)
+    os.remove(mp3)
+
+
 def say(text, path):
+    """macOS. Drafting only: see the licence note at the top of this file."""
     subprocess.run(
         ["say", "-v", VOICE, "-r", str(RATE), "-o", path, "--data-format=aac"],
         input=text, text=True, check=True,
     )
+
+
+def speak(text, path):
+    (elevenlabs if ENGINE == "elevenlabs" else say)(text, path)
+
+
+def pcm_of(path):
+    """The samples out of a RIFF file. afconvert writes WAVE_FORMAT_EXTENSIBLE,
+    which the stdlib wave module refuses to open, so walk the chunks."""
+    import struct
+    raw = open(path, "rb").read()
+    if raw[:4] != b"RIFF" or raw[8:12] != b"WAVE":
+        sys.exit("not a WAV: " + path)
+    pos = 12
+    while pos + 8 <= len(raw):
+        cid, size = struct.unpack("<4sI", raw[pos:pos + 8])
+        body = raw[pos + 8:pos + 8 + size]
+        if cid == b"data":
+            return body
+        pos += 8 + size + (size & 1)
+    sys.exit("no data chunk in " + path)
+
+
+def write_wav(path, frames, rate=44100, channels=1, width=2):
+    import struct
+    n = len(frames)
+    hdr = (b"RIFF" + struct.pack("<I", 36 + n) + b"WAVEfmt " + struct.pack("<IHHIIHH",
+           16, 1, channels, rate, rate * channels * width, channels * width, width * 8)
+           + b"data" + struct.pack("<I", n))
+    open(path, "wb").write(hdr + frames)
+
+
+def concat(paths, out):
+    """Join the finished tracks into the full walk, rather than paying to
+    synthesise the whole script a second time. Decode, splice, encode once."""
+    tmp = os.path.join(AUDIO, "_join.wav")
+    frames, parts = [], []
+    for i, p in enumerate(paths):
+        w = os.path.join(AUDIO, "_p%02d.wav" % i)
+        subprocess.run(["afconvert", "-f", "WAVE", "-d", "LEI16@44100", "-c", "1", p, w],
+                       check=True)
+        parts.append(w)
+        frames.append(pcm_of(w))
+    write_wav(tmp, b"".join(frames))
+    subprocess.run(["afconvert", "-f", "m4af", "-d", "aac", "-b", AAC_BITRATE, tmp, out],
+                   check=True)
+    for p in parts + [tmp]:
+        os.remove(p)
+
+
+def voice_note():
+    """What the page should say about the voice. Read from the stamp written
+    when the audio was made, so the page describes the audio that is actually
+    in the repo rather than whatever the config happens to say today."""
+    if os.path.exists(STAMP):
+        return json.load(open(STAMP))
+    return {"engine": ENGINE, "name": VOICE, "pace": "%d words per minute" % RATE,
+            "note": "the British English system voice"}
+
+
+def cost():
+    n = sum(len(spoken(s)) for s in STOPS)
+    print("%d characters of narration across %d tracks." % (n, len(STOPS)))
+    print("ElevenLabs bills roughly one credit per character, so a full rebuild")
+    print("costs about %d credits. The continuous file is spliced from the tracks," % n)
+    print("not synthesised again, so it is free.")
+    print("Starter is 30,000 credits a month; Creator is 100,000.")
 
 
 def length(path):
@@ -834,14 +995,16 @@ def build_audio():
     if os.path.exists(cover):
         art = open(cover, "rb").read()
 
+    made = []
     for i, stop in enumerate(STOPS):
         path = os.path.join(AUDIO, "%02d-%s.m4a" % (i, slug(stop["title"])))
-        say(spoken(stop), path)
+        speak(spoken(stop), path)
         tag(path, i, stop, art)
+        made.append(path)
         print("  %-46s %5.1fs" % (os.path.basename(path), length(path)))
 
-    print("  ... and the whole thing as one file")
-    say("\n\n".join(spoken(s) for s in STOPS), FULL)
+    print("  ... splicing the whole walk from those tracks")
+    concat(made, FULL)
     from mutagen.mp4 import MP4, MP4Cover
     m = MP4(FULL)
     m["\xa9nam"] = "Hampstead Heath - the full walk"
@@ -850,6 +1013,20 @@ def build_audio():
     if art:
         m["covr"] = [MP4Cover(art, imageformat=MP4Cover.FORMAT_JPEG)]
     m.save()
+
+    if ENGINE == "elevenlabs":
+        name = EL_VOICE
+        for v in el_get("/voices").get("voices", []):
+            if v.get("voice_id") == EL_VOICE:
+                name = v.get("name", EL_VOICE)
+                break
+        note = {"engine": "elevenlabs", "name": name, "voice_id": EL_VOICE, "model": EL_MODEL,
+                "pace": "%g of its natural pace" % EL_SPEED,
+                "note": "an ElevenLabs voice, licensed for commercial use"}
+    else:
+        note = {"engine": "say", "name": VOICE, "pace": "%d words per minute" % RATE,
+                "note": "the British English system voice"}
+    json.dump(note, open(STAMP, "w"), indent=1)
 
 
 # --------------------------------------------------------------------------
@@ -1773,9 +1950,10 @@ def render(tracks):
     w('<section class="blk">')
     w("  <h2>How it was made <span>Colophon</span></h2>")
     w('  <div class="colo">')
-    w('    <div><p class="lab">Voice</p><p>%s, at %d words per minute &#8211; slower than '
-      "conversation, which is what you want when the listener is also crossing roads and "
-      "watching for tree roots.</p></div>" % (esc(VOICE), RATE))
+    v = voice_note()
+    w('    <div><p class="lab">Voice</p><p>%s, at %s &#8211; slower than conversation, which is '
+      "what you want when the listener is also crossing roads and watching for tree "
+      "roots.</p></div>" % (esc(v["name"]), esc(v["pace"])))
     w('    <div><p class="lab">Files</p><p>%d AAC tracks, tagged as one album with cover art, plus '
       "a single continuous <code>FULL WALK</code> file for anyone who would rather not keep "
       "pressing play.</p></div>" % len(tracks))
@@ -1801,8 +1979,8 @@ def render(tracks):
       "before setting out for anything ticketed. The Heath has no lighting, the swimming ponds are "
       "open only when lifeguards are on duty, and both of those facts matter more here than "
       "anywhere else on this list.</p>")
-    w("<p>Audio is synthesised speech &#8211; %s, the British English system voice, at %d words per "
-      "minute. Good enough to walk to, and not a broadcast read.</p>" % (esc(VOICE), RATE))
+    w("<p>Audio is synthesised speech &#8211; %s, %s, at %s. Good enough to walk to, and not a "
+      "broadcast read.</p>" % (esc(v["name"]), esc(v["note"]), esc(v["pace"])))
     w("</footer>\n")
     w("</div>")
 
@@ -1931,7 +2109,11 @@ def build_cover():
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    if args == ["--cover"]:
+    if args == ["--voices"]:
+        list_voices()
+    elif args == ["--cost"]:
+        cost()
+    elif args == ["--cover"]:
         build_cover()
     elif args == ["--page"]:
         build_page()
