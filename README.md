@@ -2,19 +2,19 @@
 
 **https://hampstead-heath.blankm.workers.dev**
 
-A twenty-stop loop from Hampstead Underground station, over the top of the
-Heath to Kenwood and back down past the swimming ponds. 23 tracks, 36 minutes,
-plus the full transcript.
+A twenty-two-stop loop from Hampstead Underground station, over the top of the
+Heath to Kenwood and back down past the swimming ponds. 25 tracks, plus the
+full transcript.
 
 Every track opens with where you should be standing and closes by telling you
 where to walk next. Nothing auto-advances: between stops you are walking, not
 listening.
 
 - `index.html` – the page: map, transcript, a photograph and a play button on every stop
-- `audio/` – the 23 tracks
+- `audio/` – the 25 tracks
 - `images/` – one photograph per track, plus `credits.json`
 - `map.json` – the shape of the Heath, its water and its roads, from OpenStreetMap
-- `hampstead-heath-walk.gpx` – the twenty stops for a real navigation app
+- `hampstead-heath-walk.gpx` – the stops for a real navigation app
 - `hampstead-heath-full-walk.m4a` – all of it as one continuous file, for offline
 - `build.py` – the narration, and everything that is generated from it
 - `fetch_images.py` – re-fetches the photographs from Wikimedia Commons
@@ -39,7 +39,7 @@ export GOOGLE_API_KEY=...         # or GOOGLE_ACCESS_TOKEN for a bearer token
 python3 build.py --voices         # the en-GB Chirp 3: HD voices
 export GOOGLE_VOICE=en-GB-Chirp3-HD-Charon
 python3 build.py --sample         # one track, to hear it before committing
-python3 build.py                  # all 23, then rebuilds the page
+python3 build.py                  # all 25 tracks, then rebuilds the page
 ```
 
 Two other engines are available. `TTS_ENGINE=elevenlabs` (with
@@ -59,7 +59,7 @@ colophon reads from it, so the page cannot claim a voice it did not use.
 
 ## Rebuilding
 
-Needs macOS (`say`) and `mutagen`; the cover also needs `pillow`.
+Needs macOS (`afconvert`) and `mutagen`; the cover also needs `pillow`.
 
 ```bash
 python3 build.py            # audio, then the page
@@ -68,8 +68,21 @@ python3 build.py --cover    # redraw cover.jpg
 ```
 
 The text lives in one place, `STOPS` in `build.py`, so the transcript on the
-page cannot drift out of step with the recording. Change `VOICE` and `RATE` at
-the top and the whole set rebuilds in about a minute.
+page cannot drift out of step with the recording. Change the voice settings at
+the top and the whole set rebuilds in one pass.
+
+## Adding or moving a stop
+
+Stop numbers are assigned from walking order in `build.py`, not written into
+each entry, so inserting one renumbers the guide by itself. Three things do
+need doing by hand: the spoken cross-references in neighbouring `walk` texts,
+a coordinate in `STOPS_LL` in `fetch_map.py`, and a picture in `PICKS` in
+`fetch_images.py`.
+
+Be aware that inserting a stop changes the index prefix on every audio and
+image file after it, so the whole set has to be re-rendered and re-fetched
+before the page will build. Do that on a branch: a half-renumbered `main`
+deploys a page whose photographs and audio all 404.
 
 ## Pictures
 

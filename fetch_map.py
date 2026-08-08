@@ -29,23 +29,25 @@ STOPS_LL = {
  1:  (51.55654, -0.17812),   # Hampstead Underground station
  2:  (51.55618, -0.18108),   # Church Row / St John-at-Hampstead
  3:  (51.55888, -0.17970),   # Fenton House
- 4:  (51.56057, -0.18004),   # Hampstead Observatory, on the reservoir
- 5:  (51.56056, -0.17920),   # Whitestone Pond
- 6:  (51.56560, -0.18397),   # The Hill Garden and Pergola
- 7:  (51.56682, -0.18938),   # Golders Hill Park
- 8:  (51.56145, -0.18010),   # Jack Straw's Castle
- 9:  (51.56294, -0.17628),   # Vale of Health
- 10: (51.57023, -0.17372),   # The Spaniards Inn
- 11: (51.57155, -0.16734),   # Kenwood House
- 12: (51.57155, -0.16734),   # Dido Belle, inside Kenwood
- 13: (51.56699, -0.16042),   # Kenwood Ladies' Pond
- 14: (51.56475, -0.15905),   # Highgate Men's Pond
- 15: (51.56060, -0.15760),   # The Tumulus
- 16: (51.55940, -0.15450),   # Parliament Hill summit
- 17: (51.55644, -0.15131),   # Parliament Hill Lido
- 18: (51.55758, -0.16554),   # Hampstead Ponds, and the Fleet under them
- 19: (51.55552, -0.16794),   # Keats House
- 20: (51.55819, -0.17504),   # Well Walk and Burgh House
+ 4:  (51.55976, -0.18001),   # Admiral's House
+ 5:  (51.56057, -0.18004),   # Hampstead Observatory, on the reservoir
+ 6:  (51.56056, -0.17920),   # Whitestone Pond
+ 7:  (51.56560, -0.18397),   # The Hill Garden and Pergola
+ 8:  (51.56682, -0.18938),   # Golders Hill Park
+ 9:  (51.56145, -0.18010),   # Jack Straw's Castle
+ 10: (51.56294, -0.17628),   # Vale of Health
+ 11: (51.57023, -0.17372),   # The Spaniards Inn
+ 12: (51.57155, -0.16734),   # Kenwood House
+ 13: (51.57155, -0.16734),   # Dido Belle, inside Kenwood
+ 14: (51.56699, -0.16042),   # Kenwood Ladies' Pond
+ 15: (51.56475, -0.15905),   # Highgate Men's Pond
+ 16: (51.56060, -0.15760),   # The Tumulus
+ 17: (51.55940, -0.15450),   # Parliament Hill summit
+ 18: (51.55644, -0.15131),   # Parliament Hill Lido
+ 19: (51.55758, -0.16554),   # Hampstead Ponds, and the Fleet under them
+ 20: (51.55552, -0.16794),   # Keats House
+ 21: (51.56018, -0.17455),   # the lock-up, in Cannon Hall's garden wall
+ 22: (51.55819, -0.17504),   # Well Walk and Burgh House
 }
 
 # a little wider than the stops, so nothing is cropped at a marker
