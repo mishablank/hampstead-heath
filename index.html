@@ -249,11 +249,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   .row{padding:11px 4px 11px 0; align-items:start}
   .rt{white-space:normal; overflow:visible; text-overflow:clip; line-height:1.3}
   .rn,.rd{padding-top:2px}
-  /* thumbs, not cursors */
-  .pb{width:30px; height:30px}
-  .pb::before{border-left-width:8px; border-top-width:5.5px; border-bottom-width:5.5px}
-  .pb.on::before{width:9px; height:11px;
-    background:linear-gradient(to right,currentColor 0 3px,transparent 3px 6px,currentColor 6px 9px)}
+  /* .pb is sized in the player stylesheet, which loads after this one */
   .trk{gap:0 14px; padding:26px 0 28px}
   .tn{width:30px; height:30px; font-size:.95rem}
   .tbody p,.shot,.walk,.play{max-width:none}
@@ -276,10 +272,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   .stats .n{font-size:1.25rem}
   section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
 }
-/* fingers are not mice: give every control a 44px target without moving anything */
 @media (hover:none){
-  .pb{position:relative}
-  .pb::after{content:""; position:absolute; inset:-9px; border-radius:50%}
   .rt{padding:2px 0}
 }
 </style>
@@ -721,6 +714,19 @@ body.playing{padding-bottom:76px}
 @media (max-width:560px){
   .bar{grid-template-columns:auto auto minmax(0,1fr) auto; gap:0 8px}
   .bar #bprev{display:none}
+}
+
+/* thumbs, not cursors. These live here, after the .pb{all:unset} above, or
+   they lose to it on source order and quietly do nothing. */
+@media (max-width:700px){
+  .pb{width:30px; height:30px}
+  .pb::before{border-left-width:8px; border-top-width:5.5px; border-bottom-width:5.5px}
+  .pb.on::before{width:9px; height:11px;
+    background:linear-gradient(to right,currentColor 0 3px,transparent 3px 6px,currentColor 6px 9px)}
+}
+@media (hover:none){
+  .pb{position:relative}
+  .pb::after{content:""; position:absolute; inset:-8px; border-radius:50%}
 }
 </style>
 
