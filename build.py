@@ -2324,7 +2324,7 @@ def build_page():
     route = gpx(tracks)
     if route:
         open(os.path.join(HERE, "hampstead-heath-walk.gpx"), "w").write(route)
-        print("  hampstead-heath-walk.gpx: 20 waypoints")
+        print("  hampstead-heath-walk.gpx: %d waypoints" % STOP_COUNT)
 
     open(os.path.join(HERE, "wrangler.jsonc"), "w").write(
         '{\n  "name": "hampstead-heath",\n'
