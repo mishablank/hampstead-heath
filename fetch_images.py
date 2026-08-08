@@ -31,6 +31,8 @@ PICKS = {
  "how-to-use-this":            "File:Hampstead Heath, London - geograph.org.uk - 3924668.jpg",
  "hampstead-underground-station": "File:Hampstead station building.JPG",
  "church-row-and-saint-john-at-hampstead": "File:Church Row, Hampstead.jpg",
+ "saint-mary-s-holly-walk":     "File:St. Mary's Catholic Church - geograph.org.uk - 838738.jpg",
+ "holly-bush-hill":            "File:Holly Bush Hill and pub - geograph.org.uk - 376305.jpg",
  "fenton-house":               "File:Fenton House, Hampstead - geograph.org.uk - 1271918.jpg",
  "admiral-s-house":            "File:Admiral's House, Hampstead - geograph.org.uk - 5802584.jpg",
  "hampstead-observatory":      "File:Hampstead Scientific Society - geograph.org.uk - 609321.jpg",

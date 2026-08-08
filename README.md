@@ -2,8 +2,8 @@
 
 **https://hampstead-heath.blankm.workers.dev**
 
-A twenty-two-stop loop from Hampstead Underground station, over the top of the
-Heath to Kenwood and back down past the swimming ponds. 25 tracks, plus the
+A twenty-four-stop loop from Hampstead Underground station, over the top of the
+Heath to Kenwood and back down past the swimming ponds. 27 tracks, plus the
 full transcript.
 
 Every track opens with where you should be standing and closes by telling you
@@ -11,7 +11,7 @@ where to walk next. Nothing auto-advances: between stops you are walking, not
 listening.
 
 - `index.html` – the page: map, transcript, a photograph and a play button on every stop
-- `audio/` – the 25 tracks
+- `audio/` – the 27 tracks
 - `images/` – one photograph per track, plus `credits.json`
 - `map.json` – the shape of the Heath, its water and its roads, from OpenStreetMap
 - `hampstead-heath-walk.gpx` – the stops for a real navigation app
@@ -39,7 +39,7 @@ export GOOGLE_API_KEY=...         # or GOOGLE_ACCESS_TOKEN for a bearer token
 python3 build.py --voices         # the en-GB Chirp 3: HD voices
 export GOOGLE_VOICE=en-GB-Chirp3-HD-Charon
 python3 build.py --sample         # one track, to hear it before committing
-python3 build.py                  # all 25 tracks, then rebuilds the page
+python3 build.py                  # all 27 tracks, then rebuilds the page
 ```
 
 Two other engines are available. `TTS_ENGINE=elevenlabs` (with

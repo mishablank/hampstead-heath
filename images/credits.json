@@ -20,103 +20,103 @@
   "w": 1400
  },
  "10": {
+  "by": "Martin Addison",
+  "edit": "resized",
+  "file": "10-golders-hill-park.jpg",
+  "h": 480,
+  "lic": "CC BY-SA 2.0",
+  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "src": "https://commons.wikimedia.org/wiki/File:Golders_Hill_Park_in_2006.jpg",
+  "w": 640
+ },
+ "11": {
+  "by": "George Rex",
+  "edit": "resized",
+  "file": "11-jack-straw-s-castle.jpg",
+  "h": 853,
+  "lic": "CC BY-SA 2.0",
+  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "src": "https://commons.wikimedia.org/wiki/File:Jack_Straw%27s_Castle.jpg",
+  "w": 1280
+ },
+ "12": {
   "by": "David Howard",
   "edit": "resized",
-  "file": "10-the-vale-of-health.jpg",
+  "file": "12-the-vale-of-health.jpg",
   "h": 1050,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Vale_of_Health,_Hampstead_-_geograph.org.uk_-_3711963.jpg",
   "w": 1400
  },
- "11": {
+ "13": {
   "by": "Martin Addison",
   "edit": "resized",
-  "file": "11-the-spaniards-inn.jpg",
+  "file": "13-the-spaniards-inn.jpg",
   "h": 407,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:The_Spaniards_Inn_-_geograph.org.uk_-_1003208.jpg",
   "w": 640
  },
- "12": {
+ "14": {
   "by": "Oxyman",
   "edit": "resized",
-  "file": "12-kenwood-house.jpg",
+  "file": "14-kenwood-house.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Kenwood_House,_south_front_-_geograph.org.uk_-_1472942.jpg",
   "w": 640
  },
- "13": {
+ "15": {
   "by": "David Martin",
   "edit": "resized",
-  "file": "13-dido-elizabeth-belle.jpg",
+  "file": "15-dido-elizabeth-belle.jpg",
   "h": 858,
   "lic": "Public domain",
   "licurl": "",
   "src": "https://commons.wikimedia.org/wiki/File:Dido_Elizabeth_Belle.jpg",
   "w": 1000
  },
- "14": {
+ "16": {
   "by": "Peter",
   "edit": "resized",
-  "file": "14-the-kenwood-ladies-pond.jpg",
+  "file": "16-the-kenwood-ladies-pond.jpg",
   "h": 1050,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Kenwood_Ladies_Bathing_Pond_-_geograph.org.uk_-_1841422.jpg",
   "w": 1400
  },
- "15": {
+ "17": {
   "by": "Peter Smyly",
   "edit": "resized",
-  "file": "15-the-highgate-men-s-pond.jpg",
+  "file": "17-the-highgate-men-s-pond.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Highgate_Men%27s_Bathing_Pond_-_geograph.org.uk_-_1570343.jpg",
   "w": 640
  },
- "16": {
+ "18": {
   "by": "Ethan Doyle White",
   "edit": "resized",
-  "file": "16-the-tumulus.jpg",
+  "file": "18-the-tumulus.jpg",
   "h": 1051,
   "lic": "CC BY-SA 4.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/4.0",
   "src": "https://commons.wikimedia.org/wiki/File:Boudicca%27s_Grave,_Hampstead_Heath_(South_Face_-_01).jpg",
   "w": 1400
  },
- "17": {
+ "19": {
   "by": "Peter Smyly",
   "edit": "resized",
-  "file": "17-parliament-hill.jpg",
+  "file": "19-parliament-hill.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Parliament_Hill_view_of_Central_London_-_geograph.org.uk_-_1568116.jpg",
-  "w": 640
- },
- "18": {
-  "by": "Tom Page from London, UK",
-  "edit": "resized",
-  "file": "18-parliament-hill-lido.jpg",
-  "h": 933,
-  "lic": "CC BY-SA 2.0",
-  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "src": "https://commons.wikimedia.org/wiki/File:Parliament_Hill_Lido_(6448960385).jpg",
-  "w": 1400
- },
- "19": {
-  "by": "Alex McGregor",
-  "edit": "resized",
-  "file": "19-the-hampstead-ponds-and-the-river-fleet.jpg",
-  "h": 480,
-  "lic": "CC BY-SA 2.0",
-  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "src": "https://commons.wikimedia.org/wiki/File:Pond_on_Hampstead_Heath_-_geograph.org.uk_-_1850332.jpg",
   "w": 640
  },
  "2": {
@@ -130,49 +130,69 @@
   "w": 1400
  },
  "20": {
+  "by": "Tom Page from London, UK",
+  "edit": "resized",
+  "file": "20-parliament-hill-lido.jpg",
+  "h": 933,
+  "lic": "CC BY-SA 2.0",
+  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "src": "https://commons.wikimedia.org/wiki/File:Parliament_Hill_Lido_(6448960385).jpg",
+  "w": 1400
+ },
+ "21": {
+  "by": "Alex McGregor",
+  "edit": "resized",
+  "file": "21-the-hampstead-ponds-and-the-river-fleet.jpg",
+  "h": 480,
+  "lic": "CC BY-SA 2.0",
+  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "src": "https://commons.wikimedia.org/wiki/File:Pond_on_Hampstead_Heath_-_geograph.org.uk_-_1850332.jpg",
+  "w": 640
+ },
+ "22": {
   "by": "ceridwen",
   "edit": "resized",
-  "file": "20-keats-house.jpg",
+  "file": "22-keats-house.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Keats%27_House,_Hampstead_-_geograph.org.uk_-_221032.jpg",
   "w": 640
  },
- "21": {
+ "23": {
   "by": "No Swan So Fine",
   "edit": "resized",
-  "file": "21-the-cannon-lane-lock-up.jpg",
+  "file": "23-the-cannon-lane-lock-up.jpg",
   "h": 1050,
   "lic": "CC BY-SA 4.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/4.0",
   "src": "https://commons.wikimedia.org/wiki/File:Former_Hampstead_parish_lock_up,_Cannon_Lane.jpg",
   "w": 1400
  },
- "22": {
+ "24": {
   "by": "ceridwen",
   "edit": "resized",
-  "file": "22-well-walk-and-burgh-house.jpg",
+  "file": "24-well-walk-and-burgh-house.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Burgh_House_in_New_End_Square_-_geograph.org.uk_-_674944.jpg",
   "w": 640
  },
- "23": {
+ "25": {
   "by": "Derek Harper",
   "edit": "resized",
-  "file": "23-three-ways-to-walk-it.jpg",
+  "file": "25-three-ways-to-walk-it.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Path_on_Hampstead_Heath_-_geograph.org.uk_-_1916802.jpg",
   "w": 640
  },
- "24": {
+ "26": {
   "by": "ceridwen",
   "edit": "resized",
-  "file": "24-didn-t-make-the-cut.jpg",
+  "file": "26-didn-t-make-the-cut.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
@@ -180,73 +200,73 @@
   "w": 640
  },
  "3": {
+  "by": "Martin Addison",
+  "edit": "resized",
+  "file": "03-saint-mary-s-holly-walk.jpg",
+  "h": 640,
+  "lic": "CC BY-SA 2.0",
+  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "src": "https://commons.wikimedia.org/wiki/File:St._Mary%27s_Catholic_Church_-_geograph.org.uk_-_838738.jpg",
+  "w": 415
+ },
+ "4": {
   "by": "ceridwen",
   "edit": "resized",
-  "file": "03-fenton-house.jpg",
+  "file": "04-holly-bush-hill.jpg",
+  "h": 480,
+  "lic": "CC BY-SA 2.0",
+  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
+  "src": "https://commons.wikimedia.org/wiki/File:Holly_Bush_Hill_and_pub_-_geograph.org.uk_-_376305.jpg",
+  "w": 640
+ },
+ "5": {
+  "by": "ceridwen",
+  "edit": "resized",
+  "file": "05-fenton-house.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Fenton_House,_Hampstead_-_geograph.org.uk_-_1271918.jpg",
   "w": 640
  },
- "4": {
+ "6": {
   "by": "Jim Osley",
   "edit": "resized",
-  "file": "04-admiral-s-house.jpg",
+  "file": "06-admiral-s-house.jpg",
   "h": 1452,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Admiral%27s_House,_Hampstead_-_geograph.org.uk_-_5802584.jpg",
   "w": 1400
  },
- "5": {
+ "7": {
   "by": "Martin Addison",
   "edit": "resized",
-  "file": "05-hampstead-observatory.jpg",
+  "file": "07-hampstead-observatory.jpg",
   "h": 480,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Hampstead_Scientific_Society_-_geograph.org.uk_-_609321.jpg",
   "w": 640
  },
- "6": {
+ "8": {
   "by": "Karlunun",
   "edit": "resized",
-  "file": "06-whitestone-pond.jpg",
+  "file": "08-whitestone-pond.jpg",
   "h": 575,
   "lic": "CC BY-SA 4.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/4.0",
   "src": "https://commons.wikimedia.org/wiki/File:Whitestone_Pond_Hampstead_Heath_London_134m190_20220423_1928.jpg",
   "w": 1400
  },
- "7": {
+ "9": {
   "by": "Jim Osley",
   "edit": "cropped and resized",
-  "file": "07-the-hill-garden-and-pergola.jpg",
+  "file": "09-the-hill-garden-and-pergola.jpg",
   "h": 1216,
   "lic": "CC BY-SA 2.0",
   "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
   "src": "https://commons.wikimedia.org/wiki/File:Hampstead_,_Hill_Garden_and_Pergola_-_geograph.org.uk_-_8084698.jpg",
   "w": 1400
- },
- "8": {
-  "by": "Martin Addison",
-  "edit": "resized",
-  "file": "08-golders-hill-park.jpg",
-  "h": 480,
-  "lic": "CC BY-SA 2.0",
-  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "src": "https://commons.wikimedia.org/wiki/File:Golders_Hill_Park_in_2006.jpg",
-  "w": 640
- },
- "9": {
-  "by": "George Rex",
-  "edit": "resized",
-  "file": "09-jack-straw-s-castle.jpg",
-  "h": 853,
-  "lic": "CC BY-SA 2.0",
-  "licurl": "https://creativecommons.org/licenses/by-sa/2.0",
-  "src": "https://commons.wikimedia.org/wiki/File:Jack_Straw%27s_Castle.jpg",
-  "w": 1280
  }
 }

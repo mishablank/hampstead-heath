@@ -28,26 +28,28 @@ import urllib.request
 STOPS_LL = {
  1:  (51.55654, -0.17812),   # Hampstead Underground station
  2:  (51.55618, -0.18108),   # Church Row / St John-at-Hampstead
- 3:  (51.55888, -0.17970),   # Fenton House
- 4:  (51.55976, -0.18001),   # Admiral's House
- 5:  (51.56057, -0.18004),   # Hampstead Observatory, on the reservoir
- 6:  (51.56056, -0.17920),   # Whitestone Pond
- 7:  (51.56560, -0.18397),   # The Hill Garden and Pergola
- 8:  (51.56682, -0.18938),   # Golders Hill Park
- 9:  (51.56145, -0.18010),   # Jack Straw's Castle
- 10: (51.56294, -0.17628),   # Vale of Health
- 11: (51.57023, -0.17372),   # The Spaniards Inn
- 12: (51.57155, -0.16734),   # Kenwood House
- 13: (51.57155, -0.16734),   # Dido Belle, inside Kenwood
- 14: (51.56699, -0.16042),   # Kenwood Ladies' Pond
- 15: (51.56475, -0.15905),   # Highgate Men's Pond
- 16: (51.56060, -0.15760),   # The Tumulus
- 17: (51.55940, -0.15450),   # Parliament Hill summit
- 18: (51.55644, -0.15131),   # Parliament Hill Lido
- 19: (51.55758, -0.16554),   # Hampstead Ponds, and the Fleet under them
- 20: (51.55552, -0.16794),   # Keats House
- 21: (51.56018, -0.17455),   # the lock-up, in Cannon Hall's garden wall
- 22: (51.55819, -0.17504),   # Well Walk and Burgh House
+ 3:  (51.55690, -0.18029),   # St Mary's, Holly Walk
+ 4:  (51.55800, -0.17946),   # Holly Bush Hill / Romney's House
+ 5:  (51.55888, -0.17970),   # Fenton House
+ 6:  (51.55976, -0.18001),   # Admiral's House
+ 7:  (51.56057, -0.18004),   # Hampstead Observatory, on the reservoir
+ 8:  (51.56056, -0.17920),   # Whitestone Pond
+ 9:  (51.56560, -0.18397),   # The Hill Garden and Pergola
+ 10: (51.56682, -0.18938),   # Golders Hill Park
+ 11: (51.56145, -0.18010),   # Jack Straw's Castle
+ 12: (51.56294, -0.17628),   # Vale of Health
+ 13: (51.57023, -0.17372),   # The Spaniards Inn
+ 14: (51.57155, -0.16734),   # Kenwood House
+ 15: (51.57155, -0.16734),   # Dido Belle, inside Kenwood
+ 16: (51.56699, -0.16042),   # Kenwood Ladies' Pond
+ 17: (51.56475, -0.15905),   # Highgate Men's Pond
+ 18: (51.56060, -0.15760),   # The Tumulus
+ 19: (51.55940, -0.15450),   # Parliament Hill summit
+ 20: (51.55644, -0.15131),   # Parliament Hill Lido
+ 21: (51.55758, -0.16554),   # Hampstead Ponds, and the Fleet under them
+ 22: (51.55552, -0.16794),   # Keats House
+ 23: (51.56018, -0.17455),   # the lock-up, in Cannon Hall's garden wall
+ 24: (51.55819, -0.17504),   # Well Walk and Burgh House
 }
 
 # a little wider than the stops, so nothing is cropped at a marker
