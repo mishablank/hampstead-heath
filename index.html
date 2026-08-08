@@ -199,7 +199,8 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 }
 .mapctl button:hover{color:var(--ink); border-color:var(--ink-2)}
 .mapctl button:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
-#mcap{margin:9px 2px 0; line-height:1.5}
+/* a caption is a sentence, not a label: no shouting */
+#mcap{margin:9px 2px 0; font-size:.84rem; line-height:1.5; color:var(--ink-3); max-width:70ch}
 #mcap a{color:inherit}
 .mapkey{display:flex; flex-wrap:wrap; gap:4px 18px; margin:10px 2px 0}
 .mapkey span{display:inline-flex; align-items:center; gap:7px}
@@ -266,7 +267,8 @@ footer p{margin:0 0 8px; max-width:70ch}
     border-top:1px solid var(--rule-soft);
   }
   .mapctl button{border:0; border-left:1px solid var(--rule-soft); min-height:42px; line-height:42px}
-  .mapctl button:first-child{border-left:0; margin-right:auto}
+  .mapctl button:first-child{border-left:0}
+  .mapctl #mlocate{flex:1}   /* fills the row rather than leaving a gap */
 }
 @media (max-width:430px){
   .cart h1{font-size:2rem}
@@ -355,7 +357,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 </svg>
 <div class="mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">&#8722;</button><button type="button" data-z="fit">Fit</button><button type="button" id="mlocate">Where am I</button></div>
 </div>
-<figcaption class="lab" id="mcap">Tap a number to play that stop. The dotted line is the order of the stops, not the path you walk. Map data <a href="https://www.openstreetmap.org/copyright">&#169; OpenStreetMap contributors</a>, ODbL.</figcaption>
+<figcaption id="mcap">Tap a number to play that stop. The dotted line is the order of the stops, not the path you walk. Map data <a href="https://www.openstreetmap.org/copyright">&#169; OpenStreetMap contributors</a>, ODbL.</figcaption>
 </figure>
   <div class="mapkey lab">
     <span><i style="background:var(--heath)"></i>Village & street</span>
