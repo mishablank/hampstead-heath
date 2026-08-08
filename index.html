@@ -1,3 +1,7 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="A twenty-stop walking audio guide to Hampstead Heath and its village: 23 tracks, 36 minutes, with the full transcript, a map and a photograph for every stop.">
+<meta name="color-scheme" content="light dark">
 <title>The Audio Guide &#8211; Hampstead Heath &amp; Its Village</title>
 <style>
 :root{
@@ -159,6 +163,48 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .tbody p:first-child{margin-top:0}
 .eyebrow{font-variant-numeric:tabular-nums}
 
+/* ---- the map ------------------------------------------------------ */
+.mapwrap{margin:22px 0 0}
+.mapbox{position:relative; border:1px solid var(--rule-soft); background:var(--paper-2)}
+/* pan-y, not none: one finger must still scroll the page past the map */
+#mp{display:block; width:100%; height:auto; touch-action:pan-y; cursor:grab}
+#mp.drag{cursor:grabbing}
+.mheath{fill:var(--heath); fill-opacity:.10; stroke:var(--heath); stroke-opacity:.45; stroke-width:1.6}
+.mwater{fill:var(--water); fill-opacity:.30; stroke:var(--water); stroke-opacity:.5; stroke-width:1}
+.mroad{fill:none; stroke:var(--ink-3); stroke-opacity:.45; stroke-width:1.6; stroke-linecap:round}
+.mroute{fill:none; stroke:var(--ink-2); stroke-opacity:.65; stroke-width:2.4;
+        stroke-dasharray:2 9; stroke-linecap:round; stroke-linejoin:round}
+.mstop{cursor:pointer}
+.mhit{fill:transparent}
+.mdot{fill:var(--ink-3); stroke:var(--paper); stroke-width:2.5}
+.mstop.village .mdot{fill:var(--heath)} .mstop.high .mdot{fill:var(--contour)}
+.mstop.water .mdot{fill:var(--water)}   .mstop.house .mdot{fill:var(--brick)}
+.mnum{font-family:var(--font-label); font-size:15px; text-anchor:middle;
+      fill:var(--paper); font-weight:700; pointer-events:none}
+.mstop:hover .mdot,.mstop:focus .mdot{stroke:var(--ink)}
+.mstop:focus{outline:none}
+.mstop:focus-visible .mdot{stroke:var(--ink); stroke-width:4}
+.mstop.on .mdot{stroke:var(--ink); stroke-width:4}
+.mdotme{fill:var(--slate,#37608A); stroke:var(--paper); stroke-width:3}
+.macc{fill:var(--water); fill-opacity:.18; stroke:var(--water); stroke-opacity:.5}
+.mapctl{
+  position:absolute; right:8px; top:8px; display:flex; flex-direction:column; gap:6px;
+  align-items:stretch;
+}
+.mapctl button{
+  all:unset; cursor:pointer; text-align:center; box-sizing:border-box;
+  min-width:36px; min-height:36px; line-height:34px; padding:0 9px;
+  background:var(--paper); border:1px solid var(--rule); color:var(--ink-2);
+  font-family:var(--font-label); text-transform:uppercase; letter-spacing:.1em; font-size:10.5px;
+}
+.mapctl button:hover{color:var(--ink); border-color:var(--ink-2)}
+.mapctl button:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
+#mcap{margin:9px 2px 0; line-height:1.5}
+#mcap a{color:inherit}
+.mapkey{display:flex; flex-wrap:wrap; gap:4px 18px; margin:10px 2px 0}
+.mapkey span{display:inline-flex; align-items:center; gap:7px}
+.mapkey i{width:10px; height:10px; border-radius:50%; display:inline-block}
+
 /* ---- one photograph per track ------------------------------------- */
 .shot{margin:18px 0 0; max-width:62ch}
 .shot img{
@@ -193,6 +239,47 @@ footer{margin-top:clamp(42px,6vw,68px); padding-top:20px; border-top:1px solid v
 footer p{margin:0 0 8px; max-width:70ch}
 
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
+
+/* ---- phones -------------------------------------------------------- */
+@media (max-width:700px){
+  body{font-size:16px; line-height:1.6}
+  .wrap{padding-bottom:72px}
+  /* titles matter more than a tidy single line on a narrow screen */
+  .row{padding:11px 4px 11px 0; align-items:start}
+  .rt{white-space:normal; overflow:visible; text-overflow:clip; line-height:1.3}
+  .rn,.rd{padding-top:2px}
+  /* thumbs, not cursors */
+  .pb{width:30px; height:30px}
+  .pb::before{border-left-width:8px; border-top-width:5.5px; border-bottom-width:5.5px}
+  .pb.on::before{width:9px; height:11px;
+    background:linear-gradient(to right,currentColor 0 3px,transparent 3px 6px,currentColor 6px 9px)}
+  .trk{gap:0 14px; padding:26px 0 28px}
+  .tn{width:30px; height:30px; font-size:.95rem}
+  .tbody p,.shot,.walk,.play{max-width:none}
+  .colo div{padding:15px 16px 17px}
+  .bar{padding:8px 12px; padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  .bseek::-webkit-slider-thumb{width:16px; height:16px}
+  .bseek::-moz-range-thumb{width:16px; height:16px}
+  /* controls under the map rather than over it: the map is small enough */
+  .mapctl{
+    position:static; flex-direction:row; gap:0; justify-content:flex-end;
+    border-top:1px solid var(--rule-soft);
+  }
+  .mapctl button{border:0; border-left:1px solid var(--rule-soft); min-height:42px; line-height:42px}
+  .mapctl button:first-child{border-left:0; margin-right:auto}
+}
+@media (max-width:430px){
+  .cart h1{font-size:2rem}
+  .stats li{padding:11px 12px 12px}
+  .stats .n{font-size:1.25rem}
+  section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
+}
+/* fingers are not mice: give every control a 44px target without moving anything */
+@media (hover:none){
+  .pb{position:relative}
+  .pb::after{content:""; position:absolute; inset:-9px; border-radius:50%}
+  .rt{padding:2px 0}
+}
 </style>
 
 <div class="wrap">
@@ -231,6 +318,52 @@ footer p{margin:0 0 8px; max-width:70ch}
   </ul>
 <p class="blk-sub" style="margin-top:18px">Press play on any stop. Tracks stream only when you ask for one and the photographs load only as you scroll to them, so this page stays cheap on mobile data. Nothing auto-advances &#8211; between stops you are walking, not listening. <a href="hampstead-heath-full-walk.m4a" download>Download the whole walk as one file</a> if you would rather have it offline, because the Heath has patchy signal in the middle.</p>
 </header>
+
+<section class="blk" id="map">
+  <h2>The map <span>Twenty stops</span></h2>
+  <p class="blk-sub">The loop, anticlockwise, starting and ending at the station. Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. There are no map tiles here and nothing is fetched from anywhere, so it works with one bar of signal. <a href="hampstead-heath-walk.gpx" download>Download the route as GPX</a> for a map application that can actually navigate.</p>
+<figure class="mapwrap">
+<div class="mapbox">
+<svg id="mp" viewBox="0 0 1000 796" role="group" aria-label="Map of the walk, twenty stops in order" preserveAspectRatio="xMidYMid meet">
+<path class="mheath" d="M88.2 258.1L188.2 248.9L198.1 260.1L239.2 264.5L255.2 278.0L198.1 306.5L175.8 333.9L121.3 369.5L57.5 301.1L62.1 258.7L88.2 258.1ZM157.9 58.9L234.5 142.2L233.9 160.9L289.5 212.3L320.6 212.3L366.7 192.0L296.0 128.0L293.3 96.9L261.3 48.1L256.0 19.0L271.4 -54.9L280.8 -60.3L271.4 -55.5L276.8 -84.7L267.8 -100.9L119.6 -10.8L146.9 18.6L157.9 58.9ZM554.9 255.4L567.4 255.0L568.4 277.4L529.9 304.8L520.6 337.0L545.1 356.3L574.5 331.2L609.3 323.4L637.9 299.7L685.3 281.4L661.7 242.5L634.5 246.5L626.1 236.7L620.2 249.6L603.2 237.4L584.2 244.2L576.0 233.0L551.6 229.3L544.2 245.5L498.7 257.4L494.1 266.5L502.1 279.4L554.9 255.4ZM433.9 510.4L392.6 511.7L391.2 502.9L372.6 510.7L365.1 489.0L340.6 490.0L341.7 497.8L334.5 463.3L419.6 278.4L412.4 306.8L419.4 320.7L445.1 318.0L453.9 305.1L460.4 288.2L433.1 249.6L446.3 262.1L460.2 240.8L450.1 220.5L472.0 155.4L513.5 119.9L543.4 108.7L602.1 103.0L621.5 117.2L627.8 110.1L672.0 119.2L740.4 110.7L774.9 136.1L724.0 138.2L710.3 182.5L778.5 176.4L786.3 210.3L779.4 243.5L741.9 265.2L830.1 363.7L831.6 403.0L856.4 436.2L848.8 448.1L875.2 463.6L874.1 497.2L941.7 499.2L972.2 571.0L960.4 575.7L927.6 557.1L920.0 567.9L935.8 595.4L921.1 613.7L942.5 630.3L967.4 692.9L884.8 670.6L762.1 669.5L720.2 582.8L689.7 556.4L660.0 573.7L646.1 602.1L651.4 619.4L632.6 666.5L623.6 665.1L623.6 678.3L629.5 679.7L626.5 694.9L615.8 700.0L607.6 655.3L583.8 626.9L574.7 636.0L508.6 625.9L476.6 603.2L516.6 594.7L530.9 576.4L512.2 560.2L523.8 547.6L499.2 525.3L486.3 536.1L433.9 510.4Z"/>
+<path class="mroad" d="M413.5 915.4L412.2 778.3L399.6 755.9M333.9 479.9L339.6 499.9M467.6 158.2L488.4 135.5M467.6 158.2L457.3 187.6M616.0 703.1L617.1 705.4M631.4 743.0L628.8 732.9M586.7 798.2L578.3 791.1M385.9 512.7L444.8 511.7L473.7 527.0L547.6 592.3L603.4 651.3M963.4 158.2L935.4 204.9L928.8 224.9M286.9 625.2L291.4 628.2M385.9 512.7L348.4 507.7M-30.5 417.6L-11.6 418.6L1.1 405.4L55.2 300.7L60.2 286.2L60.4 257.0M29.7 351.2L38.9 362.0L43.8 394.2L50.1 404.7L113.7 448.7M470.5 712.9L393.1 683.1M500.2 622.8L455.4 621.1M868.2 442.6L850.7 431.1L837.3 410.1L829.9 389.5L834.1 366.4L814.3 342.1M937.9 482.6L904.2 428.1M897.5 403.0L876.8 291.9M934.7 710.9L960.6 698.0M814.3 342.1L741.9 265.2M741.9 265.2L734.3 255.0M574.7 636.0L596.0 646.8M604.0 652.3L608.2 661.4L607.4 678.7M598.7 645.5L596.0 646.8M500.2 622.8L574.7 636.0M620.2 711.9L629.9 728.8M7.8 153.4L3.4 164.6M495.8 727.8L470.5 712.9M949.7 513.1L948.0 508.3M4.8 175.4L3.4 164.6M509.9 117.9L590.5 100.2L635.6 110.4M368.8 715.3L353.7 683.4L357.1 655.0M440.8 619.1L436.2 616.0M288.4 611.3L294.3 583.5M486.9 539.5L442.5 609.6M295.6 619.8L291.4 628.2M170.5 793.2L206.7 810.1M153.9 788.1L155.2 788.4M897.3 142.9L957.9 147.7M313.1 815.8L306.9 783.3L282.3 755.9L270.1 728.1L265.5 698.7L270.3 663.1L297.1 608.6L301.1 588.3M332.2 470.4L330.7 458.6M332.6 453.5L332.2 470.4M302.5 352.9L276.8 324.4L269.5 296.3M332.6 453.5L313.9 377.6M313.9 377.6L302.5 352.9M302.5 352.9L313.9 377.6M336.8 448.7L332.6 453.5M116.0 450.1L165.5 462.3L203.2 461.3M358.7 619.1L362.7 635.3M0.6 147.7L-0.4 140.2M6.1 141.9L9.7 149.7M-0.4 140.2L6.1 141.9M1.3 151.7L0.6 147.7M9.7 149.7L7.8 153.4M7.8 153.4L1.3 151.7M3.4 164.6L1.3 151.7M0.6 147.7L6.1 141.9M-0.2 631.3L14.9 660.1L46.9 693.6M0.6 642.1L-2.7 632.3M86.1 732.2L30.7 683.4L0.6 642.1M126.3 768.4L103.8 748.1M99.8 740.7L131.2 769.1M153.9 788.1L134.7 776.2M148.0 782.7L153.9 788.1M81.1 724.1L99.8 740.7M99.2 744.0L86.1 732.2M456.0 206.6L455.6 208.6M414.5 283.5L336.8 448.7M960.6 698.0L1029.9 655.0M203.2 461.3L230.3 467.4L253.7 500.2M253.7 500.2L301.3 486.7L319.4 494.8M322.5 497.8L332.8 502.9M857.9 137.8L897.3 142.9M641.7 112.4L661.3 116.8L736.2 106.3L776.6 126.7L857.9 137.8M635.6 110.4L641.7 112.4M628.8 732.9L629.9 728.8M876.8 291.9L877.9 274.0L928.8 224.9M904.2 428.1L897.5 403.0M946.1 503.3L943.4 495.8M948.0 508.3L946.1 503.3M113.7 448.7L116.0 450.1M46.9 693.6L81.1 724.1M436.2 616.0L442.5 609.6M442.5 609.6L440.8 619.1M345.5 517.1L359.8 563.5L354.5 597.1L357.5 615.4M348.4 507.7L341.7 506.6M339.6 499.9L341.7 506.6M617.5 706.1L620.2 711.9M362.7 635.3L358.5 651.6M393.1 683.1L386.5 679.4M386.5 679.4L369.1 667.8M578.3 791.1L560.4 776.9M131.2 769.1L143.6 779.9M332.6 453.5L336.8 448.7M546.3 765.7L495.8 727.8M555.8 773.2L552.4 770.5M-34.7 434.8L14.3 267.2L4.8 175.4M455.6 208.6L437.5 236.7M294.3 583.5L293.3 579.1M904.2 428.1L868.2 442.6M399.6 755.9L368.8 715.3M155.2 788.4L170.5 793.2M328.6 454.1L328.6 468.4M337.3 501.6L329.9 472.4M337.3 501.6L322.1 494.1M337.7 506.6L322.5 500.9M336.0 455.2L336.4 480.9L345.3 506.0M1006.7 616.4L984.4 584.5M103.8 748.1L99.2 744.0M134.7 776.2L126.3 768.4M143.6 779.9L148.0 782.7M984.4 584.5L983.6 582.8M983.6 582.8L975.4 570.3M975.4 570.3L970.7 561.8M970.7 561.8L954.1 525.9M954.1 525.9L949.7 513.1M943.4 495.8L942.5 494.1M942.1 490.4L937.9 482.6M552.4 770.5L547.6 766.7M547.6 766.7L546.3 765.7M560.4 776.9L555.8 773.2M488.4 135.5L509.9 117.9M457.3 187.6L456.0 206.6M269.5 296.3L251.2 270.6M341.7 506.6L343.4 510.7M343.4 510.7L345.5 517.1M341.7 506.6L332.8 502.9M319.4 494.8L322.5 497.8M332.8 502.9L341.7 506.6M332.2 470.4L333.9 479.9M330.7 458.6L332.6 453.5M437.5 236.7L414.5 283.5M617.1 705.4L617.5 706.1M339.4 508.0L337.7 506.6M358.5 651.6L357.1 655.0M357.5 615.4L358.7 619.1M345.3 506.0L348.4 506.0M603.4 651.3L604.0 652.3M607.4 678.7L616.0 703.1M369.1 667.8L357.1 655.0M455.4 621.1L440.8 619.1"/>
+<path class="mwater" d="M622.7 590.6L618.9 559.8L635.6 551.7L639.4 564.6L649.3 569.0L653.9 577.8L651.8 586.2L622.7 590.6ZM616.8 556.1L611.8 538.1L610.9 520.9L604.8 513.1L608.0 510.4L617.1 519.5L633.5 549.0L616.8 556.1ZM776.8 368.5L775.6 362.0L786.1 355.9L794.1 360.3L808.0 378.6L812.6 390.8L807.4 399.3L790.3 405.4L774.5 403.0L771.4 396.9L776.4 402.3L783.2 398.3L781.1 383.0L770.5 383.4L771.8 391.5L769.3 392.5L765.3 381.0L776.6 373.9L776.8 368.5ZM786.9 426.7L804.6 414.9L847.6 439.6L831.6 459.9L819.2 465.0L814.1 463.6L797.9 436.9L786.9 426.7ZM838.3 471.8L838.9 467.0L853.9 453.5L868.6 464.0L870.3 471.8L866.5 492.4L863.4 498.2L855.8 499.9L853.7 498.2L854.7 493.8L844.6 486.7L838.3 471.8ZM755.2 326.1L760.4 322.4L765.3 332.9L782.5 352.9L765.3 362.4L752.0 361.0L750.3 355.9L762.9 351.2L765.9 345.8L755.4 330.5L755.2 326.1ZM749.1 313.9L745.7 311.6L741.3 316.3L744.6 319.7L737.3 323.4L727.2 299.7L729.9 282.1L735.4 283.5L737.5 292.6L749.1 313.9ZM707.8 244.5L724.2 244.5L730.7 253.0L726.3 259.1L717.3 258.4L717.5 254.3L707.8 244.5ZM623.8 227.2L647.8 231.0L653.7 239.1L648.6 243.8L624.6 235.0L620.6 230.6L623.8 227.2ZM598.3 215.7L610.7 212.0L609.3 220.5L616.4 222.5L613.7 238.1L620.8 247.2L601.9 236.7L585.3 241.8L587.6 230.6L598.3 215.7ZM611.4 631.3L626.7 604.2L637.5 597.7L642.9 599.1L645.9 619.4L636.4 650.6L633.5 653.3L620.4 647.2L611.8 640.4L611.4 631.3ZM323.4 493.8L326.1 483.6L331.2 481.2L335.6 497.8L331.2 499.9L323.4 493.8ZM447.8 476.2L450.3 475.8L448.2 466.7L438.1 444.0L429.3 442.0L423.4 447.4L420.0 459.9L422.5 470.1L447.8 476.2ZM141.9 366.4L161.5 381.3L161.7 387.8L138.3 376.6L138.1 370.2L141.9 366.4ZM534.3 451.8L540.4 446.4L534.5 437.9L532.4 428.4L534.1 419.3L528.4 426.4L526.1 444.0L534.3 451.8ZM96.0 320.4L99.6 318.7L95.2 310.6L89.1 312.2L96.0 320.4ZM61.3 295.3L66.9 285.5L80.0 296.3L74.3 299.0L61.3 295.3ZM349.9 288.9L354.1 300.1L349.1 306.8L344.4 302.8L343.6 296.0L344.4 288.9L349.9 288.9ZM346.7 315.0L356.0 317.7L349.3 321.7L346.5 320.0L346.7 315.0ZM335.8 317.7L337.5 321.1L333.9 322.1L335.8 317.7ZM728.4 129.7L729.5 133.4L725.7 133.1L728.4 129.7ZM278.3 128.7L285.1 137.5L271.4 133.8L278.3 128.7ZM313.3 167.0L308.0 169.3L310.9 172.0L324.2 172.4L313.3 167.0ZM342.3 181.5L337.3 182.5L338.7 178.5L342.3 181.5ZM789.1 655.3L792.8 661.4L798.9 657.7L795.2 651.9L789.1 655.3ZM380.8 139.5L388.2 139.5L381.1 154.1L368.2 149.0L380.8 139.5ZM788.0 191.0L796.6 201.5L788.2 202.2L788.0 191.0ZM873.9 231.3L877.9 232.7L874.3 243.5L870.3 242.1L873.9 231.3ZM266.1 508.0L271.8 509.0L266.7 513.8L266.1 508.0ZM369.5 284.1L364.6 282.4L372.2 281.8L369.5 284.1ZM112.8 27.1L113.5 23.4L117.1 24.0L112.8 27.1ZM169.1 266.5L171.4 269.9L185.5 271.6L169.5 275.0L165.5 268.6L165.7 265.5L169.1 266.5Z"/>
+<path class="mroute" d="M365.9 659.0L303.6 671.2L332.6 579.8L325.5 522.6L343.2 522.9L242.7 352.2L128.8 310.9L324.2 492.8L404.6 442.3L458.5 195.4L592.8 150.7L592.8 150.7L738.5 305.1L767.4 381.0L797.9 521.5L863.2 562.2L930.3 662.4L630.7 623.8L580.2 693.6L430.7 603.2"/>
+<g class="mstops">
+<g class="mstop village" data-i="1" data-n="1" tabindex="0" role="button" aria-label="Stop 1, Hampstead Underground Station, 1:21. Play it and jump to the transcript." transform="translate(365.9 659.0)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">1</text></g>
+<g class="mstop village" data-i="2" data-n="2" tabindex="0" role="button" aria-label="Stop 2, Church Row and Saint John-at-Hampstead, 1:34. Play it and jump to the transcript." transform="translate(303.6 671.2)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">2</text></g>
+<g class="mstop house" data-i="3" data-n="3" tabindex="0" role="button" aria-label="Stop 3, Fenton House, 1:31. Play it and jump to the transcript." transform="translate(332.6 579.8)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">3</text></g>
+<g class="mstop high" data-i="4" data-n="4" tabindex="0" role="button" aria-label="Stop 4, Hampstead Observatory, 1:15. Play it and jump to the transcript." transform="translate(325.5 522.6)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">4</text></g>
+<g class="mstop high" data-i="5" data-n="5" tabindex="0" role="button" aria-label="Stop 5, Whitestone Pond, 1:29. Play it and jump to the transcript." transform="translate(360.2 531.9)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">5</text></g>
+<g class="mstop high" data-i="6" data-n="6" tabindex="0" role="button" aria-label="Stop 6, The Hill Garden and Pergola, 1:38. Play it and jump to the transcript." transform="translate(242.7 352.2)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">6</text></g>
+<g class="mstop high" data-i="7" data-n="7" tabindex="0" role="button" aria-label="Stop 7, Golders Hill Park, 1:21. Play it and jump to the transcript." transform="translate(128.8 310.9)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">7</text></g>
+<g class="mstop village" data-i="8" data-n="8" tabindex="0" role="button" aria-label="Stop 8, Jack Straw's Castle, 1:40. Play it and jump to the transcript." transform="translate(324.2 492.8)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">8</text></g>
+<g class="mstop village" data-i="9" data-n="9" tabindex="0" role="button" aria-label="Stop 9, The Vale of Health, 1:41. Play it and jump to the transcript." transform="translate(404.6 442.3)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">9</text></g>
+<g class="mstop village" data-i="10" data-n="10" tabindex="0" role="button" aria-label="Stop 10, The Spaniards Inn, 1:32. Play it and jump to the transcript." transform="translate(458.5 195.4)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">10</text></g>
+<g class="mstop house" data-i="11" data-n="11" tabindex="0" role="button" aria-label="Stop 11, Kenwood House, 1:44. Play it and jump to the transcript." transform="translate(592.8 150.7)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">11</text></g>
+<g class="mstop house" data-i="12" data-n="12" tabindex="0" role="button" aria-label="Stop 12, Dido Elizabeth Belle, 1:59. Play it and jump to the transcript." transform="translate(626.8 168.7)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">12</text></g>
+<g class="mstop water" data-i="13" data-n="13" tabindex="0" role="button" aria-label="Stop 13, The Kenwood Ladies' Pond, 1:31. Play it and jump to the transcript." transform="translate(738.5 305.1)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">13</text></g>
+<g class="mstop water" data-i="14" data-n="14" tabindex="0" role="button" aria-label="Stop 14, The Highgate Men's Pond, 1:18. Play it and jump to the transcript." transform="translate(767.4 381.0)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">14</text></g>
+<g class="mstop high" data-i="15" data-n="15" tabindex="0" role="button" aria-label="Stop 15, The Tumulus, 1:30. Play it and jump to the transcript." transform="translate(797.9 521.5)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">15</text></g>
+<g class="mstop high" data-i="16" data-n="16" tabindex="0" role="button" aria-label="Stop 16, Parliament Hill, 1:27. Play it and jump to the transcript." transform="translate(863.2 562.2)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">16</text></g>
+<g class="mstop water" data-i="17" data-n="17" tabindex="0" role="button" aria-label="Stop 17, Parliament Hill Lido, 1:04. Play it and jump to the transcript." transform="translate(930.3 662.4)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">17</text></g>
+<g class="mstop water" data-i="18" data-n="18" tabindex="0" role="button" aria-label="Stop 18, The Hampstead Ponds and the River Fleet, 1:43. Play it and jump to the transcript." transform="translate(630.7 623.8)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">18</text></g>
+<g class="mstop house" data-i="19" data-n="19" tabindex="0" role="button" aria-label="Stop 19, Keats House, 1:46. Play it and jump to the transcript." transform="translate(580.2 693.6)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">19</text></g>
+<g class="mstop village" data-i="20" data-n="20" tabindex="0" role="button" aria-label="Stop 20, Well Walk and Burgh House, 1:47. Play it and jump to the transcript." transform="translate(430.7 603.2)"><circle class="mhit" r="30"/><circle class="mdot" r="14"/><text class="mnum" y="5">20</text></g>
+</g>
+<g id="mme" hidden><circle class="macc" r="0"/><circle class="mdotme" r="9"/></g>
+</svg>
+<div class="mapctl"><button type="button" data-z="in" aria-label="Zoom in">+</button><button type="button" data-z="out" aria-label="Zoom out">&#8722;</button><button type="button" data-z="fit">Fit</button><button type="button" id="mlocate">Where am I</button></div>
+</div>
+<figcaption class="lab" id="mcap">Tap a number to play that stop. The dotted line is the order of the stops, not the path you walk. Map data <a href="https://www.openstreetmap.org/copyright">&#169; OpenStreetMap contributors</a>, ODbL.</figcaption>
+</figure>
+  <div class="mapkey lab">
+    <span><i style="background:var(--heath)"></i>Village & street</span>
+    <span><i style="background:var(--contour)"></i>High ground</span>
+    <span><i style="background:var(--water)"></i>Water</span>
+    <span><i style="background:var(--brick)"></i>House & museum</span>
+  </div>
+</section>
 
 <section class="blk">
   <h2>The tape <span>35:44 of narration</span></h2>
@@ -606,7 +739,7 @@ body.playing{padding-bottom:76px}
 <script>
 (function(){
   "use strict";
-  var T = [{"f": "audio/00-how-to-use-this.m4a", "t": "How to use this", "d": 65.4}, {"f": "audio/01-hampstead-underground-station.m4a", "t": "1. Hampstead Underground Station", "d": 80.9}, {"f": "audio/02-church-row-and-saint-john-at-hampstead.m4a", "t": "2. Church Row and Saint John-at-Hampstead", "d": 93.6}, {"f": "audio/03-fenton-house.m4a", "t": "3. Fenton House", "d": 91.0}, {"f": "audio/04-hampstead-observatory.m4a", "t": "4. Hampstead Observatory", "d": 75.4}, {"f": "audio/05-whitestone-pond.m4a", "t": "5. Whitestone Pond", "d": 89.2}, {"f": "audio/06-the-hill-garden-and-pergola.m4a", "t": "6. The Hill Garden and Pergola", "d": 97.8}, {"f": "audio/07-golders-hill-park.m4a", "t": "7. Golders Hill Park", "d": 80.8}, {"f": "audio/08-jack-straw-s-castle.m4a", "t": "8. Jack Straw's Castle", "d": 100.3}, {"f": "audio/09-the-vale-of-health.m4a", "t": "9. The Vale of Health", "d": 101.2}, {"f": "audio/10-the-spaniards-inn.m4a", "t": "10. The Spaniards Inn", "d": 91.8}, {"f": "audio/11-kenwood-house.m4a", "t": "11. Kenwood House", "d": 103.9}, {"f": "audio/12-dido-elizabeth-belle.m4a", "t": "12. Dido Elizabeth Belle", "d": 119.4}, {"f": "audio/13-the-kenwood-ladies-pond.m4a", "t": "13. The Kenwood Ladies' Pond", "d": 90.5}, {"f": "audio/14-the-highgate-men-s-pond.m4a", "t": "14. The Highgate Men's Pond", "d": 78.1}, {"f": "audio/15-the-tumulus.m4a", "t": "15. The Tumulus", "d": 90.2}, {"f": "audio/16-parliament-hill.m4a", "t": "16. Parliament Hill", "d": 87.4}, {"f": "audio/17-parliament-hill-lido.m4a", "t": "17. Parliament Hill Lido", "d": 63.7}, {"f": "audio/18-the-hampstead-ponds-and-the-river-fleet.m4a", "t": "18. The Hampstead Ponds and the River Fleet", "d": 103.1}, {"f": "audio/19-keats-house.m4a", "t": "19. Keats House", "d": 105.7}, {"f": "audio/20-well-walk-and-burgh-house.m4a", "t": "20. Well Walk and Burgh House", "d": 107.2}, {"f": "audio/21-three-ways-to-walk-it.m4a", "t": "Three ways to walk it", "d": 88.4}, {"f": "audio/22-didn-t-make-twenty.m4a", "t": "Didn't make twenty", "d": 138.6}], cur = -1;
+  var T = [{"f": "audio/00-how-to-use-this.m4a", "t": "How to use this", "d": 65.4}, {"f": "audio/01-hampstead-underground-station.m4a", "t": "1. Hampstead Underground Station", "d": 80.9}, {"f": "audio/02-church-row-and-saint-john-at-hampstead.m4a", "t": "2. Church Row and Saint John-at-Hampstead", "d": 93.6}, {"f": "audio/03-fenton-house.m4a", "t": "3. Fenton House", "d": 91.0}, {"f": "audio/04-hampstead-observatory.m4a", "t": "4. Hampstead Observatory", "d": 75.4}, {"f": "audio/05-whitestone-pond.m4a", "t": "5. Whitestone Pond", "d": 89.2}, {"f": "audio/06-the-hill-garden-and-pergola.m4a", "t": "6. The Hill Garden and Pergola", "d": 97.8}, {"f": "audio/07-golders-hill-park.m4a", "t": "7. Golders Hill Park", "d": 80.8}, {"f": "audio/08-jack-straw-s-castle.m4a", "t": "8. Jack Straw's Castle", "d": 100.3}, {"f": "audio/09-the-vale-of-health.m4a", "t": "9. The Vale of Health", "d": 101.2}, {"f": "audio/10-the-spaniards-inn.m4a", "t": "10. The Spaniards Inn", "d": 91.8}, {"f": "audio/11-kenwood-house.m4a", "t": "11. Kenwood House", "d": 103.9}, {"f": "audio/12-dido-elizabeth-belle.m4a", "t": "12. Dido Elizabeth Belle", "d": 119.4}, {"f": "audio/13-the-kenwood-ladies-pond.m4a", "t": "13. The Kenwood Ladies' Pond", "d": 90.5}, {"f": "audio/14-the-highgate-men-s-pond.m4a", "t": "14. The Highgate Men's Pond", "d": 78.1}, {"f": "audio/15-the-tumulus.m4a", "t": "15. The Tumulus", "d": 90.2}, {"f": "audio/16-parliament-hill.m4a", "t": "16. Parliament Hill", "d": 87.4}, {"f": "audio/17-parliament-hill-lido.m4a", "t": "17. Parliament Hill Lido", "d": 63.7}, {"f": "audio/18-the-hampstead-ponds-and-the-river-fleet.m4a", "t": "18. The Hampstead Ponds and the River Fleet", "d": 103.1}, {"f": "audio/19-keats-house.m4a", "t": "19. Keats House", "d": 105.7}, {"f": "audio/20-well-walk-and-burgh-house.m4a", "t": "20. Well Walk and Burgh House", "d": 107.2}, {"f": "audio/21-three-ways-to-walk-it.m4a", "t": "Three ways to walk it", "d": 88.4}, {"f": "audio/22-didn-t-make-twenty.m4a", "t": "Didn't make twenty", "d": 138.6}], cur = -1, mapPaint = null;
   var A = new Audio();
   A.preload = "none";                     // nothing downloads until you press play
 
@@ -637,6 +770,7 @@ body.playing{padding-bottom:76px}
     });
     bplay.innerHTML = live ? "&#10073;&#10073;" : "&#9654;";
     bplay.setAttribute("aria-label", live ? "Pause" : "Play");
+    if(mapPaint) mapPaint(cur);
   }
   function progress(){
     var d = A.duration || T[cur] && T[cur].d || 0,
@@ -698,6 +832,157 @@ body.playing{padding-bottom:76px}
   A.addEventListener("error", function(){
     btitle.textContent = "Could not load that track - check your connection";
   });
+
+  /* ---- the map ----------------------------------------------------- */
+  (function(){
+    var svg = document.getElementById("mp");
+    if(!svg) return;
+    var vb0 = svg.getAttribute("viewBox").split(/\s+/).map(Number),
+        vb  = vb0.slice(),
+        cap = document.getElementById("mcap"),
+        capText = cap ? cap.innerHTML : "",
+        me  = document.getElementById("mme");
+
+    function apply(){
+      svg.setAttribute("viewBox", vb.join(" "));
+      /* markers keep their size on screen however far you have zoomed in */
+      var k = vb[2] / vb0[2];
+      svg.querySelectorAll(".mdot").forEach(function(c){ c.setAttribute("r", 14 * k); });
+      svg.querySelectorAll(".mhit").forEach(function(c){ c.setAttribute("r", 36 * k); });
+      svg.querySelectorAll(".mnum").forEach(function(t){
+        t.style.fontSize = (15 * k) + "px"; t.setAttribute("y", 5 * k);
+      });
+      svg.querySelectorAll(".mdot,.mdotme").forEach(function(c){
+        c.style.strokeWidth = (2.5 * k) + "px";
+      });
+      svg.querySelector(".mroute").style.strokeWidth = (2.4 * k) + "px";
+      svg.querySelector(".mroute").style.strokeDasharray = (2*k) + " " + (9*k);
+      svg.querySelector(".mroad").style.strokeWidth = (1.6 * k) + "px";
+    }
+    function zoom(factor, cx, cy){
+      var w = Math.min(vb0[2], Math.max(vb0[2] / 14, vb[2] * factor)),
+          h = w * vb0[3] / vb0[2];
+      if(cx === undefined){ cx = vb[0] + vb[2]/2; cy = vb[1] + vb[3]/2; }
+      vb = [cx - (cx - vb[0]) * w / vb[2], cy - (cy - vb[1]) * h / vb[3], w, h];
+      clamp(); apply();
+    }
+    function clamp(){
+      vb[0] = Math.max(vb0[0] - vb[2]*.15, Math.min(vb[0], vb0[2] - vb[2] + vb[2]*.15));
+      vb[1] = Math.max(vb0[1] - vb[3]*.15, Math.min(vb[1], vb0[3] - vb[3] + vb[3]*.15));
+    }
+    function at(e){
+      var r = svg.getBoundingClientRect();
+      return [vb[0] + (e.clientX - r.left) / r.width * vb[2],
+              vb[1] + (e.clientY - r.top) / r.height * vb[3]];
+    }
+
+    document.querySelectorAll(".mapctl [data-z]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var z = b.dataset.z;
+        if(z === "fit"){ vb = vb0.slice(); apply(); }
+        else zoom(z === "in" ? 1/1.6 : 1.6);
+      });
+    });
+    svg.addEventListener("wheel", function(e){
+      e.preventDefault();
+      var p = at(e);
+      zoom(e.deltaY > 0 ? 1.15 : 1/1.15, p[0], p[1]);
+    }, {passive:false});
+
+    /* drag to pan, one finger or a mouse; pinch with two */
+    var pts = new Map(), last = null, spread = 0, moved = 0, hinted = false;
+    svg.addEventListener("pointerdown", function(e){
+      svg.setPointerCapture(e.pointerId);
+      pts.set(e.pointerId, e); last = at(e); moved = 0;
+      if(pts.size === 2) spread = 0;
+      svg.classList.add("drag");
+    });
+    svg.addEventListener("pointermove", function(e){
+      if(!pts.has(e.pointerId)) return;
+      pts.set(e.pointerId, e);
+      /* one finger scrolls the page, two move the map. Trapping the scroll
+         under a full-width map is the usual sin of embedded maps. */
+      if(e.pointerType === "touch" && pts.size < 2){
+        if(cap && !hinted){ hinted = true; cap.textContent = "Two fingers to move the map.";
+          setTimeout(function(){ cap.innerHTML = capText; hinted = false; }, 2200); }
+        return;
+      }
+      if(pts.size >= 2){
+        var a = [...pts.values()], d = Math.hypot(
+          a[0].clientX - a[1].clientX, a[0].clientY - a[1].clientY);
+        if(spread) zoom(spread / d, vb[0] + vb[2]/2, vb[1] + vb[3]/2);
+        spread = d; return;
+      }
+      var p = at(e);
+      vb[0] -= p[0] - last[0]; vb[1] -= p[1] - last[1];
+      moved += Math.abs(p[0]-last[0]) + Math.abs(p[1]-last[1]);
+      clamp(); apply(); last = at(e);
+    });
+    ["pointerup","pointercancel","pointerleave"].forEach(function(ev){
+      svg.addEventListener(ev, function(e){
+        pts.delete(e.pointerId); spread = 0;
+        if(!pts.size) svg.classList.remove("drag");
+      });
+    });
+
+    function go(g){
+      var i = +g.dataset.i;
+      var art = document.getElementById("t" + ("0" + i).slice(-2));
+      if(art) art.scrollIntoView({behavior:"smooth", block:"start"});
+      toggle(i);
+    }
+    svg.querySelectorAll(".mstop").forEach(function(g){
+      g.addEventListener("click", function(){ if(moved < 8) go(g); });
+      g.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(g); }
+      });
+      g.addEventListener("pointerenter", function(){
+        if(cap) cap.textContent = g.getAttribute("aria-label").replace(
+          ". Play it and jump to the transcript.", "");
+      });
+      g.addEventListener("pointerleave", function(){ if(cap) cap.innerHTML = capText; });
+    });
+
+    /* the map follows the player */
+    mapPaint = function(i){
+      svg.querySelectorAll(".mstop").forEach(function(g){
+        g.classList.toggle("on", +g.dataset.i === i);
+      });
+    };
+
+    /* where am I: the browser's own geolocation, nothing sent anywhere */
+    var btn = document.getElementById("mlocate"), watch = null, bb = [51.5525, -0.1955, 51.576, -0.148];
+    btn.addEventListener("click", function(){
+      if(!navigator.geolocation){ cap.textContent = "This browser will not share a location."; return; }
+      if(watch !== null){
+        navigator.geolocation.clearWatch(watch); watch = null;
+        me.hidden = true; btn.textContent = "Where am I"; cap.innerHTML = capText; return;
+      }
+      btn.textContent = "Finding...";
+      watch = navigator.geolocation.watchPosition(function(pos){
+        var la = pos.coords.latitude, lo = pos.coords.longitude;
+        var x = (lo - bb[1]) / (bb[3] - bb[1]) * vb0[2],
+            y = (bb[2] - la) / (bb[2] - bb[0]) * vb0[3];
+        btn.textContent = "Hide me";
+        if(x < 0 || y < 0 || x > vb0[2] || y > vb0[3]){
+          me.hidden = true;
+          cap.textContent = "You are outside this map. It only covers the Heath and the village.";
+          return;
+        }
+        me.hidden = false;
+        cap.innerHTML = capText;
+        me.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ")");
+        var mpp = (bb[3] - bb[1]) * 111320 * Math.cos(bb[0] * Math.PI/180) / vb0[2];
+        me.querySelector(".macc").setAttribute("r", Math.min(400, (pos.coords.accuracy||30) / mpp));
+      }, function(){
+        btn.textContent = "Where am I";
+        cap.textContent = "Could not get a location. On the Heath that is usually the trees.";
+        watch = null;
+      }, {enableHighAccuracy:true, maximumAge:10000, timeout:20000});
+    });
+
+    apply();
+  })();
 
   if("mediaSession" in navigator){
     A.addEventListener("play", function(){

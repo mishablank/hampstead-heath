@@ -16,6 +16,7 @@ whole set rebuilds in about a minute.
 
 import html as _html
 import json
+import math
 import os
 import re
 import subprocess
@@ -1024,6 +1025,48 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .tbody p:first-child{margin-top:0}
 .eyebrow{font-variant-numeric:tabular-nums}
 
+/* ---- the map ------------------------------------------------------ */
+.mapwrap{margin:22px 0 0}
+.mapbox{position:relative; border:1px solid var(--rule-soft); background:var(--paper-2)}
+/* pan-y, not none: one finger must still scroll the page past the map */
+#mp{display:block; width:100%; height:auto; touch-action:pan-y; cursor:grab}
+#mp.drag{cursor:grabbing}
+.mheath{fill:var(--heath); fill-opacity:.10; stroke:var(--heath); stroke-opacity:.45; stroke-width:1.6}
+.mwater{fill:var(--water); fill-opacity:.30; stroke:var(--water); stroke-opacity:.5; stroke-width:1}
+.mroad{fill:none; stroke:var(--ink-3); stroke-opacity:.45; stroke-width:1.6; stroke-linecap:round}
+.mroute{fill:none; stroke:var(--ink-2); stroke-opacity:.65; stroke-width:2.4;
+        stroke-dasharray:2 9; stroke-linecap:round; stroke-linejoin:round}
+.mstop{cursor:pointer}
+.mhit{fill:transparent}
+.mdot{fill:var(--ink-3); stroke:var(--paper); stroke-width:2.5}
+.mstop.village .mdot{fill:var(--heath)} .mstop.high .mdot{fill:var(--contour)}
+.mstop.water .mdot{fill:var(--water)}   .mstop.house .mdot{fill:var(--brick)}
+.mnum{font-family:var(--font-label); font-size:15px; text-anchor:middle;
+      fill:var(--paper); font-weight:700; pointer-events:none}
+.mstop:hover .mdot,.mstop:focus .mdot{stroke:var(--ink)}
+.mstop:focus{outline:none}
+.mstop:focus-visible .mdot{stroke:var(--ink); stroke-width:4}
+.mstop.on .mdot{stroke:var(--ink); stroke-width:4}
+.mdotme{fill:var(--slate,#37608A); stroke:var(--paper); stroke-width:3}
+.macc{fill:var(--water); fill-opacity:.18; stroke:var(--water); stroke-opacity:.5}
+.mapctl{
+  position:absolute; right:8px; top:8px; display:flex; flex-direction:column; gap:6px;
+  align-items:stretch;
+}
+.mapctl button{
+  all:unset; cursor:pointer; text-align:center; box-sizing:border-box;
+  min-width:36px; min-height:36px; line-height:34px; padding:0 9px;
+  background:var(--paper); border:1px solid var(--rule); color:var(--ink-2);
+  font-family:var(--font-label); text-transform:uppercase; letter-spacing:.1em; font-size:10.5px;
+}
+.mapctl button:hover{color:var(--ink); border-color:var(--ink-2)}
+.mapctl button:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
+#mcap{margin:9px 2px 0; line-height:1.5}
+#mcap a{color:inherit}
+.mapkey{display:flex; flex-wrap:wrap; gap:4px 18px; margin:10px 2px 0}
+.mapkey span{display:inline-flex; align-items:center; gap:7px}
+.mapkey i{width:10px; height:10px; border-radius:50%; display:inline-block}
+
 /* ---- one photograph per track ------------------------------------- */
 .shot{margin:18px 0 0; max-width:62ch}
 .shot img{
@@ -1058,6 +1101,47 @@ footer{margin-top:clamp(42px,6vw,68px); padding-top:20px; border-top:1px solid v
 footer p{margin:0 0 8px; max-width:70ch}
 
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
+
+/* ---- phones -------------------------------------------------------- */
+@media (max-width:700px){
+  body{font-size:16px; line-height:1.6}
+  .wrap{padding-bottom:72px}
+  /* titles matter more than a tidy single line on a narrow screen */
+  .row{padding:11px 4px 11px 0; align-items:start}
+  .rt{white-space:normal; overflow:visible; text-overflow:clip; line-height:1.3}
+  .rn,.rd{padding-top:2px}
+  /* thumbs, not cursors */
+  .pb{width:30px; height:30px}
+  .pb::before{border-left-width:8px; border-top-width:5.5px; border-bottom-width:5.5px}
+  .pb.on::before{width:9px; height:11px;
+    background:linear-gradient(to right,currentColor 0 3px,transparent 3px 6px,currentColor 6px 9px)}
+  .trk{gap:0 14px; padding:26px 0 28px}
+  .tn{width:30px; height:30px; font-size:.95rem}
+  .tbody p,.shot,.walk,.play{max-width:none}
+  .colo div{padding:15px 16px 17px}
+  .bar{padding:8px 12px; padding-bottom:calc(8px + env(safe-area-inset-bottom))}
+  .bseek::-webkit-slider-thumb{width:16px; height:16px}
+  .bseek::-moz-range-thumb{width:16px; height:16px}
+  /* controls under the map rather than over it: the map is small enough */
+  .mapctl{
+    position:static; flex-direction:row; gap:0; justify-content:flex-end;
+    border-top:1px solid var(--rule-soft);
+  }
+  .mapctl button{border:0; border-left:1px solid var(--rule-soft); min-height:42px; line-height:42px}
+  .mapctl button:first-child{border-left:0; margin-right:auto}
+}
+@media (max-width:430px){
+  .cart h1{font-size:2rem}
+  .stats li{padding:11px 12px 12px}
+  .stats .n{font-size:1.25rem}
+  section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
+}
+/* fingers are not mice: give every control a 44px target without moving anything */
+@media (hover:none){
+  .pb{position:relative}
+  .pb::after{content:""; position:absolute; inset:-9px; border-radius:50%}
+  .rt{padding:2px 0}
+}
 """
 
 PLAYER_CSS = """
@@ -1139,7 +1223,7 @@ body.playing{padding-bottom:76px}
 PLAYER_JS = r"""
 (function(){
   "use strict";
-  var T = __TRACKS__, cur = -1;
+  var T = __TRACKS__, cur = -1, mapPaint = null;
   var A = new Audio();
   A.preload = "none";                     // nothing downloads until you press play
 
@@ -1170,6 +1254,7 @@ PLAYER_JS = r"""
     });
     bplay.innerHTML = live ? "&#10073;&#10073;" : "&#9654;";
     bplay.setAttribute("aria-label", live ? "Pause" : "Play");
+    if(mapPaint) mapPaint(cur);
   }
   function progress(){
     var d = A.duration || T[cur] && T[cur].d || 0,
@@ -1232,6 +1317,157 @@ PLAYER_JS = r"""
     btitle.textContent = "Could not load that track - check your connection";
   });
 
+  /* ---- the map ----------------------------------------------------- */
+  (function(){
+    var svg = document.getElementById("mp");
+    if(!svg) return;
+    var vb0 = svg.getAttribute("viewBox").split(/\s+/).map(Number),
+        vb  = vb0.slice(),
+        cap = document.getElementById("mcap"),
+        capText = cap ? cap.innerHTML : "",
+        me  = document.getElementById("mme");
+
+    function apply(){
+      svg.setAttribute("viewBox", vb.join(" "));
+      /* markers keep their size on screen however far you have zoomed in */
+      var k = vb[2] / vb0[2];
+      svg.querySelectorAll(".mdot").forEach(function(c){ c.setAttribute("r", 14 * k); });
+      svg.querySelectorAll(".mhit").forEach(function(c){ c.setAttribute("r", 36 * k); });
+      svg.querySelectorAll(".mnum").forEach(function(t){
+        t.style.fontSize = (15 * k) + "px"; t.setAttribute("y", 5 * k);
+      });
+      svg.querySelectorAll(".mdot,.mdotme").forEach(function(c){
+        c.style.strokeWidth = (2.5 * k) + "px";
+      });
+      svg.querySelector(".mroute").style.strokeWidth = (2.4 * k) + "px";
+      svg.querySelector(".mroute").style.strokeDasharray = (2*k) + " " + (9*k);
+      svg.querySelector(".mroad").style.strokeWidth = (1.6 * k) + "px";
+    }
+    function zoom(factor, cx, cy){
+      var w = Math.min(vb0[2], Math.max(vb0[2] / 14, vb[2] * factor)),
+          h = w * vb0[3] / vb0[2];
+      if(cx === undefined){ cx = vb[0] + vb[2]/2; cy = vb[1] + vb[3]/2; }
+      vb = [cx - (cx - vb[0]) * w / vb[2], cy - (cy - vb[1]) * h / vb[3], w, h];
+      clamp(); apply();
+    }
+    function clamp(){
+      vb[0] = Math.max(vb0[0] - vb[2]*.15, Math.min(vb[0], vb0[2] - vb[2] + vb[2]*.15));
+      vb[1] = Math.max(vb0[1] - vb[3]*.15, Math.min(vb[1], vb0[3] - vb[3] + vb[3]*.15));
+    }
+    function at(e){
+      var r = svg.getBoundingClientRect();
+      return [vb[0] + (e.clientX - r.left) / r.width * vb[2],
+              vb[1] + (e.clientY - r.top) / r.height * vb[3]];
+    }
+
+    document.querySelectorAll(".mapctl [data-z]").forEach(function(b){
+      b.addEventListener("click", function(){
+        var z = b.dataset.z;
+        if(z === "fit"){ vb = vb0.slice(); apply(); }
+        else zoom(z === "in" ? 1/1.6 : 1.6);
+      });
+    });
+    svg.addEventListener("wheel", function(e){
+      e.preventDefault();
+      var p = at(e);
+      zoom(e.deltaY > 0 ? 1.15 : 1/1.15, p[0], p[1]);
+    }, {passive:false});
+
+    /* drag to pan, one finger or a mouse; pinch with two */
+    var pts = new Map(), last = null, spread = 0, moved = 0, hinted = false;
+    svg.addEventListener("pointerdown", function(e){
+      svg.setPointerCapture(e.pointerId);
+      pts.set(e.pointerId, e); last = at(e); moved = 0;
+      if(pts.size === 2) spread = 0;
+      svg.classList.add("drag");
+    });
+    svg.addEventListener("pointermove", function(e){
+      if(!pts.has(e.pointerId)) return;
+      pts.set(e.pointerId, e);
+      /* one finger scrolls the page, two move the map. Trapping the scroll
+         under a full-width map is the usual sin of embedded maps. */
+      if(e.pointerType === "touch" && pts.size < 2){
+        if(cap && !hinted){ hinted = true; cap.textContent = "Two fingers to move the map.";
+          setTimeout(function(){ cap.innerHTML = capText; hinted = false; }, 2200); }
+        return;
+      }
+      if(pts.size >= 2){
+        var a = [...pts.values()], d = Math.hypot(
+          a[0].clientX - a[1].clientX, a[0].clientY - a[1].clientY);
+        if(spread) zoom(spread / d, vb[0] + vb[2]/2, vb[1] + vb[3]/2);
+        spread = d; return;
+      }
+      var p = at(e);
+      vb[0] -= p[0] - last[0]; vb[1] -= p[1] - last[1];
+      moved += Math.abs(p[0]-last[0]) + Math.abs(p[1]-last[1]);
+      clamp(); apply(); last = at(e);
+    });
+    ["pointerup","pointercancel","pointerleave"].forEach(function(ev){
+      svg.addEventListener(ev, function(e){
+        pts.delete(e.pointerId); spread = 0;
+        if(!pts.size) svg.classList.remove("drag");
+      });
+    });
+
+    function go(g){
+      var i = +g.dataset.i;
+      var art = document.getElementById("t" + ("0" + i).slice(-2));
+      if(art) art.scrollIntoView({behavior:"smooth", block:"start"});
+      toggle(i);
+    }
+    svg.querySelectorAll(".mstop").forEach(function(g){
+      g.addEventListener("click", function(){ if(moved < 8) go(g); });
+      g.addEventListener("keydown", function(e){
+        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(g); }
+      });
+      g.addEventListener("pointerenter", function(){
+        if(cap) cap.textContent = g.getAttribute("aria-label").replace(
+          ". Play it and jump to the transcript.", "");
+      });
+      g.addEventListener("pointerleave", function(){ if(cap) cap.innerHTML = capText; });
+    });
+
+    /* the map follows the player */
+    mapPaint = function(i){
+      svg.querySelectorAll(".mstop").forEach(function(g){
+        g.classList.toggle("on", +g.dataset.i === i);
+      });
+    };
+
+    /* where am I: the browser's own geolocation, nothing sent anywhere */
+    var btn = document.getElementById("mlocate"), watch = null, bb = __MAPBBOX__;
+    btn.addEventListener("click", function(){
+      if(!navigator.geolocation){ cap.textContent = "This browser will not share a location."; return; }
+      if(watch !== null){
+        navigator.geolocation.clearWatch(watch); watch = null;
+        me.hidden = true; btn.textContent = "Where am I"; cap.innerHTML = capText; return;
+      }
+      btn.textContent = "Finding...";
+      watch = navigator.geolocation.watchPosition(function(pos){
+        var la = pos.coords.latitude, lo = pos.coords.longitude;
+        var x = (lo - bb[1]) / (bb[3] - bb[1]) * vb0[2],
+            y = (bb[2] - la) / (bb[2] - bb[0]) * vb0[3];
+        btn.textContent = "Hide me";
+        if(x < 0 || y < 0 || x > vb0[2] || y > vb0[3]){
+          me.hidden = true;
+          cap.textContent = "You are outside this map. It only covers the Heath and the village.";
+          return;
+        }
+        me.hidden = false;
+        cap.innerHTML = capText;
+        me.setAttribute("transform", "translate(" + x.toFixed(1) + " " + y.toFixed(1) + ")");
+        var mpp = (bb[3] - bb[1]) * 111320 * Math.cos(bb[0] * Math.PI/180) / vb0[2];
+        me.querySelector(".macc").setAttribute("r", Math.min(400, (pos.coords.accuracy||30) / mpp));
+      }, function(){
+        btn.textContent = "Where am I";
+        cap.textContent = "Could not get a location. On the Heath that is usually the trees.";
+        watch = null;
+      }, {enableHighAccuracy:true, maximumAge:10000, timeout:20000});
+    });
+
+    apply();
+  })();
+
   if("mediaSession" in navigator){
     A.addEventListener("play", function(){
       navigator.mediaSession.metadata = new MediaMetadata({
@@ -1263,6 +1499,117 @@ DEVICE = """<svg class="hilldev" viewBox="0 0 120 120" aria-hidden="true">
       </g>
       <circle cx="62" cy="56" r="2.6" fill="currentColor"/>
     </svg>"""
+
+
+MAP_W = 1000.0          # viewBox units across; height follows from the latitude
+
+
+def mapdata():
+    path = os.path.join(HERE, "map.json")
+    return json.load(open(path)) if os.path.exists(path) else None
+
+
+def projector(bbox):
+    """Equirectangular, scaled so a metre east is a metre north on the page."""
+    s, w, n, e = bbox
+    mid = math.radians((s + n) / 2)
+    wide = (e - w) * math.cos(mid)
+    h = MAP_W * (n - s) / wide
+    def xy(lat, lon):
+        return ((lon - w) / (e - w) * MAP_W, (n - lat) / (n - s) * h)
+    return xy, h
+
+
+def path_d(rings, xy, close):
+    out = []
+    for ring in rings:
+        pts = ["%.1f %.1f" % xy(lat, lon) for lat, lon in ring]
+        if pts:
+            out.append("M" + "L".join(pts) + ("Z" if close else ""))
+    return "".join(out)
+
+
+def map_svg(tracks):
+    """An inline SVG map: no tiles, no libraries, no network. Geometry is
+    OpenStreetMap, simplified by fetch_map.py."""
+    d = mapdata()
+    if not d:
+        return ""
+    xy, h = projector(d["bbox"])
+    stops = {int(k): v for k, v in d["stops"].items()}
+
+    # markers, nudged apart where two stops share a doorway (11 and 12)
+    placed, marks = [], []
+    for n in sorted(stops):
+        x, y = xy(*stops[n])
+        while any(math.hypot(x - px, y - py) < 22 for px, py in placed):
+            x, y = x + 17, y + 9
+        placed.append((x, y))
+        stop = next(s for s, _, _ in tracks if s["n"] == n)
+        i = [s for s, _, _ in tracks].index(stop)
+        dur = clock(next(t for s, _, t in tracks if s is stop))
+        marks.append((n, x, y, stop, i, dur))
+
+    # the connector is stop order, not the walked path, and says so
+    route = "M" + "L".join("%.1f %.1f" % xy(*stops[n]) for n in sorted(stops))
+
+    out = ['<figure class="mapwrap">']
+    out.append('<div class="mapbox">')
+    out.append('<svg id="mp" viewBox="0 0 %d %.0f" role="group" '
+               'aria-label="Map of the walk, twenty stops in order" '
+               'preserveAspectRatio="xMidYMid meet">' % (MAP_W, h))
+    out.append('<path class="mheath" d="%s"/>' % path_d(d["heath"], xy, True))
+    out.append('<path class="mroad" d="%s"/>' % path_d(d["roads"], xy, False))
+    out.append('<path class="mwater" d="%s"/>' % path_d(d["water"], xy, True))
+    out.append('<path class="mroute" d="%s"/>' % route)
+    out.append('<g class="mstops">')
+    for n, x, y, stop, i, dur in marks:
+        out.append('<g class="mstop %s" data-i="%d" data-n="%d" tabindex="0" role="button" '
+                   'aria-label="Stop %d, %s, %s. Play it and jump to the transcript." '
+                   'transform="translate(%.1f %.1f)">'
+                   '<circle class="mhit" r="30"/><circle class="mdot" r="14"/>'
+                   '<text class="mnum" y="5">%d</text></g>'
+                   % (stop["kind"], i, n, n, esc(stop["title"]), dur, x, y, n))
+    out.append("</g>")
+    out.append('<g id="mme" hidden><circle class="macc" r="0"/><circle class="mdotme" r="9"/></g>')
+    out.append("</svg>")
+    out.append('<div class="mapctl">'
+               '<button type="button" data-z="in" aria-label="Zoom in">+</button>'
+               '<button type="button" data-z="out" aria-label="Zoom out">&#8722;</button>'
+               '<button type="button" data-z="fit">Fit</button>'
+               '<button type="button" id="mlocate">Where am I</button>'
+               "</div>")
+    out.append("</div>")
+    out.append('<figcaption class="lab" id="mcap">Tap a number to play that stop. The dotted line '
+               'is the order of the stops, not the path you walk. Map data '
+               '<a href="https://www.openstreetmap.org/copyright">&#169; OpenStreetMap '
+               'contributors</a>, ODbL.</figcaption>')
+    out.append("</figure>")
+    return "\n".join(out)
+
+
+def gpx(tracks):
+    """The twenty stops as waypoints and a route, for a real map application."""
+    d = mapdata()
+    if not d:
+        return None
+    stops = {int(k): v for k, v in d["stops"].items()}
+    by_n = {s["n"]: s for s, _, _ in tracks}
+    o = ['<?xml version="1.0" encoding="UTF-8"?>',
+         '<gpx version="1.1" creator="hampstead-heath audio guide" '
+         'xmlns="http://www.topografix.com/GPX/1/1">',
+         "  <metadata><name>Hampstead Heath and its village</name>"
+         "<desc>Twenty stops, in walking order.</desc></metadata>"]
+    for n in sorted(stops):
+        lat, lon = stops[n]
+        o.append('  <wpt lat="%.5f" lon="%.5f"><name>%d. %s</name><desc>%s</desc></wpt>'
+                 % (lat, lon, n, esc(by_n[n]["title"]), esc(by_n[n]["where"])))
+    o.append("  <rte><name>Hampstead Heath, twenty stops</name>")
+    for n in sorted(stops):
+        lat, lon = stops[n]
+        o.append('    <rtept lat="%.5f" lon="%.5f"><name>%d</name></rtept>' % (lat, lon, n))
+    o += ["  </rte>", "</gpx>", ""]
+    return "\n".join(o)
 
 
 def pictures():
@@ -1302,6 +1649,12 @@ def render(tracks):
 
     out = []
     w = out.append
+    w('<meta charset="utf-8">')
+    w('<meta name="viewport" content="width=device-width, initial-scale=1">')
+    w('<meta name="description" content="A twenty-stop walking audio guide to Hampstead Heath '
+      'and its village: 23 tracks, 36 minutes, with the full transcript, a map and a photograph '
+      'for every stop.">')
+    w('<meta name="color-scheme" content="light dark">')
     w("<title>The Audio Guide &#8211; Hampstead Heath &amp; Its Village</title>")
     w("<style>" + CSS + "</style>\n")
     w('<div class="wrap">\n')
@@ -1337,6 +1690,26 @@ def render(tracks):
       "if you would rather have it offline, because the Heath has patchy signal in the "
       "middle.</p>")
     w("</header>\n")
+
+    # map -----------------------------------------------------------------
+    svg = map_svg(tracks)
+    if svg:
+        w('<section class="blk" id="map">')
+        w("  <h2>The map <span>Twenty stops</span></h2>")
+        w('  <p class="blk-sub">The loop, anticlockwise, starting and ending at the station. '
+          "Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. "
+          "There are no map tiles here and nothing is fetched from anywhere, so it works with "
+          "one bar of signal. <a href=\"hampstead-heath-walk.gpx\" download>Download the route "
+          "as GPX</a> for a map application that can actually navigate.</p>")
+        w(svg)
+        w('  <div class="mapkey lab">')
+        for kind, label in (("village", "Village & street"), ("high", "High ground"),
+                            ("water", "Water"), ("house", "House & museum")):
+            w('    <span><i style="background:var(--%s)"></i>%s</span>'
+              % ({"village": "heath", "high": "contour", "water": "water",
+                  "house": "brick"}[kind], label))
+        w("  </div>")
+        w("</section>\n")
 
     # contents ------------------------------------------------------------
     w('<section class="blk">')
@@ -1446,7 +1819,10 @@ def render(tracks):
     data = [{"f": "audio/" + fn,
              "t": (s["title"] if s["n"] is None else "%d. %s" % (s["n"], s["title"])),
              "d": round(d, 1)} for s, fn, d in tracks]
-    js = PLAYER_JS.replace("__TRACKS__", json.dumps(data, ensure_ascii=False))
+    d = mapdata()
+    js = (PLAYER_JS
+          .replace("__TRACKS__", json.dumps(data, ensure_ascii=False))
+          .replace("__MAPBBOX__", json.dumps(d["bbox"]) if d else "null"))
     w("<script>" + js.encode("ascii", "xmlcharrefreplace").decode() + "</script>")
     return "\n".join(out) + "\n"
 
@@ -1461,6 +1837,11 @@ def build_page():
         tracks.append((stop, fn, length(path)))
     open(os.path.join(HERE, "index.html"), "w").write(render(tracks))
     print("  index.html: %d tracks, %s" % (len(tracks), clock(sum(t[2] for t in tracks))))
+
+    route = gpx(tracks)
+    if route:
+        open(os.path.join(HERE, "hampstead-heath-walk.gpx"), "w").write(route)
+        print("  hampstead-heath-walk.gpx: 20 waypoints")
 
     open(os.path.join(HERE, "wrangler.jsonc"), "w").write(
         '{\n  "name": "hampstead-heath",\n'
