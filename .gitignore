@@ -1,2 +1,4 @@
 sample-*.m4a
 *.mp3
+.wrangler/
+__pycache__/
