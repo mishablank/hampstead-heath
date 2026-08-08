@@ -1024,6 +1024,20 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .tbody p:first-child{margin-top:0}
 .eyebrow{font-variant-numeric:tabular-nums}
 
+/* ---- one photograph per track ------------------------------------- */
+.shot{margin:18px 0 0; max-width:62ch}
+.shot img{
+  display:block; width:100%; height:auto;
+  border:1px solid var(--rule-soft); background:var(--plate);
+}
+.shot figcaption{margin:8px 0 0; color:var(--ink-3)}
+.shot figcaption a{color:inherit; text-decoration-color:var(--rule)}
+.shot figcaption a:hover{color:var(--ink-2)}
+/* photographs shot in daylight glare on a dark page */
+@media (prefers-color-scheme:dark){.shot img{filter:brightness(.86) contrast(1.03)}}
+:root[data-theme="dark"] .shot img{filter:brightness(.86) contrast(1.03)}
+:root[data-theme="light"] .shot img{filter:none}
+
 /* the one device this page adds: standing still vs moving */
 .walk{
   margin:20px 0 0; padding:11px 0 12px 16px; border-left:2px solid var(--heath);
@@ -1251,8 +1265,37 @@ DEVICE = """<svg class="hilldev" viewBox="0 0 120 120" aria-hidden="true">
     </svg>"""
 
 
+def pictures():
+    """images/credits.json, written by fetch_images.py. Optional: without it
+    the page still builds, just without photographs."""
+    path = os.path.join(HERE, "images", "credits.json")
+    return json.load(open(path)) if os.path.exists(path) else {}
+
+
+def figure(i, stop, pics):
+    """A photograph and the credit its licence requires."""
+    p = pics.get(str(i))
+    if not p:
+        return ""
+    where = stop["where"] if stop["n"] else "Hampstead Heath"
+    alt = "%s, %s" % (stop["title"], where) if stop["n"] else where
+    if p["lic"].lower().startswith("public domain"):
+        credit = ('<a href="%s">%s</a> &#183; public domain, via Wikimedia Commons'
+                  % (esc(p["src"]), esc(p["by"])))
+    else:
+        lic = ('<a href="%s">%s</a>' % (esc(p["licurl"]), esc(p["lic"]))
+               if p["licurl"] else esc(p["lic"]))
+        credit = ('Photograph by <a href="%s">%s</a> &#183; %s &#183; %s'
+                  % (esc(p["src"]), esc(p["by"]), lic, esc(p["edit"])))
+    return ('<figure class="shot"><img src="images/%s" alt="%s" width="%d" height="%d" '
+            'loading="lazy" decoding="async">'
+            '<figcaption class="lab">%s</figcaption></figure>'
+            % (esc(p["file"]), esc(alt), p["w"], p["h"], credit))
+
+
 def render(tracks):
     """tracks: list of (stop, filename, duration)"""
+    pics = pictures()
     total = sum(d for _, _, d in tracks)
     longest = max(d for _, _, d in tracks)
     free = sum(1 for s in STOPS if s["n"] and s["n"] not in PAID)
@@ -1287,8 +1330,9 @@ def render(tracks):
     w('<li><span class="n">%d</span><span class="lab">That cost nothing</span></li>' % free)
     w("  </ul>")
     w('<p class="blk-sub" style="margin-top:18px">Press play on any stop. Tracks stream only when '
-      "you ask for one, so opening this page costs you nothing on mobile data. Nothing "
-      "auto-advances &#8211; between stops you are walking, not listening. "
+      "you ask for one and the photographs load only as you scroll to them, so this page stays "
+      "cheap on mobile data. Nothing auto-advances &#8211; between stops you are walking, not "
+      "listening. "
       '<a href="hampstead-heath-full-walk.m4a" download>Download the whole walk as one file</a> '
       "if you would rather have it offline, because the Heath has patchy signal in the "
       "middle.</p>")
@@ -1336,6 +1380,7 @@ def render(tracks):
           '<span class="ptime">%s</span></div>'
           % (stop["kind"], i, mark, i + 1, esc(label), clock(dur), esc(stop["title"]),
              esc(stop["where"]), i, esc(stop["title"]), clock(dur)))
+        w(figure(i, stop, pics))
         w("\n".join("<p>%s</p>" % esc(p) for p in stop["body"]))
         if stop.get("walk"):
             w('<div class="walk"><span class="lab">Walk on</span><p>%s</p></div>'
@@ -1353,6 +1398,10 @@ def render(tracks):
     w('    <div><p class="lab">Files</p><p>%d AAC tracks, tagged as one album with cover art, plus '
       "a single continuous <code>FULL WALK</code> file for anyone who would rather not keep "
       "pressing play.</p></div>" % len(tracks))
+    w('    <div><p class="lab">Pictures</p><p>One photograph per track, picked to show the thing '
+      "you are standing in front of rather than the prettiest view of it. All of them are "
+      "Creative Commons or public domain, from Wikimedia Commons, credited under the picture and "
+      "fetched by <code>fetch_images.py</code>.</p></div>")
     w('    <div><p class="lab">Rebuilding it</p><p>The narration lives in one Python file, '
       "<code>build.py</code>. The audio and this page are both generated from it, so the "
       "transcript can never drift out of step with the recording.</p></div>")
