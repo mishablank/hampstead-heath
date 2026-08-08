@@ -9,7 +9,8 @@ out of step with the recording.
     python3 build.py              audio, then the page
     python3 build.py --page       page only, timed from the audio already there
     python3 build.py --cover      redraw cover.jpg
-    python3 build.py --voices     list the ElevenLabs voices on your account
+    python3 build.py --voices     list the voices available for this engine
+    python3 build.py --sample     render one track so you can hear the voice
     python3 build.py --cost       how many credits a full rebuild costs
 
 Needs macOS (afconvert) and mutagen. The voice comes from ElevenLabs by
@@ -36,7 +37,10 @@ import time
 #               non-commercial use and forbids publishing them, which rules
 #               out putting them on a website. Drafting only.
 # --------------------------------------------------------------------------
-ENGINE = os.environ.get("TTS_ENGINE", "elevenlabs")
+# "google"      Chirp 3: HD. Commercial use under the standard Google Cloud
+#               terms, and ~1M HD characters a month are free, which is about
+#               thirty times this script.
+ENGINE = os.environ.get("TTS_ENGINE", "google")
 
 VOICE = "Jamie (Premium)"        # macOS voice, when ENGINE is "say"
 RATE = 168                       # words per minute, when ENGINE is "say"
@@ -48,6 +52,11 @@ EL_SPEED = 0.94                  # 1.0 is their default; this is a walking pace
 EL_STABILITY = 0.55
 EL_SIMILARITY = 0.8
 EL_API = "https://api.elevenlabs.io/v1"
+
+GG_VOICE = os.environ.get("GOOGLE_VOICE", "en-GB-Chirp3-HD-Charon")
+GG_SPEED = 0.94                  # 1.0 is normal; 0.25 to 2.0 allowed
+GG_API = "https://texttospeech.googleapis.com/v1"
+
 AAC_BITRATE = "48000"     # mono speech; 64k is twice what this needs
 
 ALBUM = "Hampstead Heath - a walking gazetteer"
@@ -843,6 +852,10 @@ def el_get(path):
 
 def list_voices():
     """Print the voices this account can use, so you can pick one."""
+    if ENGINE == "google":
+        return gg_voices()
+    if ENGINE == "say":
+        return subprocess.run(["say", "-v", "?"], check=True) and None
     voices = el_get("/voices").get("voices", [])
     print("%-26s %-24s %s" % ("NAME", "VOICE ID", "LABELS"))
     for v in sorted(voices, key=lambda v: v.get("name", "")):
@@ -894,6 +907,73 @@ def elevenlabs(text, path):
     os.remove(mp3)
 
 
+def gg_call(path_, body=None):
+    """Google accepts either an API key on the query string or a bearer token.
+    The key is the browser-only setup; the token is what you get from
+    `gcloud auth print-access-token` if the key is ever refused."""
+    import urllib.error
+    import urllib.request
+    url = GG_API + path_
+    headers = {"content-type": "application/json"}
+    apikey = os.environ.get("GOOGLE_API_KEY", "").strip()
+    token = os.environ.get("GOOGLE_ACCESS_TOKEN", "").strip()
+    if apikey:
+        url += ("&" if "?" in url else "?") + "key=" + apikey
+    elif token:
+        headers["Authorization"] = "Bearer " + token
+    else:
+        sys.exit("Set GOOGLE_API_KEY (or GOOGLE_ACCESS_TOKEN).")
+    project = os.environ.get("GOOGLE_PROJECT", "").strip()
+    if project:
+        headers["x-goog-user-project"] = project
+
+    data = json.dumps(body).encode() if body is not None else None
+    req = urllib.request.Request(url, data=data, headers=headers)
+    for attempt in range(5):
+        try:
+            return json.load(urllib.request.urlopen(req, timeout=300))
+        except urllib.error.HTTPError as e:
+            detail = e.read().decode("utf8", "replace")[:400]
+            if e.code in (401, 403):
+                sys.exit("Google refused the credentials (%d).\n%s\n\n"
+                         "Usually: the Text-to-Speech API is not enabled on the project, "
+                         "the key is restricted to other APIs, or billing is off." % (e.code, detail))
+            if e.code == 400:
+                sys.exit("Google rejected the request (voice name or speed?):\n%s" % detail)
+            if e.code == 429 or e.code >= 500:
+                time.sleep(6 * (attempt + 1))
+                continue
+            sys.exit("Google error %d: %s" % (e.code, detail))
+    sys.exit("Google kept refusing; try again later.")
+
+
+def gg_voices():
+    """The Chirp 3: HD voices available for British English."""
+    out = gg_call("/voices?languageCode=en-GB")
+    rows = [v for v in out.get("voices", []) if "Chirp3-HD" in v.get("name", "")]
+    print("%-34s %s" % ("VOICE NAME", "GENDER"))
+    for v in sorted(rows, key=lambda v: v["name"]):
+        print("%-34s %s" % (v["name"], v.get("ssmlGender", "")))
+    print("\n%d Chirp 3: HD voices. Pick one and: export GOOGLE_VOICE=<name>" % len(rows))
+    if not rows:
+        print("None came back. Other en-GB voices exist; drop the Chirp3-HD filter to see them.")
+
+
+def google(text, path):
+    import base64
+    out = gg_call("/text:synthesize", {
+        "input": {"text": text},
+        "voice": {"languageCode": "en-GB", "name": GG_VOICE},
+        "audioConfig": {"audioEncoding": "MP3", "speakingRate": GG_SPEED,
+                        "sampleRateHertz": 44100},
+    })
+    mp3 = path.replace(".m4a", ".mp3")
+    open(mp3, "wb").write(base64.b64decode(out["audioContent"]))
+    subprocess.run(["afconvert", "-f", "m4af", "-d", "aac", "-b", AAC_BITRATE, mp3, path],
+                   check=True)
+    os.remove(mp3)
+
+
 def say(text, path):
     """macOS. Drafting only: see the licence note at the top of this file."""
     subprocess.run(
@@ -902,8 +982,13 @@ def say(text, path):
     )
 
 
+ENGINES = {"google": google, "elevenlabs": elevenlabs, "say": say}
+
+
 def speak(text, path):
-    (elevenlabs if ENGINE == "elevenlabs" else say)(text, path)
+    if ENGINE not in ENGINES:
+        sys.exit("TTS_ENGINE must be one of: %s" % ", ".join(sorted(ENGINES)))
+    ENGINES[ENGINE](text, path)
 
 
 def pcm_of(path):
@@ -963,10 +1048,12 @@ def voice_note():
 def cost():
     n = sum(len(spoken(s)) for s in STOPS)
     print("%d characters of narration across %d tracks." % (n, len(STOPS)))
-    print("ElevenLabs bills roughly one credit per character, so a full rebuild")
-    print("costs about %d credits. The continuous file is spliced from the tracks," % n)
-    print("not synthesised again, so it is free.")
-    print("Starter is 30,000 credits a month; Creator is 100,000.")
+    print("The continuous file is spliced from the finished tracks, not synthesised")
+    print("again, so a rebuild costs exactly that once.\n")
+    print("  google      Chirp 3: HD is billed per character, but the monthly free")
+    print("              allowance is around a million HD characters, roughly %dx this." % (10**6 // n))
+    print("  elevenlabs  about %d credits; Starter is 30,000 a month, Creator 100,000." % n)
+    print("  say         free, and not licensed for anything you publish.")
 
 
 def length(path):
@@ -986,6 +1073,18 @@ def tag(path, i, stop, art):
     if art:
         m["covr"] = [MP4Cover(art, imageformat=MP4Cover.FORMAT_JPEG)]
     m.save()
+
+
+def sample(i=4):
+    """One track, named after the voice that made it, so you can put two of
+    them side by side and actually choose. Track 4 is a good test: 75 seconds,
+    a date, a proper noun and a dry last line."""
+    stop = STOPS[i]
+    voice = {"google": GG_VOICE, "elevenlabs": EL_VOICE or "unset", "say": VOICE}[ENGINE]
+    out = os.path.join(HERE, "sample-%s-%s.m4a" % (ENGINE, slug(voice)))
+    speak(spoken(stop), out)
+    print("  %s  (%.1fs)" % (os.path.basename(out), length(out)))
+    print("  open it with:  afplay '%s'" % out)
 
 
 def build_audio():
@@ -1014,7 +1113,12 @@ def build_audio():
         m["covr"] = [MP4Cover(art, imageformat=MP4Cover.FORMAT_JPEG)]
     m.save()
 
-    if ENGINE == "elevenlabs":
+    if ENGINE == "google":
+        # en-GB-Chirp3-HD-Charon -> Charon
+        note = {"engine": "google", "name": GG_VOICE.split("-")[-1], "voice_id": GG_VOICE,
+                "pace": "%g of its natural pace" % GG_SPEED,
+                "note": "a British English Chirp 3: HD voice from Google Cloud"}
+    elif ENGINE == "elevenlabs":
         name = EL_VOICE
         for v in el_get("/voices").get("voices", []):
             if v.get("voice_id") == EL_VOICE:
@@ -2113,6 +2217,8 @@ if __name__ == "__main__":
         list_voices()
     elif args == ["--cost"]:
         cost()
+    elif args == ["--sample"]:
+        sample()
     elif args == ["--cover"]:
         build_cover()
     elif args == ["--page"]:

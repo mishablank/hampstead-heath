@@ -28,18 +28,28 @@ are the first thing that will change.
 The macOS system voices are licensed for personal, non-commercial use only
 (macOS SLA §2.F), and the same clause forbids publishing or public sharing of
 their output. That rules them out for anything on a website, commercial or
-not. So the build uses ElevenLabs, where every paid plan grants commercial
-rights to the audio you generate.
+not.
+
+The build uses Google Cloud Chirp 3: HD instead. Commercial use is covered by
+the standard Google Cloud terms, and the monthly free allowance for HD voices
+is roughly thirty times the size of this script, so a rebuild is usually free.
 
 ```bash
-export ELEVENLABS_API_KEY=sk_...
-python3 build.py --voices        # pick one, note the id
-export ELEVENLABS_VOICE_ID=...
-python3 build.py --cost          # what a full rebuild will spend
-python3 build.py                 # ~36k credits, then rebuilds the page
+export GOOGLE_API_KEY=...         # or GOOGLE_ACCESS_TOKEN for a bearer token
+python3 build.py --voices         # the en-GB Chirp 3: HD voices
+export GOOGLE_VOICE=en-GB-Chirp3-HD-Charon
+python3 build.py --sample         # one track, to hear it before committing
+python3 build.py                  # all 23, then rebuilds the page
 ```
 
-`TTS_ENGINE=say` falls back to the Mac voice for drafting. Do not publish it.
+Two other engines are available. `TTS_ENGINE=elevenlabs` (with
+`ELEVENLABS_API_KEY` and `ELEVENLABS_VOICE_ID`) costs about 36,000 credits per
+rebuild and sounds better; every paid ElevenLabs plan grants commercial
+rights, and they survive cancelling the plan. `TTS_ENGINE=say` is the Mac
+voice, for drafting only. Do not publish it.
+
+`--sample` names its output after the engine and voice, so you can render the
+same track on two of them and compare.
 
 The continuous full-walk file is spliced from the finished tracks rather than
 synthesised again, which halves the credits and guarantees it matches. Pace,
