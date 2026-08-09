@@ -2666,12 +2666,15 @@ def ld(nodes):
             % text.replace("</", "<\\/"))
 
 
-def head(title, desc, path, nodes, og_title=None, og_desc=None, css=CSS):
+def head(title, desc, path, nodes, og_title=None, og_desc=None, css=CSS,
+         og_image=None, og_alt=None):
     """Everything read before a word of the page is. Absolute URLs throughout,
     because half of these are consumed off-site."""
     here = url(path)
     og_title = og_title or title
     og_desc = og_desc or desc
+    og_url = url(og_image or "og.jpg")
+    og_alt = og_alt or OG_ALT
     o = ['<!DOCTYPE html>', '<html lang="en-GB">', '<head>',
          '<meta charset="utf-8">',
          '<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -2691,16 +2694,18 @@ def head(title, desc, path, nodes, og_title=None, og_desc=None, css=CSS):
          '<meta property="og:title" content="%s">' % esc(og_title),
          '<meta property="og:description" content="%s">' % esc(og_desc),
          '<meta property="og:url" content="%s">' % here,
-         '<meta property="og:image" content="%s">' % url("og.jpg"),
+         '<meta property="og:image" content="%s">' % og_url,
+         # Facebook prefers the https twin when it has one, and caches by URL
+         '<meta property="og:image:secure_url" content="%s">' % og_url,
          '<meta property="og:image:type" content="image/jpeg">',
          '<meta property="og:image:width" content="1200">',
          '<meta property="og:image:height" content="630">',
-         '<meta property="og:image:alt" content="%s">' % esc(OG_ALT),
+         '<meta property="og:image:alt" content="%s">' % esc(og_alt),
          '<meta name="twitter:card" content="summary_large_image">',
          '<meta name="twitter:title" content="%s">' % esc(og_title),
          '<meta name="twitter:description" content="%s">' % esc(og_desc),
-         '<meta name="twitter:image" content="%s">' % url("og.jpg"),
-         '<meta name="twitter:image:alt" content="%s">' % esc(OG_ALT),
+         '<meta name="twitter:image" content="%s">' % og_url,
+         '<meta name="twitter:image:alt" content="%s">' % esc(og_alt),
          # a favicon is also the icon Google puts beside a mobile result
          '<link rel="icon" href="/favicon.ico" sizes="32x32">',
          '<link rel="icon" href="/icon.svg" type="image/svg+xml">',
@@ -3180,7 +3185,10 @@ def stop_page(i, stop, fn, dur, tracks, pics, coords):
     o = [head(title, desc, stop_path(stop), graph_stop(i, stop, fn, dur, pics, coords),
               og_title="%d. %s" % (n, stop["title"]),
               og_desc="%s · %s of the Hampstead Heath walking audio guide."
-                      % (stop["where"], clock(dur)))]
+                      % (stop["where"], clock(dur)),
+              og_image=og_stop_file(stop),
+              og_alt="%s - stop %d of %d on the Hampstead Heath walking audio guide."
+                     % (stop["title"], n, STOP_COUNT))]
     w = o.append
     w('<div class="wrap">')
     w('<header class="cart">')
@@ -3560,12 +3568,16 @@ def build_page():
         open(os.path.join(SITE, "hampstead-heath-walk.gpx"), "w").write(route)
         print("  hampstead-heath-walk.gpx: %d waypoints" % STOP_COUNT)
 
-    build_discovery(tracks, pictures())
+    pics = pictures()
+    build_discovery(tracks, pics)
     build_manifest()
     if not os.path.exists(os.path.join(SITE, "favicon.ico")):
         build_icons()
     if not os.path.exists(os.path.join(SITE, "og.jpg")):
         build_og()
+    # always, not only when missing: the card carries the stop's own title, and
+    # a card that disagrees with the page it previews is worse than no card
+    build_og_stops(tracks, pics)
 
     # html_handling is what serves stops/kenwood-house/index.html at
     # /stops/kenwood-house, which is the URL the sitemap and every link use.
@@ -3584,6 +3596,9 @@ def build_page():
 # --------------------------------------------------------------------------
 
 PAPER, INK, SOFT, GREEN = "#EFEDE5", "#181D16", "#8A9384", "#2C6B45"
+# the card keeps the parchment even though the page is white now: a white card
+# on a white feed has no edges, and these are read at thumbnail size
+KIND_INK = {"village": GREEN, "high": "#96591C", "water": "#2A6A8E", "house": "#94413A"}
 
 
 def pil_font(names, size):
@@ -3765,6 +3780,94 @@ def build_og():
 
     img.save(os.path.join(SITE, "og.jpg"), quality=90)
     print("  og.jpg 1200x630")
+
+
+def og_stop_file(stop):
+    return "og/%s.jpg" % slug(stop["title"])
+
+
+def build_og_stops(tracks, pics):
+    """One card per stop page. Sharing a stop should show that stop, not the
+    cover - the share buttons post the stop's own URL, so the preview has to
+    match it or the link looks like it goes somewhere else."""
+    from PIL import Image, ImageDraw
+    W, H = 1200, 630
+    out = os.path.join(SITE, "og")
+    os.makedirs(out, exist_ok=True)
+
+    disp = pil_font(["Big Caslon.ttf", "Baskerville.ttc", "Didot.ttc", "Georgia.ttf"], 58)
+    caps = pil_font(["Optima.ttc", "GillSans.ttc", "Futura.ttc", "Helvetica.ttc"], 22)
+    num = pil_font(["Optima.ttc", "GillSans.ttc", "Futura.ttc", "Helvetica.ttc"], 30)
+    made = 0
+
+    for i, (stop, fn, dur) in enumerate(tracks):
+        if not stop["n"]:
+            continue
+        img = Image.new("RGB", (W, H), PAPER)
+        d = ImageDraw.Draw(img)
+
+        # the photograph, cropped to fill its plate rather than squashed into it
+        p = pics.get(str(i))
+        px, py, pw, ph = 640, 78, 512, 474
+        if p:
+            src = os.path.join(SITE, "images", p["file"])
+            if os.path.exists(src):
+                ph_img = Image.open(src).convert("RGB")
+                scale = max(pw / ph_img.width, ph / ph_img.height)
+                ph_img = ph_img.resize((max(1, round(ph_img.width * scale)),
+                                        max(1, round(ph_img.height * scale))),
+                                       Image.LANCZOS)
+                left = (ph_img.width - pw) // 2
+                top = (ph_img.height - ph) // 2
+                img.paste(ph_img.crop((left, top, left + pw, top + ph)), (px, py))
+        d.rectangle([px, py, px + pw - 1, py + ph - 1], outline=SOFT, width=1)
+
+        d.rectangle([26, 26, W - 27, H - 27], outline=INK, width=3)
+        d.rectangle([40, 40, W - 41, H - 41], outline=SOFT, width=1)
+
+        def spaced_w(text, f, track=6):
+            return sum(d.textlength(c, font=f) + track for c in text) - track
+
+        def spaced(text, f, x, y, fill, track=6):
+            # the text column stops where the plate starts; tighten rather than
+            # let a caps line run under the photograph
+            while track > 1 and x + spaced_w(text, f, track) > px - 24:
+                track -= 1
+            for c in text:
+                d.text((x, y), c, font=f, fill=fill)
+                x += d.textlength(c, font=f) + track
+
+        accent = KIND_INK.get(stop["kind"], INK)
+        x0 = 96
+        d.ellipse([x0, 92, x0 + 52, 144], fill=accent)
+        w_num = d.textlength(str(stop["n"]), font=num)
+        d.text((x0 + 26 - w_num / 2, 101), str(stop["n"]), font=num, fill=PAPER)
+        spaced("STOP %d OF %d" % (stop["n"], STOP_COUNT), caps, x0 + 74, 98, INK)
+        spaced(KIND[stop["kind"]][0].upper(), caps, x0 + 74, 126, SOFT)
+
+        # wrap the title by measurement: these run from one word to seven
+        words, lines, line = stop["title"].split(), [], ""
+        for word in words:
+            trial = (line + " " + word).strip()
+            if d.textlength(trial, font=disp) > 470 and line:
+                lines.append(line)
+                line = word
+            else:
+                line = trial
+        lines.append(line)
+        lines = lines[:4]
+        y = 214
+        for ln in lines:
+            d.text((x0 - 3, y), ln, font=disp, fill=INK)
+            y += 68
+
+        d.line([(x0, 470), (x0 + 300, 470)], fill=SOFT, width=2)
+        spaced("HAMPSTEAD HEATH, READ ALOUD", caps, x0, 496, INK)
+        spaced("A FREE AUDIO GUIDE  ·  NW3", caps, x0, 530, SOFT)
+
+        img.save(os.path.join(SITE, og_stop_file(stop)), quality=88)
+        made += 1
+    print("  og/: %d stop cards 1200x630" % made)
 
 
 def build_manifest():
