@@ -3,3 +3,4 @@ sample-*.m4a
 .wrangler/
 __pycache__/
 .claude/
+.gstack/

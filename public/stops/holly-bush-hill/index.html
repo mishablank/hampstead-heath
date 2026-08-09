@@ -74,7 +74,9 @@ body{
   font-family:var(--font-body); font-size:15px; line-height:1.62;
   -webkit-font-smoothing:antialiased;
 }
-.wrap{max-width:940px; margin:0 auto; padding:0 clamp(16px,4vw,40px) 96px}
+/* 20px is the floor, not 16: at 375px the old gutter put the last character of
+   every line within a thumb's width of the bezel */
+.wrap{max-width:940px; margin:0 auto; padding:0 clamp(20px,4vw,40px) 96px}
 a{color:var(--heath); text-underline-offset:2px; text-decoration-thickness:from-font}
 a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .lab{
@@ -344,7 +346,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 @media (max-width:700px){
   /* read at arm's length, outdoors, in sun: the phone sizes are a step up from
      the desktop ones, and the small furniture a bigger step than the prose */
-  body{font-size:17.5px; line-height:1.62}
+  body{font-size:18px; line-height:1.62}
   .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
   .walk p{font-size:1.02rem}
@@ -354,7 +356,17 @@ footer p{margin:0 0 8px; max-width:70ch}
   .rt{white-space:normal; overflow:visible; text-overflow:clip; line-height:1.3}
   .rn,.rd{padding-top:2px}
   /* .pb is sized in the player stylesheet, which loads after this one */
-  .trk{gap:0 14px; padding:26px 0 28px}
+  /* The marker rail costs every line 44px of a 375px screen and leaves the page
+     lopsided - 60px of gutter on the left against 20 on the right. On a phone
+     the badge floats beside the heading instead and everything below it runs
+     the full measure, symmetrically, the way a phone article reads. */
+  .trk{display:block; padding:26px 0 28px}
+  .tmark{float:left; margin:1px 12px 2px 0; padding-top:0}
+  /* the eyebrow and the title ride beside the badge; everything after it clears */
+  .trk .play,.trk .shot,.trk .walk,.trk .sa{clear:left}
+  /* on a stop page the badge has no heading to sit beside and repeats what the
+     masthead just said, so it buys nothing and costs a line */
+  .trk.solo .tmark{display:none}
   .tn{width:30px; height:30px; font-size:.95rem}
   .tbody p,.shot,.walk,.play{max-width:none}
   .colo div{padding:15px 16px 17px}
@@ -671,7 +683,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   </div></div>
 </header>
 <main>
-<article class="trk house">
+<article class="trk solo house">
   <div class="tmark"><span class="tn">4</span></div>
   <div class="tbody">
     <div class="sa">
