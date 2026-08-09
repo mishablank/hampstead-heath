@@ -67,6 +67,9 @@ body{
 /* 20px is the floor, not 16: at 375px the old gutter put the last character of
    every line within a thumb's width of the bezel */
 .wrap{max-width:940px; margin:0 auto; padding:0 clamp(20px,4vw,40px) 96px}
+/* the masthead runs wider than the measure, because it now carries the map and
+   a map that is narrower than the prose beside it is not worth putting first */
+.wrap-hero{max-width:1140px; padding-bottom:0}
 a{color:var(--heath); text-underline-offset:2px; text-decoration-thickness:from-font}
 a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .lab{
@@ -77,6 +80,8 @@ a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 
 /* ---- masthead ---------------------------------------------------- */
 header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
+/* the front page spends its top margin on the map instead */
+.wrap-hero header.cart{padding-top:clamp(18px,2.6vw,30px)}
 /* wraps rather than squeezes: on a phone the controls take their own row and
    the eyebrow gets its full line back */
 /* spans the masthead grid, so the controls end at the page's right margin
@@ -158,6 +163,48 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .lede{margin:.8em 0 0; max-width:58ch; font-size:clamp(1rem,1.6vw,1.0625rem); color:var(--ink-2)}
 .lede b{color:var(--ink); font-weight:600}
 .hilldev{width:clamp(92px,12vw,132px); height:auto; flex:none; color:var(--ink-3)}
+
+/* ---- the hero: the map is the first thing on the page -------------- */
+/* Phone order is head, map, lede, acts: the map has to be on the first
+   screen, and the paragraph explaining it can wait until under it. */
+.hero{
+  grid-column:1 / -1; display:grid; grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"head" "map" "lede" "acts";
+  gap:clamp(18px,2.4vw,26px) clamp(24px,4vw,50px);
+  margin-top:clamp(12px,1.6vw,18px);
+}
+.hero-head{grid-area:head} .hero-map{grid-area:map; min-width:0}
+.hero-lede{grid-area:lede} .hero-acts{grid-area:acts}
+@media (min-width:900px){
+  /* the fourth row is empty and takes 1fr: it swallows whatever the map is
+     taller than the column beside it, instead of stretching the gaps */
+  .hero{
+    grid-template-columns:minmax(290px,.86fr) minmax(0,1.14fr);
+    grid-template-areas:"head map" "lede map" "acts map" "pad map";
+    grid-template-rows:auto auto auto 1fr;
+  }
+  /* keep the map's own proportions rather than letterboxing it: cap the width,
+     and the intrinsic ratio brings the height down with it */
+  .hero-map .mapbox{max-width:calc(min(56vh,540px) * 1.2565); margin-inline:auto}
+}
+.hero .lede:first-child{margin-top:0}
+.hero .mapwrap{margin:0}
+.hero .mapkey{margin-top:11px}
+.hero-stats{margin-top:12px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:3px 12px}
+.hero-stats b{color:var(--ink); font-weight:400}
+.hero-acts{display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px}
+.hero-play{margin:0; max-width:320px; flex:1 1 260px}
+.acts{
+  list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px 20px;
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:11px;
+}
+.acts a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+.acts a:hover{color:var(--heath); border-bottom-color:var(--heath)}
+/* the kite sits in the slack under the column, which is the only place on the
+   front page that has room for it now */
+.hero .hilldev{grid-area:pad; width:86px; margin:0; align-self:end; justify-self:start}
+@media (max-width:899px){.hero .hilldev{display:none}}
 
 /* ---- section furniture ------------------------------------------- */
 section.blk{margin-top:clamp(42px,6vw,72px)}
@@ -337,7 +384,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   /* read at arm's length, outdoors, in sun: the phone sizes are a step up from
      the desktop ones, and the small furniture a bigger step than the prose */
   body{font-size:18px; line-height:1.62}
-  .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig{font-size:12.5px}
+  .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig,.acts{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
   .walk p{font-size:1.02rem}
   .wrap{padding-bottom:72px}

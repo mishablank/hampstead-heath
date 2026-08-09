@@ -67,6 +67,9 @@ body{
 /* 20px is the floor, not 16: at 375px the old gutter put the last character of
    every line within a thumb's width of the bezel */
 .wrap{max-width:940px; margin:0 auto; padding:0 clamp(20px,4vw,40px) 96px}
+/* the masthead runs wider than the measure, because it now carries the map and
+   a map that is narrower than the prose beside it is not worth putting first */
+.wrap-hero{max-width:1140px; padding-bottom:0}
 a{color:var(--heath); text-underline-offset:2px; text-decoration-thickness:from-font}
 a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .lab{
@@ -77,6 +80,8 @@ a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 
 /* ---- masthead ---------------------------------------------------- */
 header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
+/* the front page spends its top margin on the map instead */
+.wrap-hero header.cart{padding-top:clamp(18px,2.6vw,30px)}
 /* wraps rather than squeezes: on a phone the controls take their own row and
    the eyebrow gets its full line back */
 /* spans the masthead grid, so the controls end at the page's right margin
@@ -158,6 +163,48 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .lede{margin:.8em 0 0; max-width:58ch; font-size:clamp(1rem,1.6vw,1.0625rem); color:var(--ink-2)}
 .lede b{color:var(--ink); font-weight:600}
 .hilldev{width:clamp(92px,12vw,132px); height:auto; flex:none; color:var(--ink-3)}
+
+/* ---- the hero: the map is the first thing on the page -------------- */
+/* Phone order is head, map, lede, acts: the map has to be on the first
+   screen, and the paragraph explaining it can wait until under it. */
+.hero{
+  grid-column:1 / -1; display:grid; grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"head" "map" "lede" "acts";
+  gap:clamp(18px,2.4vw,26px) clamp(24px,4vw,50px);
+  margin-top:clamp(12px,1.6vw,18px);
+}
+.hero-head{grid-area:head} .hero-map{grid-area:map; min-width:0}
+.hero-lede{grid-area:lede} .hero-acts{grid-area:acts}
+@media (min-width:900px){
+  /* the fourth row is empty and takes 1fr: it swallows whatever the map is
+     taller than the column beside it, instead of stretching the gaps */
+  .hero{
+    grid-template-columns:minmax(290px,.86fr) minmax(0,1.14fr);
+    grid-template-areas:"head map" "lede map" "acts map" "pad map";
+    grid-template-rows:auto auto auto 1fr;
+  }
+  /* keep the map's own proportions rather than letterboxing it: cap the width,
+     and the intrinsic ratio brings the height down with it */
+  .hero-map .mapbox{max-width:calc(min(56vh,540px) * 1.2565); margin-inline:auto}
+}
+.hero .lede:first-child{margin-top:0}
+.hero .mapwrap{margin:0}
+.hero .mapkey{margin-top:11px}
+.hero-stats{margin-top:12px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:3px 12px}
+.hero-stats b{color:var(--ink); font-weight:400}
+.hero-acts{display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px}
+.hero-play{margin:0; max-width:320px; flex:1 1 260px}
+.acts{
+  list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px 20px;
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:11px;
+}
+.acts a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+.acts a:hover{color:var(--heath); border-bottom-color:var(--heath)}
+/* the kite sits in the slack under the column, which is the only place on the
+   front page that has room for it now */
+.hero .hilldev{grid-area:pad; width:86px; margin:0; align-self:end; justify-self:start}
+@media (max-width:899px){.hero .hilldev{display:none}}
 
 /* ---- section furniture ------------------------------------------- */
 section.blk{margin-top:clamp(42px,6vw,72px)}
@@ -337,7 +384,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   /* read at arm's length, outdoors, in sun: the phone sizes are a step up from
      the desktop ones, and the small furniture a bigger step than the prose */
   body{font-size:18px; line-height:1.62}
-  .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig{font-size:12.5px}
+  .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig,.acts{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
   .walk p{font-size:1.02rem}
   .wrap{padding-bottom:72px}
@@ -1254,40 +1301,17 @@ footer p{margin:0 0 8px; max-width:70ch}
 </head>
 <body>
 
-<div class="wrap">
+<div class="wrap wrap-hero">
 
 <header class="cart">
   <div class="cart-inner">
     <div class="topbar"><p class="lab">The audio guide &#183; Hampstead, NW3</p><span class="hdr-actions"><span class="hgrp"><a class="iconbtn" href="https://github.com/mishablank/hampstead-heath" target="_blank" rel="noopener" aria-label="Star this guide on GitHub" title="Star on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="iconbtn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2F&amp;text=Hampstead%20Heath%2C%20read%20aloud%20-%20a%20free%20twenty-four-stop%20walking%20audio%20guide%20to%20Hampstead%20Heath" target="_blank" rel="noopener" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a><a class="iconbtn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2F" target="_blank" rel="noopener" aria-label="Share on Facebook" title="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><button class="iconbtn" id="sharebtn" type="button" data-url="https://hampstead-heath.blankm.workers.dev/" data-title="Hampstead Heath, read aloud - a free twenty-four-stop walking audio guide to Hampstead Heath" aria-label="Share this page" title="Share"><svg class="i-share" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button></span><span class="hgrp"><span class="hcredit">Made by <a href="https://www.linkedin.com/in/mishablank/" target="_blank" rel="me noopener">Mike Blank</a></span><button class="themectl" id="themebtn" type="button"><i aria-hidden="true"></i><span class="tword">Theme</span> <span id="themelab">Bright</span></button></span></span></div>
-    <div>
-      <h1>Hampstead Heath, <em>read aloud</em></h1>
-      <p class="lede">The twenty-four-stop walk as <b>27 tracks, 55 minutes</b>, to be played standing in front of the thing it describes. Every track opens where you should be standing and closes by telling you where to go next. This page is the transcript, word for word, so you can read it on the train or hand it to someone without headphones.</p>
-    </div>
-    <svg class="hilldev" viewBox="0 0 120 120" aria-hidden="true">
-      <g fill="none" stroke="currentColor" stroke-width="1" opacity=".85">
-        <path d="M6 92 C22 88 30 76 44 74 C58 72 66 80 82 76 C96 73 106 66 114 62"/>
-        <path d="M14 82 C28 78 34 68 46 66 C58 64 66 70 80 67 C92 64 100 58 108 55"/>
-        <path d="M24 72 C34 69 40 61 48 59 C58 57 64 61 76 59 C86 57 92 52 99 49"/>
-      </g>
-      <g stroke="currentColor" stroke-width="1" opacity=".5" fill="none">
-        <ellipse cx="40" cy="102" rx="15" ry="4"/>
-        <ellipse cx="76" cy="108" rx="19" ry="5"/>
-      </g>
-      <g stroke="currentColor" stroke-width="1.4" fill="none">
-        <path d="M62 55 L62 30"/>
-        <path d="M62 30 L74 20 L86 30 L74 40 Z" stroke-width="1.6"/>
-        <path d="M74 40 q3 6 -2 9 q-5 3 -2 8" stroke-width="1" opacity=".6"/>
-      </g>
-      <circle cx="62" cy="56" r="2.6" fill="currentColor"/>
-    </svg>
-  </div>
-</header>
-
-<main>
-
-<section class="blk" id="map">
-  <h2>The map <span>24 stops</span></h2>
-  <p class="blk-sub">The loop, anticlockwise, starting and ending at the station. Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. There are no map tiles here and nothing is fetched from anywhere, so it works with one bar of signal. <a href="hampstead-heath-walk.gpx" download>Download the route as GPX</a> for a map application that can actually navigate, or <a href="hampstead-heath-full-walk.m4a" download>the whole walk as one audio file</a> to carry it where there is no signal at all.</p>
+    <div class="hero">
+      <div class="hero-head">
+        <h1>Hampstead Heath, <em>read aloud</em></h1>
+        <p class="lab hero-stats"><span><b>24</b> stops</span><span><b>27</b> tracks</span><span><b>55</b> minutes</span><span>Free</span></p>
+      </div>
+      <div class="hero-map">
 <figure class="mapwrap">
 <div class="mapbox">
 <svg id="mp" viewBox="0 0 1000 796" role="group" aria-label="Map of the walk, 24 stops in order" preserveAspectRatio="xMidYMid meet">
@@ -1327,13 +1351,51 @@ footer p{margin:0 0 8px; max-width:70ch}
 </div>
 <figcaption id="mcap">Tap a number to play that stop. The dotted line is the order of the stops, not the path you walk. Map data <a href="https://www.openstreetmap.org/copyright">&#169; OpenStreetMap contributors</a>, ODbL.</figcaption>
 </figure>
-  <div class="mapkey lab">
-    <span><i style="background:var(--heath)"></i>Village & street</span>
-    <span><i style="background:var(--contour)"></i>High ground</span>
-    <span><i style="background:var(--water)"></i>Water</span>
-    <span><i style="background:var(--brick)"></i>House & museum</span>
+        <div class="mapkey lab">
+          <span><i style="background:var(--heath)"></i>Village & street</span>
+          <span><i style="background:var(--contour)"></i>High ground</span>
+          <span><i style="background:var(--water)"></i>Water</span>
+          <span><i style="background:var(--brick)"></i>House & museum</span>
+        </div>
+      </div>
+      <div class="hero-lede">
+        <p class="lede">The twenty-four-stop walk as <b>27 tracks, 55 minutes</b>, to be played standing in front of the thing it describes. Every track opens where you should be standing and closes by telling you where to go next. This page is the transcript, word for word, so you can read it on the train or hand it to someone without headphones.</p>
+        <p class="lede">The loop above runs anticlockwise, starting and ending at the station. Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. There are no map tiles here and nothing is fetched from anywhere, so it works with one bar of signal.</p>
+      </div>
+      <div class="hero-acts">
+        <div class="play hero-play" data-i="0"><button class="pb" aria-label="Play How to use this"></button><span class="plab">From the start</span><span class="pgs"><i></i></span><span class="ptime">1:21</span></div>
+        <ul class="acts">
+          <li><a href="hampstead-heath-walk.gpx" download>The route as GPX</a></li>
+          <li><a href="hampstead-heath-full-walk.m4a" download>The whole walk, one file</a></li>
+          <li><a href="stops/">A page per stop</a></li>
+        </ul>
+      </div>
+      <svg class="hilldev" viewBox="0 0 120 120" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="1" opacity=".85">
+        <path d="M6 92 C22 88 30 76 44 74 C58 72 66 80 82 76 C96 73 106 66 114 62"/>
+        <path d="M14 82 C28 78 34 68 46 66 C58 64 66 70 80 67 C92 64 100 58 108 55"/>
+        <path d="M24 72 C34 69 40 61 48 59 C58 57 64 61 76 59 C86 57 92 52 99 49"/>
+      </g>
+      <g stroke="currentColor" stroke-width="1" opacity=".5" fill="none">
+        <ellipse cx="40" cy="102" rx="15" ry="4"/>
+        <ellipse cx="76" cy="108" rx="19" ry="5"/>
+      </g>
+      <g stroke="currentColor" stroke-width="1.4" fill="none">
+        <path d="M62 55 L62 30"/>
+        <path d="M62 30 L74 20 L86 30 L74 40 Z" stroke-width="1.6"/>
+        <path d="M74 40 q3 6 -2 9 q-5 3 -2 8" stroke-width="1" opacity=".6"/>
+      </g>
+      <circle cx="62" cy="56" r="2.6" fill="currentColor"/>
+    </svg>
+    </div>
   </div>
-</section>
+</header>
+
+</div>
+
+<div class="wrap">
+
+<main>
 
 <section class="blk">
   <h2>The tape <span>54:56 of narration</span></h2>

@@ -1519,6 +1519,9 @@ body{
 /* 20px is the floor, not 16: at 375px the old gutter put the last character of
    every line within a thumb's width of the bezel */
 .wrap{max-width:940px; margin:0 auto; padding:0 clamp(20px,4vw,40px) 96px}
+/* the masthead runs wider than the measure, because it now carries the map and
+   a map that is narrower than the prose beside it is not worth putting first */
+.wrap-hero{max-width:1140px; padding-bottom:0}
 a{color:var(--heath); text-underline-offset:2px; text-decoration-thickness:from-font}
 a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .lab{
@@ -1529,6 +1532,8 @@ a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 
 /* ---- masthead ---------------------------------------------------- */
 header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
+/* the front page spends its top margin on the map instead */
+.wrap-hero header.cart{padding-top:clamp(18px,2.6vw,30px)}
 /* wraps rather than squeezes: on a phone the controls take their own row and
    the eyebrow gets its full line back */
 /* spans the masthead grid, so the controls end at the page's right margin
@@ -1610,6 +1615,48 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .lede{margin:.8em 0 0; max-width:58ch; font-size:clamp(1rem,1.6vw,1.0625rem); color:var(--ink-2)}
 .lede b{color:var(--ink); font-weight:600}
 .hilldev{width:clamp(92px,12vw,132px); height:auto; flex:none; color:var(--ink-3)}
+
+/* ---- the hero: the map is the first thing on the page -------------- */
+/* Phone order is head, map, lede, acts: the map has to be on the first
+   screen, and the paragraph explaining it can wait until under it. */
+.hero{
+  grid-column:1 / -1; display:grid; grid-template-columns:minmax(0,1fr);
+  grid-template-areas:"head" "map" "lede" "acts";
+  gap:clamp(18px,2.4vw,26px) clamp(24px,4vw,50px);
+  margin-top:clamp(12px,1.6vw,18px);
+}
+.hero-head{grid-area:head} .hero-map{grid-area:map; min-width:0}
+.hero-lede{grid-area:lede} .hero-acts{grid-area:acts}
+@media (min-width:900px){
+  /* the fourth row is empty and takes 1fr: it swallows whatever the map is
+     taller than the column beside it, instead of stretching the gaps */
+  .hero{
+    grid-template-columns:minmax(290px,.86fr) minmax(0,1.14fr);
+    grid-template-areas:"head map" "lede map" "acts map" "pad map";
+    grid-template-rows:auto auto auto 1fr;
+  }
+  /* keep the map's own proportions rather than letterboxing it: cap the width,
+     and the intrinsic ratio brings the height down with it */
+  .hero-map .mapbox{max-width:calc(min(56vh,540px) * 1.2565); margin-inline:auto}
+}
+.hero .lede:first-child{margin-top:0}
+.hero .mapwrap{margin:0}
+.hero .mapkey{margin-top:11px}
+.hero-stats{margin-top:12px; color:var(--ink-2); display:flex; flex-wrap:wrap; gap:3px 12px}
+.hero-stats b{color:var(--ink); font-weight:400}
+.hero-acts{display:flex; flex-wrap:wrap; align-items:center; gap:14px 22px}
+.hero-play{margin:0; max-width:320px; flex:1 1 260px}
+.acts{
+  list-style:none; margin:0; padding:0; display:flex; flex-wrap:wrap; gap:6px 20px;
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:11px;
+}
+.acts a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+.acts a:hover{color:var(--heath); border-bottom-color:var(--heath)}
+/* the kite sits in the slack under the column, which is the only place on the
+   front page that has room for it now */
+.hero .hilldev{grid-area:pad; width:86px; margin:0; align-self:end; justify-self:start}
+@media (max-width:899px){.hero .hilldev{display:none}}
 
 /* ---- section furniture ------------------------------------------- */
 section.blk{margin-top:clamp(42px,6vw,72px)}
@@ -1789,7 +1836,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   /* read at arm's length, outdoors, in sun: the phone sizes are a step up from
      the desktop ones, and the small furniture a bigger step than the prose */
   body{font-size:18px; line-height:1.62}
-  .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig{font-size:12.5px}
+  .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig,.acts{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
   .walk p{font-size:1.02rem}
   .wrap{padding-bottom:72px}
@@ -2954,48 +3001,68 @@ def render(tracks):
            og_desc="Twenty-four stops, from the deepest station in London to the swimming "
                    "ponds. %d tracks, %d minutes, free, and the whole script is on the page."
                    % (len(tracks), round(total / 60))))
-    w('<div class="wrap">\n')
-
-    # masthead ------------------------------------------------------------
+    # masthead, with the map in it ----------------------------------------
+    # The map is the front page, not a section of it: on a phone it sits under
+    # the title and above the paragraph that explains it, so the first screen
+    # is the walk rather than a description of the walk.
+    svg = map_svg(tracks)
+    w('<div class="wrap wrap-hero">\n')
     w('<header class="cart">')
     w('  <div class="cart-inner">')
     w(topbar('<p class="lab">The audio guide &#183; Hampstead, NW3</p>', url(),
              "%s - a free %s-stop walking audio guide to Hampstead Heath"
              % (SITE_NAME, in_words(STOP_COUNT))))
-    w("    <div>")
-    w("      <h1>Hampstead Heath, <em>read aloud</em></h1>")
-    w('      <p class="lede">The twenty-four-stop walk as <b>%d tracks, %d minutes</b>, to be played '
+    w('    <div class="hero">')
+    w('      <div class="hero-head">')
+    w("        <h1>Hampstead Heath, <em>read aloud</em></h1>")
+    w('        <p class="lab hero-stats"><span><b>%d</b> stops</span><span><b>%d</b> tracks</span>'
+      "<span><b>%d</b> minutes</span><span>Free</span></p>"
+      % (STOP_COUNT, len(tracks), round(total / 60)))
+    w("      </div>")
+    if svg:
+        w('      <div class="hero-map">')
+        w(svg)
+        w('        <div class="mapkey lab">')
+        for kind, label in (("village", "Village & street"), ("high", "High ground"),
+                            ("water", "Water"), ("house", "House & museum")):
+            w('          <span><i style="background:var(--%s)"></i>%s</span>'
+              % ({"village": "heath", "high": "contour", "water": "water",
+                  "house": "brick"}[kind], label))
+        w("        </div>")
+        w("      </div>")
+    w('      <div class="hero-lede">')
+    w('        <p class="lede">The twenty-four-stop walk as <b>%d tracks, %d minutes</b>, to be played '
       "standing in front of the thing it describes. Every track opens where you should be standing "
       "and closes by telling you where to go next. This page is the transcript, word for word, so "
       "you can read it on the train or hand it to someone without headphones.</p>"
       % (len(tracks), round(total / 60)))
+    if svg:
+        w('        <p class="lede">The loop above runs anticlockwise, starting and ending at the '
+          "station. Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. "
+          "There are no map tiles here and nothing is fetched from anywhere, so it works with "
+          "one bar of signal.</p>")
+    w("      </div>")
+    w('      <div class="hero-acts">')
+    w('        <div class="play hero-play" data-i="0">'
+      '<button class="pb" aria-label="Play %s"></button>'
+      '<span class="plab">From the start</span><span class="pgs"><i></i></span>'
+      '<span class="ptime">%s</span></div>'
+      % (esc(tracks[0][0]["title"]), clock(tracks[0][2])))
+    w('        <ul class="acts">')
+    w('          <li><a href="hampstead-heath-walk.gpx" download>The route as GPX</a></li>')
+    w('          <li><a href="hampstead-heath-full-walk.m4a" download>The whole walk, one '
+      "file</a></li>")
+    w('          <li><a href="stops/">A page per stop</a></li>')
+    w("        </ul>")
+    w("      </div>")
+    w("      " + DEVICE)
     w("    </div>")
-    w("    " + DEVICE)
     w("  </div>")
     w("</header>\n")
-    w("<main>\n")
+    w("</div>\n")
 
-    # map -----------------------------------------------------------------
-    svg = map_svg(tracks)
-    if svg:
-        w('<section class="blk" id="map">')
-        w("  <h2>The map <span>%d stops</span></h2>" % STOP_COUNT)
-        w('  <p class="blk-sub">The loop, anticlockwise, starting and ending at the station. '
-          "Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. "
-          "There are no map tiles here and nothing is fetched from anywhere, so it works with "
-          "one bar of signal. <a href=\"hampstead-heath-walk.gpx\" download>Download the route "
-          "as GPX</a> for a map application that can actually navigate, or "
-          '<a href="hampstead-heath-full-walk.m4a" download>the whole walk as one audio '
-          "file</a> to carry it where there is no signal at all.</p>")
-        w(svg)
-        w('  <div class="mapkey lab">')
-        for kind, label in (("village", "Village & street"), ("high", "High ground"),
-                            ("water", "Water"), ("house", "House & museum")):
-            w('    <span><i style="background:var(--%s)"></i>%s</span>'
-              % ({"village": "heath", "high": "contour", "water": "water",
-                  "house": "brick"}[kind], label))
-        w("  </div>")
-        w("</section>\n")
+    w('<div class="wrap">\n')
+    w("<main>\n")
 
     # contents ------------------------------------------------------------
     w('<section class="blk">')
