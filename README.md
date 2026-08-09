@@ -2,19 +2,19 @@
 
 **https://hampstead-heath.blankm.workers.dev**
 
-A twenty-stop loop from Hampstead Underground station, over the top of the
-Heath to Kenwood and back down past the swimming ponds. 23 tracks, 43 minutes,
-plus the full transcript.
+A twenty-four-stop loop from Hampstead Underground station, over the top of the
+Heath to Kenwood and back down past the swimming ponds. 27 tracks, plus the
+full transcript.
 
 Every track opens with where you should be standing and closes by telling you
 where to walk next. Nothing auto-advances: between stops you are walking, not
 listening.
 
 - `index.html` – the page: map, transcript, a photograph and a play button on every stop
-- `audio/` – the 23 tracks
+- `audio/` – the 27 tracks
 - `images/` – one photograph per track, plus `credits.json`
 - `map.json` – the shape of the Heath, its water and its roads, from OpenStreetMap
-- `hampstead-heath-walk.gpx` – the twenty stops for a real navigation app
+- `hampstead-heath-walk.gpx` – the stops for a real navigation app
 - `hampstead-heath-full-walk.m4a` – all of it as one continuous file, for offline
 - `build.py` – the narration, and everything that is generated from it
 - `fetch_images.py` – re-fetches the photographs from Wikimedia Commons
@@ -32,16 +32,16 @@ not.
 
 The build uses Amazon Polly's generative engine instead. Commercial use is
 covered by the AWS customer agreement, and the free tier covers 100,000
-generative characters a month for the first year – near enough three times the
-size of this script, so a rebuild is usually free. After that it is $30 per
-million characters, which is about $1.09 a rebuild.
+generative characters a month for the first year – a little over twice the size
+of this script, so a rebuild is usually free, but two in a month is not. After
+that it is $30 per million characters, which is about $1.38 a rebuild.
 
 ```bash
 aws configure                     # once; region eu-west-2
 python3 build.py --voices         # the en-GB generative voices
 export POLLY_VOICE=Amy            # or Brian; those are the two en-GB ones
 python3 build.py --sample         # one track, to hear it before committing
-python3 build.py                  # all 23, then rebuilds the page
+python3 build.py                  # all 27 tracks, then rebuilds the page
 ```
 
 The region matters. Polly's generative engine runs in nine regions only, and
@@ -79,8 +79,21 @@ python3 build.py --cover    # redraw cover.jpg
 ```
 
 The text lives in one place, `STOPS` in `build.py`, so the transcript on the
-page cannot drift out of step with the recording. Change `VOICE` and `RATE` at
-the top and the whole set rebuilds in about a minute.
+page cannot drift out of step with the recording. Change the voice settings at
+the top and the whole set rebuilds in one pass.
+
+## Adding or moving a stop
+
+Stop numbers are assigned from walking order in `build.py`, not written into
+each entry, so inserting one renumbers the guide by itself. Three things do
+need doing by hand: the spoken cross-references in neighbouring `walk` texts,
+a coordinate in `STOPS_LL` in `fetch_map.py`, and a picture in `PICKS` in
+`fetch_images.py`.
+
+Be aware that inserting a stop changes the index prefix on every audio and
+image file after it, so the whole set has to be re-rendered and re-fetched
+before the page will build. Do that on a branch: a half-renumbered `main`
+deploys a page whose photographs and audio all 404.
 
 ## Pictures
 

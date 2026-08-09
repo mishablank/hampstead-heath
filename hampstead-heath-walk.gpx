@@ -1,46 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="hampstead-heath audio guide" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Hampstead Heath and its village</name><desc>Twenty stops, in walking order.</desc></metadata>
+  <metadata><name>Hampstead Heath and its village</name><desc>24 stops, in walking order.</desc></metadata>
   <wpt lat="51.55654" lon="-0.17812"><name>1. Hampstead Underground Station</name><desc>Heath Street</desc></wpt>
   <wpt lat="51.55618" lon="-0.18108"><name>2. Church Row and Saint John-at-Hampstead</name><desc>Church Row</desc></wpt>
-  <wpt lat="51.55888" lon="-0.17970"><name>3. Fenton House</name><desc>Hampstead Grove</desc></wpt>
-  <wpt lat="51.56057" lon="-0.18004"><name>4. Hampstead Observatory</name><desc>Lower Terrace</desc></wpt>
-  <wpt lat="51.56056" lon="-0.17920"><name>5. Whitestone Pond</name><desc>the top of Heath Street</desc></wpt>
-  <wpt lat="51.56560" lon="-0.18397"><name>6. The Hill Garden and Pergola</name><desc>Inverforth Close, North End Way</desc></wpt>
-  <wpt lat="51.56682" lon="-0.18938"><name>7. Golders Hill Park</name><desc>North End Way</desc></wpt>
-  <wpt lat="51.56145" lon="-0.18010"><name>8. Jack Straw's Castle</name><desc>North End Way</desc></wpt>
-  <wpt lat="51.56294" lon="-0.17628"><name>9. The Vale of Health</name><desc>off East Heath Road</desc></wpt>
-  <wpt lat="51.57023" lon="-0.17372"><name>10. The Spaniards Inn</name><desc>Spaniards Road</desc></wpt>
-  <wpt lat="51.57155" lon="-0.16734"><name>11. Kenwood House</name><desc>Hampstead Lane</desc></wpt>
-  <wpt lat="51.57155" lon="-0.16734"><name>12. Dido Elizabeth Belle</name><desc>inside Kenwood</desc></wpt>
-  <wpt lat="51.56699" lon="-0.16042"><name>13. The Kenwood Ladies' Pond</name><desc>off Millfield Lane</desc></wpt>
-  <wpt lat="51.56475" lon="-0.15905"><name>14. The Highgate Men's Pond</name><desc>Millfield Lane</desc></wpt>
-  <wpt lat="51.56060" lon="-0.15760"><name>15. The Tumulus</name><desc>south of the Highgate Ponds</desc></wpt>
-  <wpt lat="51.55940" lon="-0.15450"><name>16. Parliament Hill</name><desc>Parliament Hill Fields</desc></wpt>
-  <wpt lat="51.55644" lon="-0.15131"><name>17. Parliament Hill Lido</name><desc>Gordon House Road</desc></wpt>
-  <wpt lat="51.55758" lon="-0.16554"><name>18. The Hampstead Ponds and the River Fleet</name><desc>the Hampstead chain</desc></wpt>
-  <wpt lat="51.55552" lon="-0.16794"><name>19. Keats House</name><desc>Keats Grove</desc></wpt>
-  <wpt lat="51.55819" lon="-0.17504"><name>20. Well Walk and Burgh House</name><desc>Well Walk and New End Square</desc></wpt>
-  <rte><name>Hampstead Heath, twenty stops</name>
+  <wpt lat="51.55690" lon="-0.18029"><name>3. Saint Mary's, Holly Walk</name><desc>Holly Place</desc></wpt>
+  <wpt lat="51.55800" lon="-0.17946"><name>4. Holly Bush Hill</name><desc>Holly Bush Hill</desc></wpt>
+  <wpt lat="51.55888" lon="-0.17970"><name>5. Fenton House</name><desc>Hampstead Grove</desc></wpt>
+  <wpt lat="51.55976" lon="-0.18001"><name>6. Admiral's House</name><desc>Admiral's Walk</desc></wpt>
+  <wpt lat="51.56057" lon="-0.18004"><name>7. Hampstead Observatory</name><desc>Lower Terrace</desc></wpt>
+  <wpt lat="51.56056" lon="-0.17920"><name>8. Whitestone Pond</name><desc>the top of Heath Street</desc></wpt>
+  <wpt lat="51.56560" lon="-0.18397"><name>9. The Hill Garden and Pergola</name><desc>Inverforth Close, North End Way</desc></wpt>
+  <wpt lat="51.56682" lon="-0.18938"><name>10. Golders Hill Park</name><desc>North End Way</desc></wpt>
+  <wpt lat="51.56145" lon="-0.18010"><name>11. Jack Straw's Castle</name><desc>North End Way</desc></wpt>
+  <wpt lat="51.56294" lon="-0.17628"><name>12. The Vale of Health</name><desc>off East Heath Road</desc></wpt>
+  <wpt lat="51.57023" lon="-0.17372"><name>13. The Spaniards Inn</name><desc>Spaniards Road</desc></wpt>
+  <wpt lat="51.57155" lon="-0.16734"><name>14. Kenwood House</name><desc>Hampstead Lane</desc></wpt>
+  <wpt lat="51.57155" lon="-0.16734"><name>15. Dido Elizabeth Belle</name><desc>inside Kenwood</desc></wpt>
+  <wpt lat="51.56699" lon="-0.16042"><name>16. The Kenwood Ladies' Pond</name><desc>off Millfield Lane</desc></wpt>
+  <wpt lat="51.56475" lon="-0.15905"><name>17. The Highgate Men's Pond</name><desc>Millfield Lane</desc></wpt>
+  <wpt lat="51.56060" lon="-0.15760"><name>18. The Tumulus</name><desc>south of the Highgate Ponds</desc></wpt>
+  <wpt lat="51.55940" lon="-0.15450"><name>19. Parliament Hill</name><desc>Parliament Hill Fields</desc></wpt>
+  <wpt lat="51.55644" lon="-0.15131"><name>20. Parliament Hill Lido</name><desc>Gordon House Road</desc></wpt>
+  <wpt lat="51.55758" lon="-0.16554"><name>21. The Hampstead Ponds and the River Fleet</name><desc>the Hampstead chain</desc></wpt>
+  <wpt lat="51.55552" lon="-0.16794"><name>22. Keats House</name><desc>Keats Grove</desc></wpt>
+  <wpt lat="51.56018" lon="-0.17455"><name>23. The Cannon Lane Lock-Up</name><desc>Cannon Lane</desc></wpt>
+  <wpt lat="51.55819" lon="-0.17504"><name>24. Well Walk and Burgh House</name><desc>Well Walk and New End Square</desc></wpt>
+  <rte><name>Hampstead Heath, 24 stops</name>
     <rtept lat="51.55654" lon="-0.17812"><name>1</name></rtept>
     <rtept lat="51.55618" lon="-0.18108"><name>2</name></rtept>
-    <rtept lat="51.55888" lon="-0.17970"><name>3</name></rtept>
-    <rtept lat="51.56057" lon="-0.18004"><name>4</name></rtept>
-    <rtept lat="51.56056" lon="-0.17920"><name>5</name></rtept>
-    <rtept lat="51.56560" lon="-0.18397"><name>6</name></rtept>
-    <rtept lat="51.56682" lon="-0.18938"><name>7</name></rtept>
-    <rtept lat="51.56145" lon="-0.18010"><name>8</name></rtept>
-    <rtept lat="51.56294" lon="-0.17628"><name>9</name></rtept>
-    <rtept lat="51.57023" lon="-0.17372"><name>10</name></rtept>
-    <rtept lat="51.57155" lon="-0.16734"><name>11</name></rtept>
-    <rtept lat="51.57155" lon="-0.16734"><name>12</name></rtept>
-    <rtept lat="51.56699" lon="-0.16042"><name>13</name></rtept>
-    <rtept lat="51.56475" lon="-0.15905"><name>14</name></rtept>
-    <rtept lat="51.56060" lon="-0.15760"><name>15</name></rtept>
-    <rtept lat="51.55940" lon="-0.15450"><name>16</name></rtept>
-    <rtept lat="51.55644" lon="-0.15131"><name>17</name></rtept>
-    <rtept lat="51.55758" lon="-0.16554"><name>18</name></rtept>
-    <rtept lat="51.55552" lon="-0.16794"><name>19</name></rtept>
-    <rtept lat="51.55819" lon="-0.17504"><name>20</name></rtept>
+    <rtept lat="51.55690" lon="-0.18029"><name>3</name></rtept>
+    <rtept lat="51.55800" lon="-0.17946"><name>4</name></rtept>
+    <rtept lat="51.55888" lon="-0.17970"><name>5</name></rtept>
+    <rtept lat="51.55976" lon="-0.18001"><name>6</name></rtept>
+    <rtept lat="51.56057" lon="-0.18004"><name>7</name></rtept>
+    <rtept lat="51.56056" lon="-0.17920"><name>8</name></rtept>
+    <rtept lat="51.56560" lon="-0.18397"><name>9</name></rtept>
+    <rtept lat="51.56682" lon="-0.18938"><name>10</name></rtept>
+    <rtept lat="51.56145" lon="-0.18010"><name>11</name></rtept>
+    <rtept lat="51.56294" lon="-0.17628"><name>12</name></rtept>
+    <rtept lat="51.57023" lon="-0.17372"><name>13</name></rtept>
+    <rtept lat="51.57155" lon="-0.16734"><name>14</name></rtept>
+    <rtept lat="51.57155" lon="-0.16734"><name>15</name></rtept>
+    <rtept lat="51.56699" lon="-0.16042"><name>16</name></rtept>
+    <rtept lat="51.56475" lon="-0.15905"><name>17</name></rtept>
+    <rtept lat="51.56060" lon="-0.15760"><name>18</name></rtept>
+    <rtept lat="51.55940" lon="-0.15450"><name>19</name></rtept>
+    <rtept lat="51.55644" lon="-0.15131"><name>20</name></rtept>
+    <rtept lat="51.55758" lon="-0.16554"><name>21</name></rtept>
+    <rtept lat="51.55552" lon="-0.16794"><name>22</name></rtept>
+    <rtept lat="51.56018" lon="-0.17455"><name>23</name></rtept>
+    <rtept lat="51.55819" lon="-0.17504"><name>24</name></rtept>
   </rte>
 </gpx>

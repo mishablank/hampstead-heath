@@ -83,7 +83,7 @@ STAMP = os.path.join(HERE, "voice.json")   # what actually made the audio here
 
 STOPS = [
 dict(kind="intro", n=None, title="How to use this", where="Introduction", body=[
-"Hampstead Heath and its village. A walking gazetteer, in twenty stops.",
+"Hampstead Heath and its village. A walking gazetteer, in twenty-four stops.",
 
 "This is a single loop that starts and ends outside Hampstead Underground "
 "station, on Heath Street. Something over three hours of walking before you "
@@ -96,8 +96,8 @@ dict(kind="intro", n=None, title="How to use this", where="Introduction", body=[
 "Wear shoes you do not mind. Two thirds of this is unpaved, the Heath sits on "
 "London clay, and it holds water for days after rain.",
 
-"Fifteen of the twenty stops are free. Three more are free unless you get into "
-"the water. Two of them charge at the door.",
+"Nineteen of the twenty-four stops are free. Three more are free unless you get "
+"into the water. Two of them charge at the door.",
 
 "Every track starts with where you should be standing and ends by telling you "
 "where to go next. Pause it whenever you want to look at something properly. "
@@ -161,15 +161,93 @@ dict(kind="village", n=2, title="Church Row and Saint John-at-Hampstead",
 "The extension across the road holds Hugh Gaitskell, who nearly became Prime "
 "Minister, the actor Anton Walbrook, and the ashes of Peter Cook.",
 
+"It also holds the Llewelyn Davies family. Arthur and Sylvia had five sons, "
+"and after both parents died young the boys were taken in by a family friend "
+"who had been writing stories for them for years. The friend was J M Barrie "
+"and the stories became Peter Pan. Being the boy who Peter Pan was based on "
+"turned out to be a life sentence rather than a gift, and more than one of "
+"them said so. Peter, who got the name, spent his adult life calling the book "
+"that terrible masterpiece, and in nineteen sixty he stepped in front of a "
+"train at Sloane Square.",
+
 "Free, and open most days.",
 ], walk=
-"Out through the top of the churchyard into Holly Walk, which is the narrow "
-"lane climbing north between the walls. Keep going up as it becomes Holly Bush "
-"Hill and then Hampstead Grove. Four minutes. The tall brown house behind "
-"wrought-iron gates on your right is stop three."),
+"Out through the top of the churchyard into Holly Walk, the narrow lane "
+"climbing north between the walls. Ninety seconds. On your right, set into the "
+"terrace and looking like a house that happens to have a bell, is stop three. "
+"You will walk past it if you are not counting doors."),
+
+dict(kind="village", n=3, title="Saint Mary's, Holly Walk", where="Holly Place", body=[
+"Stop three. Saint Mary's.",
+
+"It does not look like a church, and that is the whole point. It was built in "
+"eighteen sixteen, when a Catholic church in England was a recent and nervous "
+"freedom, and it is one of the earliest built in London after the Reformation. "
+"So it keeps its head down. Only the bell tower and the statue of the Virgin "
+"and Child give it away, and both of those were added in the eighteen fifties, "
+"once it was safe to be obvious.",
+
+"The man who built it was a refugee. Jean-Jacques Morel was a French priest "
+"who fled the Revolution in seventeen ninety two, arrived in England with "
+"nothing, and by seventeen ninety six was looking after the French Catholics "
+"who had washed up on this hill for the same reason. He raised the money, and "
+"the chapel went up in under a year and opened in August eighteen sixteen.",
+
+"That is the fact worth carrying for the rest of the walk. Hampstead's "
+"reputation is poets and money. But this church exists because a village on a "
+"hill absorbed a few hundred frightened foreigners and let them build "
+"something.",
+
+"Two names in the register. Graham Greene was married here in nineteen twenty "
+"seven, having converted in order to do it, which is where a great deal of his "
+"writing starts. And during the Second World War, when the Free French were "
+"running their war from London, Charles de Gaulle worshipped here.",
+
+"Free, and usually open. It is very small and very quiet, and there is a good "
+"chance you will be the only one in it.",
+], walk=
+"Keep going up Holly Walk. On your left, watch for a squat little building set "
+"in the wall: that is the old watch house, where the night watchman sat before "
+"anybody had thought of police. The lane opens out at the top. Two minutes."),
+
+dict(kind="house", n=4, title="Holly Bush Hill", where="Holly Bush Hill", body=[
+"Stop four. Holly Bush Hill, and the painter who ran away twice.",
+
+"The large weatherboarded building behind the pub is George Romney's house. In "
+"seventeen ninety six Romney, who was one of the three most fashionable "
+"portrait painters in England, bought the site up here and built himself a "
+"house with a picture gallery and a studio in it, which was an odd thing for a "
+"sick man in his sixties to do.",
+
+"He is here because of one face. From seventeen eighty two he painted Emma "
+"Hart, later Lady Hamilton, later Nelson's mistress, something like sixty "
+"times, as Circe, as a bacchante, as Joan of Arc, as anything he could think "
+"of. You will be told he came to Hampstead to recover from an affair with her. "
+"He did not. She was his model and his obsession and, so far as anybody can "
+"show, nothing else, which is stranger and rather sadder.",
+
+"The ending is the part nobody puts on the plaque. In seventeen ninety nine, "
+"after three years in this house, Romney gave it up and went home to Kendal, "
+"to the wife he had walked out on roughly thirty-five years earlier and barely "
+"seen since. She took him in and nursed him until he died.",
+
+"The pub in front of you is the Holly Bush, late seventeen hundreds, gas-lit, "
+"partitioned, and almost untouched. It is on most people's list of the best "
+"pubs in London and it deserves to be.",
+
+"And round the corner on Windmill Hill is Bolton House, where Joanna Baillie "
+"lived for about sixty years. She was the most performed woman playwright of "
+"her age. Byron, Wordsworth, Keats and Walter Scott all came up this hill to "
+"see her, and Sarah Siddons acted her work. Her plaque went up in nineteen "
+"hundred and was only the fourth in London given to a woman.",
+
+"All free. The pub is not, but that is your own affair.",
+], walk=
+"North up Hampstead Grove, one minute. The tall brown house behind wrought-iron "
+"gates on your right is stop five."),
 
 dict(kind="house", n=3, title="Fenton House", where="Hampstead Grove", body=[
-"Stop three. Fenton House.",
+"Stop five. Fenton House.",
 
 "Sixteen eighty six, which makes it one of the earliest and largest merchant's "
 "houses left in Hampstead, built when this was a hill village a long carriage "
@@ -195,12 +273,58 @@ dict(kind="house", n=3, title="Fenton House", where="Hampstead Grove", body=[
 "whole walk that wants money at the door. Generally Wednesday to Sunday in "
 "season, and worth checking before you climb the hill.",
 ], walk=
-"Carry on north up Hampstead Grove for one minute. Lower Terrace runs off to "
-"the left. At the end of it, behind a gate, on top of what looks like a "
-"grass-covered bunker, is stop four."),
+"Carry on north up Hampstead Grove for one minute, and take the narrow lane on "
+"your left. It is called Admiral's Walk, and the white house with the thing on "
+"the roof is stop six."),
+
+dict(kind="house", n=4, title="Admiral's House", where="Admiral's Walk", body=[
+"Stop six. Admiral's House.",
+
+"Look at the roof. That is a quarterdeck, built on top of a house, four miles "
+"from the nearest tidal water, with a flagpole and a place to stand and take "
+"the salute. It is the least explicable roof in London.",
+
+"The house went up in the early seventeen hundreds. In seventeen seventy five "
+"it was bought by Lieutenant Fountain North, of the Royal Navy, who added the "
+"quarterdeck and is said to have fired cannon from it to mark naval victories "
+"and royal birthdays, which cannot have been popular with the neighbours.",
+
+"And now the correction, which is the whole reason to stand here. No admiral "
+"has ever lived in Admiral's House. There was a real admiral in Hampstead, "
+"Matthew Barton, and he also let off cannon, and at some point the village "
+"put the two men together and gave the house to the wrong one. The mistake "
+"then spread to the lane, which is why you are standing in Admiral's Walk. "
+"Nobody has ever bothered to correct it, and by now it would be vandalism.",
+
+"Two people who took it seriously. John Constable painted this house again "
+"and again, and one of those paintings is in the Victoria and Albert. And "
+"George Gilbert Scott lived here from eighteen fifty six, which means the man "
+"who designed Saint Pancras station and the Albert Memorial was working out of "
+"a house pretending to be a ship.",
+
+"One more. If you have ever seen Mary Poppins, you know a naval gentleman who "
+"fires a cannon from his roof and knocks the furniture over. This is where "
+"Admiral Boom comes from.",
+
+"And look next door, at Grove Lodge. John Galsworthy lived in it from nineteen "
+"eighteen until he died in nineteen thirty three, wrote most of the Forsyte "
+"Saga in it, and took the Nobel Prize for literature out of it in nineteen "
+"thirty two. Two houses, sharing a wall, and between them a cannon and a "
+"Nobel.",
+
+"There is also a plaque a little further down Hampstead Grove to George du "
+"Maurier, who lived there in the eighteen seventies and eighties and wrote "
+"Trilby, the novel that gave the language Svengali. Hold on to that name. His "
+"son is at stop twenty-three and his granddaughter wrote Rebecca.",
+
+"Free, and private. Look from the lane and do not ring the bell.",
+], walk=
+"Back to Hampstead Grove and keep going north. Lower Terrace runs off to the "
+"left, and at the end of it, behind a gate, on top of what looks like a "
+"grass-covered bunker, is stop seven."),
 
 dict(kind="high", n=4, title="Hampstead Observatory", where="Lower Terrace", body=[
-"Stop four. The Hampstead Observatory.",
+"Stop seven. The Hampstead Observatory.",
 
 "A small white dome on the roof of a Victorian reservoir, at the highest point "
 "of the highest hill in inner London. It was built in nineteen ten by the "
@@ -227,7 +351,7 @@ dict(kind="high", n=4, title="Hampstead Observatory", where="Lower Terrace", bod
 "runs out at a junction with a pond in the middle of it."),
 
 dict(kind="high", n=5, title="Whitestone Pond", where="the top of Heath Street", body=[
-"Stop five. Whitestone Pond, and the roof of London.",
+"Stop eight. Whitestone Pond, and the roof of London.",
 
 "You are standing at a hundred and thirty-four metres above sea level, and "
 "there is a flagstaff by the water marking four hundred and forty feet. This "
@@ -242,6 +366,12 @@ dict(kind="high", n=5, title="Whitestone Pond", where="the top of Heath Street",
 "horses in to drink and wash their hooves at the top of the climb out of "
 "London. The white stone that gives it its name is a milestone, still there at "
 "the edge, counting the miles back to Holborn.",
+
+"Height had a use before it had a view. High ground like this carried the "
+"beacon chain, the line of fires lit across the country to raise the alarm, "
+"and Hampstead's beacon stood up here in the years when England was waiting "
+"for the Spanish Armada. The flagstaff is a polite descendant of a bonfire "
+"meant to tell London it was in trouble.",
 
 "Later it went slightly to its head. Victorian Hampstead called this "
 "Hampstead-on-Sea, paddled in it, sailed model boats on it, and skated on it "
@@ -259,7 +389,7 @@ dict(kind="high", n=5, title="Whitestone Pond", where="the top of Heath Street",
 
 dict(kind="high", n=6, title="The Hill Garden and Pergola",
      where="Inverforth Close, North End Way", body=[
-"Stop six. The Hill Garden, and the Pergola.",
+"Stop nine. The Hill Garden, and the Pergola.",
 
 "You have found the raised walkway. Go up and along it slowly, because this is "
 "the strangest thing on the Heath and it takes a minute to work out what you "
@@ -294,7 +424,7 @@ dict(kind="high", n=6, title="The Hill Garden and Pergola",
 "Heath Avenue."),
 
 dict(kind="high", n=7, title="Golders Hill Park", where="North End Way", body=[
-"Stop seven. Golders Hill Park.",
+"Stop ten. Golders Hill Park.",
 
 "This is the tidy end of the Heath. Thirty-six acres of Victorian park with "
 "mown grass, a bandstand, and a walled flower garden, all of it attached to a "
@@ -318,11 +448,11 @@ dict(kind="high", n=7, title="Golders Hill Park", where="North End Way", body=[
 "Free. Open daily, and the deer are more active in the first hour.",
 ], walk=
 "Out of the gates, turn round, and walk back south-east up North End Way. It "
-"is a steady climb of about twelve minutes back to Whitestone Pond. Stop eight "
+"is a steady climb of about twelve minutes back to Whitestone Pond. Stop eleven "
 "is the large white weatherboarded building on the corner as you arrive."),
 
 dict(kind="village", n=8, title="Jack Straw's Castle", where="North End Way", body=[
-"Stop eight. Jack Straw's Castle, which is no longer a pub and has not been "
+"Stop eleven. Jack Straw's Castle, which is no longer a pub and has not been "
 "one since two thousand and two.",
 
 "Stand back and look at it anyway, because for two hundred years this was "
@@ -340,6 +470,13 @@ dict(kind="village", n=8, title="Jack Straw's Castle", where="North End Way", bo
 "for the children, which is documented in more detail than most of his "
 "economics.",
 
+"It is also in Dracula, which is set partly on this hill. Van Helsing and "
+"Doctor Seward eat dinner at Jack Straw's Castle before walking out along "
+"Spaniards Road on the business of Lucy, who is buried in a Hampstead "
+"churchyard that Stoker never quite names. He knew the ground. The Heath in "
+"that book is the safe green edge of London where something is going wrong, "
+"which is roughly how it still reads at dusk.",
+
 "The building in front of you is not the one they drank in. That was bombed, "
 "and this replacement went up in the early nineteen sixties, in weatherboard, "
 "by Raymond Erith, the architect who later rebuilt the inside of Ten Downing "
@@ -355,7 +492,7 @@ dict(kind="village", n=8, title="Jack Straw's Castle", where="North End Way", bo
 "minutes."),
 
 dict(kind="village", n=9, title="The Vale of Health", where="off East Heath Road", body=[
-"Stop nine. The Vale of Health.",
+"Stop twelve. The Vale of Health.",
 
 "A hamlet of about a hundred houses, completely surrounded by open Heath, with "
 "one road in and the same road out. There is no through traffic because there "
@@ -387,10 +524,10 @@ dict(kind="village", n=9, title="The Vale of Health", where="off East Heath Road
 "Back up the lane the way you came, and rejoin Spaniards Road at the top. Turn "
 "right and follow it north-east along the ridge, with the Heath falling away "
 "on both sides, for about twelve minutes. The road narrows to a pinch, and the "
-"pinch is stop ten."),
+"pinch is stop thirteen."),
 
 dict(kind="village", n=10, title="The Spaniards Inn", where="Spaniards Road", body=[
-"Stop ten. The Spaniards Inn, and the toll house that is still in the way.",
+"Stop thirteen. The Spaniards Inn, and the toll house that is still in the way.",
 
 "Look at the road before you look at the pub. The little building on the other "
 "side is an eighteenth-century toll house, and the gap between the two of them "
@@ -421,7 +558,7 @@ dict(kind="village", n=10, title="The Spaniards Inn", where="Spaniards Road", bo
 "the drive until the trees stop."),
 
 dict(kind="house", n=11, title="Kenwood House", where="Hampstead Lane", body=[
-"Stop eleven. Kenwood.",
+"Stop fourteen. Kenwood.",
 
 "A white villa at the top of a slope of grass, with a lake below it. Before "
 "you go in, look at the little bridge on the lake. It is a fake. There is no "
@@ -452,10 +589,10 @@ dict(kind="house", n=11, title="Kenwood House", where="Hampstead Lane", body=[
 "Free. Open daily, and book ahead if you want to be certain of the house.",
 ], walk=
 "Do not leave yet. Stay inside, find the portrait of two young women in the "
-"garden, one of them carrying fruit. Stop twelve is standing in front of it."),
+"garden, one of them carrying fruit. Stop fifteen is standing in front of it."),
 
 dict(kind="house", n=12, title="Dido Elizabeth Belle", where="inside Kenwood", body=[
-"Stop twelve. Dido Elizabeth Belle.",
+"Stop fifteen. Dido Elizabeth Belle.",
 
 "She was born in seventeen sixty one, the daughter of Sir John Lindsay, a "
 "naval officer and Lord Mansfield's nephew, and an enslaved woman called Maria "
@@ -489,11 +626,11 @@ dict(kind="house", n=12, title="Dido Elizabeth Belle", where="inside Kenwood", b
 ], walk=
 "Out of the house by the south front and down across the lawn. Keep the lake "
 "on your right, follow the path east out of the estate, and pick up Millfield "
-"Lane heading south. Eight minutes. The gate on your right is stop thirteen, "
+"Lane heading south. Eight minutes. The gate on your right is stop sixteen, "
 "and if you are a man you are not going through it."),
 
 dict(kind="water", n=13, title="The Kenwood Ladies' Pond", where="off Millfield Lane", body=[
-"Stop thirteen. The Kenwood Ladies' Pond, which opened in nineteen twenty six "
+"Stop sixteen. The Kenwood Ladies' Pond, which opened in nineteen twenty six "
 "and is therefore a hundred years old this year.",
 
 "It is the only lifeguarded women-only open-water swimming place in Britain, "
@@ -524,7 +661,7 @@ dict(kind="water", n=13, title="The Kenwood Ladies' Pond", where="off Millfield 
 "Four minutes."),
 
 dict(kind="water", n=14, title="The Highgate Men's Pond", where="Millfield Lane", body=[
-"Stop fourteen. The Highgate Men's Pond.",
+"Stop seventeen. The Highgate Men's Pond.",
 
 "Also open every day of the year. Also lifeguarded, also unheated, and rather "
 "less discreet than the one you have just walked past: there is a diving "
@@ -551,7 +688,7 @@ dict(kind="water", n=14, title="The Highgate Men's Pond", where="Millfield Lane"
 "low round mound inside an iron fence, which is easy to walk straight past."),
 
 dict(kind="high", n=15, title="The Tumulus", where="south of the Highgate Ponds", body=[
-"Stop fifteen. The tumulus, which the whole of north London calls Boudica's "
+"Stop eighteen. The tumulus, which the whole of north London calls Boudica's "
 "grave.",
 
 "It is a round mound, about thirty-six metres across and three metres high, "
@@ -583,7 +720,7 @@ dict(kind="high", n=15, title="The Tumulus", where="south of the Highgate Ponds"
 "rising and there are benches and a great many people facing the same way."),
 
 dict(kind="high", n=16, title="Parliament Hill", where="Parliament Hill Fields", body=[
-"Stop sixteen. Parliament Hill. Ninety-eight metres, and the best free view in "
+"Stop nineteen. Parliament Hill. Ninety-eight metres, and the best free view in "
 "London.",
 
 "Take it left to right. Canary Wharf on the far left, then the towers of the "
@@ -614,7 +751,7 @@ dict(kind="high", n=16, title="Parliament Hill", where="Parliament Hill Fields",
 "seventeen is the long blue rectangle behind the fence."),
 
 dict(kind="water", n=17, title="Parliament Hill Lido", where="Gordon House Road", body=[
-"Stop seventeen. Parliament Hill Lido.",
+"Stop twenty. Parliament Hill Lido.",
 
 "Sixty metres of unheated open-air water, opened in nineteen thirty eight at "
 "the very end of the great age of London lido building, when the London County "
@@ -639,13 +776,21 @@ dict(kind="water", n=17, title="Parliament Hill Lido", where="Gordon House Road"
 
 dict(kind="water", n=18, title="The Hampstead Ponds and the River Fleet",
      where="the Hampstead chain", body=[
-"Stop eighteen. The ponds, and the river underneath them.",
+"Stop twenty-one. The ponds, and the river underneath them.",
 
 "None of these is a lake. Every pond on this Heath is a dammed valley, and the "
 "grass bank you are walking along is the dam. The water in them is the River "
 "Fleet, which rises in two arms up on this hill, one under this chain and one "
 "under the Highgate chain, and which meets itself at Camden Town before "
 "running down under Farringdon and out into the Thames at Blackfriars.",
+
+"They also open English literature, in a way nobody expects. The first thing "
+"that happens in Charles Dickens's first novel is that Samuel Pickwick reads a "
+"paper to his club. The paper is about the source of the Hampstead Ponds, with "
+"some further observations on the theory of tittlebats. That is the joke "
+"Dickens chose to start with, and it only works because in eighteen thirty six "
+"a learned paper on these ponds was exactly the sort of thing a learned "
+"gentleman would write.",
 
 "It was dammed for money. The Hampstead Water Company was incorporated in "
 "sixteen ninety two to supply London, and it spent the next century blocking "
@@ -670,10 +815,10 @@ dict(kind="water", n=18, title="The Hampstead Ponds and the River Fleet",
 ], walk=
 "Carry on down to the bottom of the ponds and out onto South End Green. Take "
 "Keats Grove, which runs west off it. Three minutes. The white house behind "
-"the garden wall on your left is stop nineteen."),
+"the garden wall on your left is stop twenty-two."),
 
 dict(kind="house", n=19, title="Keats House", where="Keats Grove", body=[
-"Stop nineteen. Keats House.",
+"Stop twenty-two. Keats House.",
 
 "It was built as a pair of semi-detached houses called Wentworth Place, and it "
 "is why you are on this street rather than any other. John Keats moved into "
@@ -703,13 +848,50 @@ dict(kind="house", n=19, title="Keats House", where="Keats Grove", body=[
 "before you come.",
 ], walk=
 "Out of the gate, west along Keats Grove to Downshire Hill, then right into "
-"Willow Road. Cross East Heath Road and go up Well Walk. Five minutes. You "
-"will pass a small stone drinking fountain on the right, and it is the reason "
-"the whole village exists."),
+"Willow Road. You will pass number two, which is a museum and is on a longer "
+"list than this one. Cross East Heath Road, climb, and bear left into Cannon "
+"Place. Cannon Lane drops away on your left. Eight minutes, and stop "
+"twenty-three is a door in a wall."),
+
+dict(kind="village", n=21, title="The Cannon Lane Lock-Up", where="Cannon Lane", body=[
+"Stop twenty-three. The parish lock-up, in the wall on your left.",
+
+"A heavy studded door, a barred slit at head height, and behind it a single "
+"windowless cell, built into the garden wall of the house above in about "
+"seventeen thirty. This is a village prison, and it is one of very few left "
+"anywhere in London.",
+
+"The point of it is what did not exist yet. There was no police force. There "
+"was a parish constable, usually a shopkeeper doing a year of unpaid duty, and "
+"if he arrested you at ten at night there was nowhere on earth to put you. So "
+"you went in here, in the dark, until the morning, when the magistrates could "
+"see you. The magistrates sat in the house behind this wall, which meant the "
+"whole apparatus of law in Hampstead was one cell, one wall and one front "
+"room.",
+
+"It stopped being used after eighteen twenty nine, when Robert Peel's "
+"Metropolitan Police arrived and the parish stopped having to improvise. The "
+"cell is now the entrance to somebody's very expensive house.",
+
+"And the house it belongs to is Cannon Hall, which from nineteen sixteen was "
+"the home of Gerald du Maurier, the actor-manager. He was the first man ever "
+"to play Captain Hook, and in the same production the first to play Mr "
+"Darling, which is why to this day the two parts are usually doubled. His "
+"daughter grew up in that house and wrote Rebecca.",
+
+"Which closes a circle, if you want it to. The boys who became Peter Pan are "
+"buried at stop two, twenty minutes back down the hill. The man who first "
+"played the villain lived behind this wall.",
+
+"Free, visible from the lane at any hour, and easy to walk past.",
+], walk=
+"Back down Cannon Place the way you came, then right and downhill into Well "
+"Walk. Two minutes. You will pass a small stone drinking fountain, and it is "
+"the reason the whole village exists."),
 
 dict(kind="village", n=20, title="Well Walk and Burgh House",
      where="Well Walk and New End Square", body=[
-"Stop twenty. Well Walk, the well, and Burgh House.",
+"Stop twenty-four. Well Walk, the well, and Burgh House.",
 
 "Start at the fountain. That is the chalybeate well, and chalybeate means the "
 "water has iron in it. In sixteen ninety eight the young Earl of Gainsborough "
@@ -744,7 +926,7 @@ dict(kind="village", n=20, title="Well Walk and Burgh House",
 
 dict(kind="close", n=None, title="Three ways to walk it",
      where="If you do not have three hours", body=[
-"That is the twenty. The station is four minutes away: Flask Walk out of the "
+"That is the twenty-four. The station is four minutes away: Flask Walk out of the "
 "top of Well Walk, then left up the High Street, and you are back where you "
 "started.",
 
@@ -752,25 +934,26 @@ dict(kind="close", n=None, title="Three ways to walk it",
 "that fit a real week.",
 
 "The first: the village hour. About fifty minutes, free, any day, no bookings. "
-"Stops one, two, four, five, nine and twenty. Station, Church Row, the "
-"observatory, the top of London, down into the Vale of Health and back along "
-"Well Walk. No mud, and you can do it in office shoes.",
+"Stops one through eight, then twenty-three and twenty-four. The station, the "
+"church row, the French chapel, Romney's hill, Fenton House, the quarterdeck, "
+"the observatory and the top of London, then the lock-up and Well Walk on the "
+"way back. No mud, and you can do it in office shoes.",
 
 "The second: the houses. Half a day, Wednesday to Sunday, because that is the "
-"one window when all four of them are open. Stops three, eleven, twelve, "
-"nineteen and twenty. Fenton House, Kenwood, Keats House and Burgh House. "
+"one window when all four of them are open. Stops five, fourteen, fifteen, "
+"twenty-two and twenty-four. Fenton House, Kenwood, Keats House and Burgh House. "
 "Kenwood and Burgh House are free, Keats is a few pounds, Fenton House is the "
 "one that charges properly. Book Kenwood if you want to be sure of the house.",
 
 "The third: the water. Any day of the year, and this is the one to do at seven "
-"in the morning. Stops thirteen or fourteen, then seventeen, then eighteen. "
+"in the morning. Stops sixteen or seventeen, then twenty, then twenty-one. "
 "The ladies' pond and the men's pond are open every day of the year, the mixed "
 "pond only from April to October, and the lido never closes. Swim, then walk "
 "up the ponds to South End Green for breakfast. It will reorganise your entire "
 "opinion of London.",
 ]),
 
-dict(kind="close", n=None, title="Didn't make twenty", where="The near misses", body=[
+dict(kind="close", n=None, title="Didn't make the cut", where="The near misses", body=[
 "Last track. Eight places cut for distance rather than for quality. All times "
 "are walking, from Hampstead station.",
 
@@ -780,7 +963,7 @@ dict(kind="close", n=None, title="Didn't make twenty", where="The near misses", 
 "Wednesday to Sunday.",
 
 "Two Willow Road, fifteen minutes, which you walked past between stops "
-"nineteen and twenty. Ernő Goldfinger built it for himself in nineteen thirty "
+"twenty-two and twenty-three. Ernő Goldfinger built it for himself in nineteen thirty "
 "nine and it is now National Trust. He demolished cottages to do it, which "
 "annoyed a neighbour called Ian Fleming so thoroughly that Fleming gave the "
 "name to a Bond villain. Goldfinger consulted his lawyers. He did not sue.",
@@ -794,9 +977,6 @@ dict(kind="close", n=None, title="Didn't make twenty", where="The near misses", 
 "Highgate Cemetery, thirty-five minutes across the Heath. Marx, George Eliot, "
 "Douglas Adams, and the Egyptian Avenue. Ticketed, and the west side is the "
 "one to book.",
-
-"The Holly Bush, four minutes, up Holly Mount. Gas-lit rooms and no music. "
-"Possibly the best pub in this postcode.",
 
 "The Flask at Highgate, thirty minutes, if you have gone to the cemetery "
 "anyway. Sixteen sixty three, and a warren.",
@@ -820,7 +1000,20 @@ dict(kind="close", n=None, title="Didn't make twenty", where="The near misses", 
 
 # stops that want money: Fenton House and Keats House at the door, the two
 # ponds and the lido only if you get in the water.
-PAID = {3, 13, 14, 17, 19}
+# Fenton House and Keats House charge at the door; the ponds and the lido
+# only if you get in the water.
+PAID = {5, 16, 17, 20, 22}
+
+# numbers follow walking order. Assigned here rather than written into each
+# entry, so inserting a stop cannot leave the guide counting wrong.
+_n = 0
+for _s in STOPS:
+    if _s["kind"] in ("intro", "close"):
+        _s["n"] = None
+    else:
+        _n += 1
+        _s["n"] = _n
+STOP_COUNT = _n
 
 KIND = {
     "intro":   ("Introduction",   "intro"),
@@ -1909,8 +2102,8 @@ def map_svg(tracks):
     out = ['<figure class="mapwrap">']
     out.append('<div class="mapbox">')
     out.append('<svg id="mp" viewBox="0 0 %d %.0f" role="group" '
-               'aria-label="Map of the walk, twenty stops in order" '
-               'preserveAspectRatio="xMidYMid meet">' % (MAP_W, h))
+               'aria-label="Map of the walk, %d stops in order" '
+               'preserveAspectRatio="xMidYMid meet">' % (MAP_W, h, STOP_COUNT))
     out.append('<path class="mheath" d="%s"/>' % path_d(d["heath"], xy, True))
     out.append('<path class="mroad" d="%s"/>' % path_d(d["roads"], xy, False))
     out.append('<path class="mwater" d="%s"/>' % path_d(d["water"], xy, True))
@@ -1942,7 +2135,7 @@ def map_svg(tracks):
 
 
 def gpx(tracks):
-    """The twenty stops as waypoints and a route, for a real map application."""
+    """The stops as waypoints and a route, for a real map application."""
     d = mapdata()
     if not d:
         return None
@@ -1952,12 +2145,12 @@ def gpx(tracks):
          '<gpx version="1.1" creator="hampstead-heath audio guide" '
          'xmlns="http://www.topografix.com/GPX/1/1">',
          "  <metadata><name>Hampstead Heath and its village</name>"
-         "<desc>Twenty stops, in walking order.</desc></metadata>"]
+         "<desc>%d stops, in walking order.</desc></metadata>" % STOP_COUNT]
     for n in sorted(stops):
         lat, lon = stops[n]
         o.append('  <wpt lat="%.5f" lon="%.5f"><name>%d. %s</name><desc>%s</desc></wpt>'
                  % (lat, lon, n, esc(by_n[n]["title"]), esc(by_n[n]["where"])))
-    o.append("  <rte><name>Hampstead Heath, twenty stops</name>")
+    o.append("  <rte><name>Hampstead Heath, %d stops</name>" % STOP_COUNT)
     for n in sorted(stops):
         lat, lon = stops[n]
         o.append('    <rtept lat="%.5f" lon="%.5f"><name>%d</name></rtept>' % (lat, lon, n))
@@ -2004,9 +2197,9 @@ def render(tracks):
     w = out.append
     w('<meta charset="utf-8">')
     w('<meta name="viewport" content="width=device-width, initial-scale=1">')
-    w('<meta name="description" content="A twenty-stop walking audio guide to Hampstead Heath '
-      'and its village: 23 tracks, 43 minutes, with the full transcript, a map and a photograph '
-      'for every stop.">')
+    w('<meta name="description" content="A twenty-four-stop walking audio guide to Hampstead Heath '
+      'and its village: %d tracks, %d minutes, with the full transcript, a map and a photograph '
+      'for every stop.">' % (len(tracks), round(total / 60)))
     w('<meta name="color-scheme" content="light dark">')
     w("<title>The Audio Guide &#8211; Hampstead Heath &amp; Its Village</title>")
     w("<style>" + CSS + "</style>\n")
@@ -2018,7 +2211,7 @@ def render(tracks):
     w("    <div>")
     w('      <p class="lab">The audio guide &#183; Hampstead, NW3</p>')
     w("      <h1>Hampstead Heath, <em>read aloud</em></h1>")
-    w('      <p class="lede">The twenty-stop walk as <b>%d tracks, %d minutes</b>, to be played '
+    w('      <p class="lede">The twenty-four-stop walk as <b>%d tracks, %d minutes</b>, to be played '
       "standing in front of the thing it describes. Every track opens where you should be standing "
       "and closes by telling you where to go next. This page is the transcript, word for word, so "
       "you can read it on the train or hand it to someone without headphones.</p>"
@@ -2030,7 +2223,7 @@ def render(tracks):
     w('<li><span class="n">%d</span><span class="lab">Tracks</span></li>' % len(tracks))
     w('<li><span class="n">%d<small> min</small></span><span class="lab">End to end</span></li>'
       % round(total / 60))
-    w('<li><span class="n">20</span><span class="lab">Stops on the loop</span></li>')
+    w('<li><span class="n">%d</span><span class="lab">Stops on the loop</span></li>' % STOP_COUNT)
     w('<li><span class="n">%s</span><span class="lab">Average track</span></li>'
       % clock(total / len(tracks)))
     w('<li><span class="n">%d</span><span class="lab">That cost nothing</span></li>' % free)
@@ -2048,7 +2241,7 @@ def render(tracks):
     svg = map_svg(tracks)
     if svg:
         w('<section class="blk" id="map">')
-        w("  <h2>The map <span>Twenty stops</span></h2>")
+        w("  <h2>The map <span>%d stops</span></h2>" % STOP_COUNT)
         w('  <p class="blk-sub">The loop, anticlockwise, starting and ending at the station. '
           "Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. "
           "There are no map tiles here and nothing is fetched from anywhere, so it works with "
@@ -2195,7 +2388,7 @@ def build_page():
     route = gpx(tracks)
     if route:
         open(os.path.join(HERE, "hampstead-heath-walk.gpx"), "w").write(route)
-        print("  hampstead-heath-walk.gpx: 20 waypoints")
+        print("  hampstead-heath-walk.gpx: %d waypoints" % STOP_COUNT)
 
     open(os.path.join(HERE, "wrangler.jsonc"), "w").write(
         '{\n  "name": "hampstead-heath",\n'
@@ -2269,7 +2462,9 @@ def build_cover():
     d.text((S / 2, 1122), "& its village", font=disp_i, fill=green, anchor="mm")
 
     d.line([(S / 2 - 200, 1236), (S / 2 + 200, 1236)], fill=soft, width=2)
-    spaced("TWENTY STOPS  ·  43 MINUTES", caps_s, 1266, soft)
+    # no running time here: it changes with the voice, and a cover that lies
+    # about its own length is worse than one that says nothing
+    spaced("TWENTY-FOUR STOPS  ·  ONE LOOP", caps_s, 1266, soft)
 
     img.save(os.path.join(HERE, "cover.jpg"), quality=92)
     print("  cover.jpg")
