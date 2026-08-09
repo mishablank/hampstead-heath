@@ -1488,36 +1488,26 @@ def clock(seconds):
 
 
 CSS = """
+/* Bright is the base, not an override: the page does not follow the device, so
+   a reader with no JavaScript gets the same white paper as everyone else. Dark
+   is the only alternative, and it is opt-in. */
 :root{
-  --paper:#EFEDE5; --paper-2:#F7F6F0; --plate:#E8E6DD;
-  --ink:#181D16; --ink-2:#525C4C; --ink-3:#7C8676;
-  --rule:#C7CBBC; --rule-soft:#DDE0D2;
-  --heath:#2C6B45; --water:#2A6A8E; --contour:#96591C; --brick:#94413A;
+  color-scheme:light;
+  --paper:#FFFFFF; --paper-2:#F4F6F2; --plate:#EDF0EA;
+  --ink:#0A0D09; --ink-2:#3A4436; --ink-3:#5E6959;
+  --rule:#B6BDAC; --rule-soft:#DCE1D4;
+  --heath:#186B3A; --water:#12608C; --contour:#8A4E0B; --brick:#9B2F26;
   --font-display:"Big Caslon","Baskerville","Hoefler Text","Palatino Linotype",Palatino,Georgia,serif;
   --font-body:Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif;
   --font-label:Copperplate,"Copperplate Gothic Light",Optima,"Gill Sans","Trebuchet MS",sans-serif;
   --font-data:"SF Mono",Menlo,Consolas,ui-monospace,monospace;
 }
-@media (prefers-color-scheme:dark){:root{
-  --paper:#0F1310; --paper-2:#171C16; --plate:#131813;
-  --ink:#E4E8DF; --ink-2:#9AA495; --ink-3:#727C6E;
-  --rule:#2A322A; --rule-soft:#1D231D;
-  --heath:#67C08D; --water:#6FB2D6; --contour:#D3A257; --brick:#DC8579;
-}}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --paper:#0F1310; --paper-2:#171C16; --plate:#131813;
   --ink:#E4E8DF; --ink-2:#9AA495; --ink-3:#727C6E;
   --rule:#2A322A; --rule-soft:#1D231D;
   --heath:#67C08D; --water:#6FB2D6; --contour:#D3A257; --brick:#DC8579;
-}
-/* white paper rather than the default's parchment: for reading outdoors, in sun */
-:root[data-theme="bright"]{
-  color-scheme:light;
-  --paper:#FFFFFF; --paper-2:#F4F6F2; --plate:#EDF0EA;
-  --ink:#0A0D09; --ink-2:#3A4436; --ink-3:#5E6959;
-  --rule:#B6BDAC; --rule-soft:#DCE1D4;
-  --heath:#186B3A; --water:#12608C; --contour:#8A4E0B; --brick:#9B2F26;
 }
 
 *{box-sizing:border-box}
@@ -1560,6 +1550,13 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .iconbtn:hover{color:var(--ink); border-color:var(--ink-3)}
 .iconbtn:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .iconbtn svg{width:15px; height:15px; fill:currentColor; display:block}
+/* a credit line, not a control: no box, and it sets its own baseline */
+.hcredit{
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:10.5px; color:var(--ink-3); white-space:nowrap;
+}
+.hcredit a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+.hcredit a:hover{color:var(--heath); border-bottom-color:var(--heath)}
 /* the copy confirmation: a tick where the share glyph was */
 .iconbtn .i-ok{display:none}
 .iconbtn.ok{color:var(--heath); border-color:var(--heath)}
@@ -1582,6 +1579,7 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 /* thumb-sized on a phone, and the eyebrow beside it needs the room back */
 @media (max-width:700px){
   .themectl{min-height:40px; padding:5px 13px; font-size:11.5px}
+  .hcredit{font-size:11.5px}
   .themectl .tword{display:none}
   .iconbtn{width:40px; height:40px}
   .iconbtn svg{width:18px; height:18px}
@@ -1761,9 +1759,7 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .shot figcaption a{color:inherit; text-decoration-color:var(--rule)}
 .shot figcaption a:hover{color:var(--ink-2)}
 /* photographs shot in daylight glare on a dark page */
-@media (prefers-color-scheme:dark){.shot img{filter:brightness(.86) contrast(1.03)}}
 :root[data-theme="dark"] .shot img{filter:brightness(.86) contrast(1.03)}
-:root[data-theme="bright"] .shot img{filter:none}
 
 /* the one device this page adds: standing still vs moving */
 .walk{
@@ -1838,6 +1834,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   /* the control is the only thing stopping six buttons sharing one row: tighten
      it rather than strip its label, since a bare swatch names nothing */
   .themectl{padding:0 8px; gap:5px; font-size:10px; letter-spacing:.06em}
+  .hcredit{font-size:10px; letter-spacing:.06em}
   .hgrp{gap:6px}
   .hdr-actions{gap:6px 10px}
   .hgrp + .hgrp{padding-left:10px}
@@ -1846,9 +1843,9 @@ footer p{margin:0 0 8px; max-width:70ch}
   .stats .n{font-size:1.25rem}
   section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
 }
-/* below this the six controls wrap to two rows, and a group rule left hanging
-   at the start of the second one reads as a stray mark: the gap is enough */
-@media (max-width:360px){
+/* below this the controls wrap to two rows, and a group rule left hanging at
+   the start of the second one reads as a stray mark: the gap is enough */
+@media (max-width:470px){
   .hgrp + .hgrp{padding-left:0; border-left:0}
 }
 @media (hover:none){
@@ -1858,30 +1855,21 @@ footer p{margin:0 0 8px; max-width:70ch}
 
 THEME_JS = r"""
 (function(){
-  // runs before the page is painted, so a forced theme never flashes the other one
-  var KEY = "hh-theme", MODES = ["auto","bright","dark"], root = document.documentElement, at = 0;
-  var SAYS = {auto:"Follows your device", bright:"White paper, for sun", dark:"Dark paper"};
-  try{ at = Math.max(0, MODES.indexOf(localStorage.getItem(KEY))); }catch(e){}
+  // runs before the page is painted, so a stored dark never flashes white first
+  var KEY = "hh-theme", MODES = ["bright","dark"], root = document.documentElement, at = 0;
+  var SAYS = {bright:"White paper, for sun", dark:"Dark paper"};
   var PAPER = {bright:"#FFFFFF", dark:"#0F1310"};
+  // anything unrecognised falls back to bright: the device preference is not consulted
+  try{ at = Math.max(0, MODES.indexOf(localStorage.getItem(KEY))); }catch(e){}
   function put(){
     var m = MODES[at];
-    if(m === "auto") root.removeAttribute("data-theme");
-    else root.setAttribute("data-theme", m);
+    root.setAttribute("data-theme", m);
     var b = document.getElementById("themebtn"), lab = document.getElementById("themelab");
     if(lab) lab.textContent = m.charAt(0).toUpperCase() + m.slice(1);
-    if(b) b.setAttribute("aria-label", "Page theme: " + m + ". " + SAYS[m] + ". Tap to change.");
-    // the two theme-color metas are keyed to prefers-color-scheme, which a forced
-    // theme has just overruled: pin one that matches, or the browser chrome lies
-    var pinned = document.getElementById("tcolor");
-    if(m === "auto"){ if(pinned) pinned.remove(); return; }
-    if(!pinned){
-      pinned = document.createElement("meta");
-      pinned.id = "tcolor"; pinned.name = "theme-color";
-      // first match in tree order wins, and this one carries no media query,
-      // so it has to go in front of the pair head() wrote
-      document.head.insertBefore(pinned, document.head.firstChild);
-    }
-    pinned.setAttribute("content", PAPER[m]);
+    if(b) b.setAttribute("aria-label",
+      "Page theme: " + m + ". " + SAYS[m] + ". Tap for " + MODES[(at + 1) % MODES.length] + ".");
+    var meta = document.getElementById("tcolor");
+    if(meta) meta.setAttribute("content", PAPER[m]);
   }
   put();
   document.addEventListener("DOMContentLoaded", put);
@@ -2573,6 +2561,7 @@ SHARE_MARK = (
     '<path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>')
 
 REPO = "https://github.com/mishablank/hampstead-heath"
+AUTHOR = "Mike Blank"
 
 # The footer credit keeps the profile; the masthead octocat points at the repo,
 # because "star this" and "who wrote this" are different errands.
@@ -2589,9 +2578,12 @@ def share_urls(here, title):
 
 
 def hdr_actions(here, title):
-    """The controls that sit in every masthead: share this page, then the page's
-    own affordances. Anchors where they navigate, buttons where they act."""
+    """The controls that sit in every masthead: star the repo and share the page,
+    then who made it and which paper it is printed on."""
     o = ['<span class="hdr-actions">', '<span class="hgrp">']
+    o.append('<a class="iconbtn" href="%s" target="_blank" rel="noopener" '
+             'aria-label="Star this guide on GitHub" title="Star on GitHub">%s</a>'
+             % (REPO, GH_MARK))
     for href, name, mark in share_urls(here, title):
         o.append('<a class="iconbtn" href="%s" target="_blank" rel="noopener" '
                  'aria-label="Share on %s" title="Share on %s">%s</a>'
@@ -2601,14 +2593,11 @@ def hdr_actions(here, title):
              'data-title="%s" aria-label="Share this page" title="Share">%s</button>'
              % (esc(here), esc(title), SHARE_MARK))
     o.append('</span><span class="hgrp">')
-    o.append('<a class="iconbtn" href="%s" target="_blank" rel="noopener" '
-             'aria-label="Star this guide on GitHub" title="Star on GitHub">%s</a>'
-             % (REPO, GH_MARK))
-    o.append('<a class="iconbtn" href="%s" target="_blank" rel="me noopener" '
-             'aria-label="LinkedIn" title="LinkedIn">%s</a>' % (LINKS[0][0], LI_MARK))
+    o.append('<span class="hcredit">Made by <a href="%s" target="_blank" '
+             'rel="me noopener">%s</a></span>' % (LINKS[0][0], AUTHOR))
     o.append('<button class="themectl" id="themebtn" type="button">'
              '<i aria-hidden="true"></i><span class="tword">Theme</span> '
-             '<span id="themelab">Auto</span></button>')
+             '<span id="themelab">Bright</span></button>')
     o.append("</span></span>")
     return "".join(o)
 
@@ -2684,8 +2673,8 @@ def head(title, desc, path, nodes, og_title=None, og_desc=None, css=CSS):
          '<meta name="color-scheme" content="light dark">',
          '<meta name="robots" content="index, follow, max-image-preview:large, '
          'max-snippet:-1, max-video-preview:-1">',
-         '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EFEDE5">',
-         '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1310">',
+         # one meta, not a prefers-color-scheme pair: the page picks its own theme
+         '<meta name="theme-color" id="tcolor" content="#FFFFFF">',
          # sharing. This is the half that decides whether a pasted link looks
          # like a guide or like a stranger's URL.
          '<meta property="og:type" content="website">',

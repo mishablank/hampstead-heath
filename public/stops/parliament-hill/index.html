@@ -8,8 +8,7 @@
 <link rel="canonical" href="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
-<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EFEDE5">
-<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1310">
+<meta name="theme-color" id="tcolor" content="#FFFFFF">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Hampstead Heath, read aloud">
 <meta property="og:locale" content="en_GB">
@@ -36,36 +35,26 @@
 <meta name="geo.position" content="51.56028;-0.16083">
 <meta name="ICBM" content="51.56028, -0.16083">
 <style>
+/* Bright is the base, not an override: the page does not follow the device, so
+   a reader with no JavaScript gets the same white paper as everyone else. Dark
+   is the only alternative, and it is opt-in. */
 :root{
-  --paper:#EFEDE5; --paper-2:#F7F6F0; --plate:#E8E6DD;
-  --ink:#181D16; --ink-2:#525C4C; --ink-3:#7C8676;
-  --rule:#C7CBBC; --rule-soft:#DDE0D2;
-  --heath:#2C6B45; --water:#2A6A8E; --contour:#96591C; --brick:#94413A;
+  color-scheme:light;
+  --paper:#FFFFFF; --paper-2:#F4F6F2; --plate:#EDF0EA;
+  --ink:#0A0D09; --ink-2:#3A4436; --ink-3:#5E6959;
+  --rule:#B6BDAC; --rule-soft:#DCE1D4;
+  --heath:#186B3A; --water:#12608C; --contour:#8A4E0B; --brick:#9B2F26;
   --font-display:"Big Caslon","Baskerville","Hoefler Text","Palatino Linotype",Palatino,Georgia,serif;
   --font-body:Charter,"Bitstream Charter","Iowan Old Style",Georgia,"Times New Roman",serif;
   --font-label:Copperplate,"Copperplate Gothic Light",Optima,"Gill Sans","Trebuchet MS",sans-serif;
   --font-data:"SF Mono",Menlo,Consolas,ui-monospace,monospace;
 }
-@media (prefers-color-scheme:dark){:root{
-  --paper:#0F1310; --paper-2:#171C16; --plate:#131813;
-  --ink:#E4E8DF; --ink-2:#9AA495; --ink-3:#727C6E;
-  --rule:#2A322A; --rule-soft:#1D231D;
-  --heath:#67C08D; --water:#6FB2D6; --contour:#D3A257; --brick:#DC8579;
-}}
 :root[data-theme="dark"]{
   color-scheme:dark;
   --paper:#0F1310; --paper-2:#171C16; --plate:#131813;
   --ink:#E4E8DF; --ink-2:#9AA495; --ink-3:#727C6E;
   --rule:#2A322A; --rule-soft:#1D231D;
   --heath:#67C08D; --water:#6FB2D6; --contour:#D3A257; --brick:#DC8579;
-}
-/* white paper rather than the default's parchment: for reading outdoors, in sun */
-:root[data-theme="bright"]{
-  color-scheme:light;
-  --paper:#FFFFFF; --paper-2:#F4F6F2; --plate:#EDF0EA;
-  --ink:#0A0D09; --ink-2:#3A4436; --ink-3:#5E6959;
-  --rule:#B6BDAC; --rule-soft:#DCE1D4;
-  --heath:#186B3A; --water:#12608C; --contour:#8A4E0B; --brick:#9B2F26;
 }
 
 *{box-sizing:border-box}
@@ -108,6 +97,13 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .iconbtn:hover{color:var(--ink); border-color:var(--ink-3)}
 .iconbtn:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .iconbtn svg{width:15px; height:15px; fill:currentColor; display:block}
+/* a credit line, not a control: no box, and it sets its own baseline */
+.hcredit{
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:10.5px; color:var(--ink-3); white-space:nowrap;
+}
+.hcredit a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
+.hcredit a:hover{color:var(--heath); border-bottom-color:var(--heath)}
 /* the copy confirmation: a tick where the share glyph was */
 .iconbtn .i-ok{display:none}
 .iconbtn.ok{color:var(--heath); border-color:var(--heath)}
@@ -130,6 +126,7 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 /* thumb-sized on a phone, and the eyebrow beside it needs the room back */
 @media (max-width:700px){
   .themectl{min-height:40px; padding:5px 13px; font-size:11.5px}
+  .hcredit{font-size:11.5px}
   .themectl .tword{display:none}
   .iconbtn{width:40px; height:40px}
   .iconbtn svg{width:18px; height:18px}
@@ -309,9 +306,7 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .shot figcaption a{color:inherit; text-decoration-color:var(--rule)}
 .shot figcaption a:hover{color:var(--ink-2)}
 /* photographs shot in daylight glare on a dark page */
-@media (prefers-color-scheme:dark){.shot img{filter:brightness(.86) contrast(1.03)}}
 :root[data-theme="dark"] .shot img{filter:brightness(.86) contrast(1.03)}
-:root[data-theme="bright"] .shot img{filter:none}
 
 /* the one device this page adds: standing still vs moving */
 .walk{
@@ -386,6 +381,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   /* the control is the only thing stopping six buttons sharing one row: tighten
      it rather than strip its label, since a bare swatch names nothing */
   .themectl{padding:0 8px; gap:5px; font-size:10px; letter-spacing:.06em}
+  .hcredit{font-size:10px; letter-spacing:.06em}
   .hgrp{gap:6px}
   .hdr-actions{gap:6px 10px}
   .hgrp + .hgrp{padding-left:10px}
@@ -394,9 +390,9 @@ footer p{margin:0 0 8px; max-width:70ch}
   .stats .n{font-size:1.25rem}
   section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
 }
-/* below this the six controls wrap to two rows, and a group rule left hanging
-   at the start of the second one reads as a stray mark: the gap is enough */
-@media (max-width:360px){
+/* below this the controls wrap to two rows, and a group rule left hanging at
+   the start of the second one reads as a stray mark: the gap is enough */
+@media (max-width:470px){
   .hgrp + .hgrp{padding-left:0; border-left:0}
 }
 @media (hover:none){
@@ -446,30 +442,21 @@ footer p{margin:0 0 8px; max-width:70ch}
 </style>
 <script>
 (function(){
-  // runs before the page is painted, so a forced theme never flashes the other one
-  var KEY = "hh-theme", MODES = ["auto","bright","dark"], root = document.documentElement, at = 0;
-  var SAYS = {auto:"Follows your device", bright:"White paper, for sun", dark:"Dark paper"};
-  try{ at = Math.max(0, MODES.indexOf(localStorage.getItem(KEY))); }catch(e){}
+  // runs before the page is painted, so a stored dark never flashes white first
+  var KEY = "hh-theme", MODES = ["bright","dark"], root = document.documentElement, at = 0;
+  var SAYS = {bright:"White paper, for sun", dark:"Dark paper"};
   var PAPER = {bright:"#FFFFFF", dark:"#0F1310"};
+  // anything unrecognised falls back to bright: the device preference is not consulted
+  try{ at = Math.max(0, MODES.indexOf(localStorage.getItem(KEY))); }catch(e){}
   function put(){
     var m = MODES[at];
-    if(m === "auto") root.removeAttribute("data-theme");
-    else root.setAttribute("data-theme", m);
+    root.setAttribute("data-theme", m);
     var b = document.getElementById("themebtn"), lab = document.getElementById("themelab");
     if(lab) lab.textContent = m.charAt(0).toUpperCase() + m.slice(1);
-    if(b) b.setAttribute("aria-label", "Page theme: " + m + ". " + SAYS[m] + ". Tap to change.");
-    // the two theme-color metas are keyed to prefers-color-scheme, which a forced
-    // theme has just overruled: pin one that matches, or the browser chrome lies
-    var pinned = document.getElementById("tcolor");
-    if(m === "auto"){ if(pinned) pinned.remove(); return; }
-    if(!pinned){
-      pinned = document.createElement("meta");
-      pinned.id = "tcolor"; pinned.name = "theme-color";
-      // first match in tree order wins, and this one carries no media query,
-      // so it has to go in front of the pair head() wrote
-      document.head.insertBefore(pinned, document.head.firstChild);
-    }
-    pinned.setAttribute("content", PAPER[m]);
+    if(b) b.setAttribute("aria-label",
+      "Page theme: " + m + ". " + SAYS[m] + ". Tap for " + MODES[(at + 1) % MODES.length] + ".");
+    var meta = document.getElementById("tcolor");
+    if(meta) meta.setAttribute("content", PAPER[m]);
   }
   put();
   document.addEventListener("DOMContentLoaded", put);
@@ -641,6 +628,10 @@ footer p{margin:0 0 8px; max-width:70ch}
   {
    "@id": "https://hampstead-heath.blankm.workers.dev/#publisher",
    "@type": "Organization",
+   "founder": {
+    "@type": "Person",
+    "name": "Mike Blank"
+   },
    "logo": {
     "@type": "ImageObject",
     "height": 512,
@@ -676,7 +667,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <div class="wrap">
 <header class="cart">
   <div class="cart-inner"><div>
-    <div class="topbar crumbed"><p class="crumb"><a href="../../">The audio guide</a><span>/</span><a href="../">The stops</a><span>/</span>Parliament Hill</p><span class="hdr-actions"><span class="hgrp"><a class="iconbtn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2Fstops%2Fparliament-hill%2F&amp;text=Parliament%20Hill%20-%20stop%2019%20of%20the%20Hampstead%20Heath%20walking%20audio%20guide" target="_blank" rel="noopener" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a><a class="iconbtn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2Fstops%2Fparliament-hill%2F" target="_blank" rel="noopener" aria-label="Share on Facebook" title="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><button class="iconbtn" id="sharebtn" type="button" data-url="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/" data-title="Parliament Hill - stop 19 of the Hampstead Heath walking audio guide" aria-label="Share this page" title="Share"><svg class="i-share" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button></span><span class="hgrp"><a class="iconbtn" href="https://github.com/mishablank/hampstead-heath" target="_blank" rel="noopener" aria-label="Star this guide on GitHub" title="Star on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="iconbtn" href="https://www.linkedin.com/in/mishablank/" target="_blank" rel="me noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a><button class="themectl" id="themebtn" type="button"><i aria-hidden="true"></i><span class="tword">Theme</span> <span id="themelab">Auto</span></button></span></span></div>
+    <div class="topbar crumbed"><p class="crumb"><a href="../../">The audio guide</a><span>/</span><a href="../">The stops</a><span>/</span>Parliament Hill</p><span class="hdr-actions"><span class="hgrp"><a class="iconbtn" href="https://github.com/mishablank/hampstead-heath" target="_blank" rel="noopener" aria-label="Star this guide on GitHub" title="Star on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="iconbtn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2Fstops%2Fparliament-hill%2F&amp;text=Parliament%20Hill%20-%20stop%2019%20of%20the%20Hampstead%20Heath%20walking%20audio%20guide" target="_blank" rel="noopener" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a><a class="iconbtn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2Fstops%2Fparliament-hill%2F" target="_blank" rel="noopener" aria-label="Share on Facebook" title="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><button class="iconbtn" id="sharebtn" type="button" data-url="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/" data-title="Parliament Hill - stop 19 of the Hampstead Heath walking audio guide" aria-label="Share this page" title="Share"><svg class="i-share" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button></span><span class="hgrp"><span class="hcredit">Made by <a href="https://www.linkedin.com/in/mishablank/" target="_blank" rel="me noopener">Mike Blank</a></span><button class="themectl" id="themebtn" type="button"><i aria-hidden="true"></i><span class="tword">Theme</span> <span id="themelab">Bright</span></button></span></span></div>
     <p class="lab">Stop 19 of 24 &#183; High ground &#183; Parliament Hill Fields</p>
     <h1>Parliament Hill</h1>
     <p class="lede">Track 20 of the walk, 1:48 long. Play it standing where the first line tells you to stand. What is printed underneath is exactly what you will hear, which is also why the numbers are written as words.</p>
