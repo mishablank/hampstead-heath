@@ -154,6 +154,12 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .trk.water .tn{background:var(--water)}
 .trk.house .tn{background:var(--brick)}
 .tn.sym{background:transparent; color:var(--ink-3); border:1px solid var(--rule); font-size:1.3rem}
+/* arriving from the map: a short wash, so the eye lands on the right stop */
+.trk.lit{animation:lit 2.1s ease-out}
+@keyframes lit{
+  0%,62%{background:var(--paper-2); box-shadow:inset 3px 0 0 var(--heath)}
+  100%{background:transparent; box-shadow:inset 3px 0 0 transparent}
+}
 .trk h3{
   font-family:var(--font-display); font-weight:400; font-size:1.5rem; line-height:1.16;
   margin:7px 0 0; letter-spacing:-.005em; text-wrap:balance;
@@ -954,10 +960,12 @@ body.playing{padding-bottom:76px}
     }, {passive:false});
 
     /* drag to pan, one finger or a mouse; pinch with two */
-    var pts = new Map(), last = null, spread = 0, moved = 0, hinted = false;
+    var pts = new Map(), last = null, spread = 0, moved = 0, hinted = false, tapped = null;
     svg.addEventListener("pointerdown", function(e){
       svg.setPointerCapture(e.pointerId);
       pts.set(e.pointerId, e); last = at(e); moved = 0;
+      /* remember which marker went down: capture rewrites the target later */
+      tapped = pts.size === 1 && e.target.closest ? e.target.closest(".mstop") : null;
       if(pts.size === 2) spread = 0;
       svg.classList.add("drag");
     });
@@ -982,8 +990,18 @@ body.playing{padding-bottom:76px}
       moved += Math.abs(p[0]-last[0]) + Math.abs(p[1]-last[1]);
       clamp(); apply(); last = at(e);
     });
+    /* The tap is settled here rather than on click: pointer capture retargets
+       the click to the <svg>, so a marker never receives one of its own. */
+    svg.addEventListener("pointerup", function(e){
+      var g = tapped;
+      tapped = null;
+      if(!g || pts.size > 1 || moved >= 8) return;
+      var el = document.elementFromPoint(e.clientX, e.clientY);
+      if(el && el.closest && el.closest(".mstop") === g) go(g);
+    });
     ["pointerup","pointercancel","pointerleave"].forEach(function(ev){
       svg.addEventListener(ev, function(e){
+        if(ev !== "pointerup") tapped = null;
         pts.delete(e.pointerId); spread = 0;
         if(!pts.size) svg.classList.remove("drag");
       });
@@ -992,11 +1010,16 @@ body.playing{padding-bottom:76px}
     function go(g){
       var i = +g.dataset.i;
       var art = document.getElementById("t" + ("0" + i).slice(-2));
-      if(art) art.scrollIntoView({behavior:"smooth", block:"start"});
+      if(art){
+        art.scrollIntoView({behavior:"smooth", block:"start"});
+        /* a beat of colour, so the eye lands on the right one in a long page */
+        art.classList.remove("lit");
+        void art.offsetWidth;
+        art.classList.add("lit");
+      }
       toggle(i);
     }
     svg.querySelectorAll(".mstop").forEach(function(g){
-      g.addEventListener("click", function(){ if(moved < 8) go(g); });
       g.addEventListener("keydown", function(e){
         if(e.key === "Enter" || e.key === " "){ e.preventDefault(); go(g); }
       });
