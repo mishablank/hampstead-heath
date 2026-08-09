@@ -1613,6 +1613,13 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 
 /* ---- section furniture ------------------------------------------- */
 section.blk{margin-top:clamp(42px,6vw,72px)}
+/* the first section stacks its own margin on the masthead's bottom padding and
+   lands wider than the rhythm every later section keeps: subtract the padding
+   back out so the gap under the masthead matches the gap between sections.
+   Stop pages open with an article, not a section, so they are untouched. */
+main > section.blk:first-child{
+  margin-top:calc(clamp(42px,6vw,72px) - clamp(24px,3vw,34px));
+}
 section.blk > h2{
   font-family:var(--font-display); font-weight:400; font-size:clamp(1.45rem,3vw,1.95rem);
   margin:0; border-bottom:2px solid var(--ink); padding-bottom:9px;
@@ -2977,7 +2984,9 @@ def render(tracks):
           "Drag to move it, pinch or scroll to zoom, and tap a number to play that stop. "
           "There are no map tiles here and nothing is fetched from anywhere, so it works with "
           "one bar of signal. <a href=\"hampstead-heath-walk.gpx\" download>Download the route "
-          "as GPX</a> for a map application that can actually navigate.</p>")
+          "as GPX</a> for a map application that can actually navigate, or "
+          '<a href="hampstead-heath-full-walk.m4a" download>the whole walk as one audio '
+          "file</a> to carry it where there is no signal at all.</p>")
         w(svg)
         w('  <div class="mapkey lab">')
         for kind, label in (("village", "Village & street"), ("high", "High ground"),
