@@ -159,27 +159,6 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .lede b{color:var(--ink); font-weight:600}
 .hilldev{width:clamp(92px,12vw,132px); height:auto; flex:none; color:var(--ink-3)}
 
-.stats{
-  list-style:none; margin:clamp(18px,2.6vw,28px) 0 0; padding:0;
-  display:grid; grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:1px; background:var(--rule-soft); border:1px solid var(--rule-soft);
-}
-/* 5 stats never divide evenly below 5 columns; let the last one take up the slack */
-@media (max-width:860px){
-  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .stats li:last-child{grid-column:span 2}
-}
-@media (max-width:470px){
-  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .stats li:last-child{grid-column:span 2}
-}
-.stats li{background:var(--paper); padding:12px 14px 13px}
-.stats .n{
-  font-family:var(--font-label); font-size:1.4rem; line-height:1; display:block;
-  margin-bottom:8px; font-variant-numeric:tabular-nums;
-}
-.stats .n small{font-size:.6em; color:var(--ink-3); letter-spacing:.06em}
-
 /* ---- section furniture ------------------------------------------- */
 section.blk{margin-top:clamp(42px,6vw,72px)}
 section.blk > h2{
@@ -395,8 +374,6 @@ footer p{margin:0 0 8px; max-width:70ch}
   .hdr-actions{gap:6px 10px}
   .hgrp + .hgrp{padding-left:10px}
   .cart h1{font-size:2rem}
-  .stats li{padding:11px 12px 12px}
-  .stats .n{font-size:1.25rem}
   section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
 }
 /* below this the controls wrap to two rows, and a group rule left hanging at
@@ -1297,14 +1274,6 @@ footer p{margin:0 0 8px; max-width:70ch}
       <circle cx="62" cy="56" r="2.6" fill="currentColor"/>
     </svg>
   </div>
-  <ul class="stats">
-<li><span class="n">27</span><span class="lab">Tracks</span></li>
-<li><span class="n">55<small> min</small></span><span class="lab">End to end</span></li>
-<li><span class="n">24</span><span class="lab">Stops on the loop</span></li>
-<li><span class="n">2:02</span><span class="lab">Average track</span></li>
-<li><span class="n">19</span><span class="lab">That cost nothing</span></li>
-  </ul>
-<p class="blk-sub" style="margin-top:18px">Press play on any stop. Tracks stream only when you ask for one and the photographs load only as you scroll to them, so this page stays cheap on mobile data. Nothing auto-advances &#8211; between stops you are walking, not listening. <a href="hampstead-heath-full-walk.m4a" download>Download the whole walk as one file</a> if you would rather have it offline, because the Heath has patchy signal in the middle.</p>
 </header>
 
 <main>
