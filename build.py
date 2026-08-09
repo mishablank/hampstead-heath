@@ -28,6 +28,7 @@ import re
 import subprocess
 import sys
 import time
+import urllib.parse
 
 # --------------------------------------------------------------------------
 # the voice.
@@ -1541,14 +1542,27 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .topbar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px}
 .topbar > .lab,.topbar > .crumb{flex:1 1 auto; min-width:0}
 .topbar .lab{text-wrap:balance}
-.hdr-actions{display:flex; align-items:center; gap:8px; flex:none; margin-left:auto}
+/* flex:none would size this to max-content and overflow rather than wrap */
+.hdr-actions{
+  display:flex; flex-wrap:wrap; justify-content:flex-end;
+  align-items:center; gap:8px 14px; flex:0 1 auto; min-width:0; margin-left:auto;
+}
+/* two errands, two groups: share this page, then act on the page */
+.hgrp{display:flex; align-items:center; gap:8px}
+.hgrp + .hgrp{padding-left:14px; border-left:1px solid var(--rule-soft)}
 .iconbtn{
+  all:unset; box-sizing:border-box; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center; flex:none;
   width:32px; height:32px; border:1px solid var(--rule-soft); color:var(--ink-3);
 }
 .iconbtn:hover{color:var(--ink); border-color:var(--ink-3)}
 .iconbtn:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .iconbtn svg{width:15px; height:15px; fill:currentColor; display:block}
+/* the copy confirmation: a tick where the share glyph was */
+.iconbtn .i-ok{display:none}
+.iconbtn.ok{color:var(--heath); border-color:var(--heath)}
+.iconbtn.ok .i-share{display:none}
+.iconbtn.ok .i-ok{display:block}
 .themectl{
   all:unset; box-sizing:border-box; cursor:pointer; flex:none;
   display:inline-flex; align-items:center; gap:8px;
@@ -1569,6 +1583,9 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
   .themectl .tword{display:none}
   .iconbtn{width:40px; height:40px}
   .iconbtn svg{width:18px; height:18px}
+  /* six controls will not sit beside the eyebrow at this width: give them the
+     whole row, and let the two groups stack if even that is not enough */
+  .hdr-actions{width:100%; margin-left:0}
 }
 .cart-inner{
   border-top:2px solid var(--ink); border-bottom:1px solid var(--rule);
@@ -1806,10 +1823,21 @@ footer p{margin:0 0 8px; max-width:70ch}
   .mapctl #mlocate{flex:1}   /* fills the row rather than leaving a gap */
 }
 @media (max-width:430px){
+  /* the control is the only thing stopping six buttons sharing one row: tighten
+     it rather than strip its label, since a bare swatch names nothing */
+  .themectl{padding:0 8px; gap:5px; font-size:10px; letter-spacing:.06em}
+  .hgrp{gap:6px}
+  .hdr-actions{gap:6px 10px}
+  .hgrp + .hgrp{padding-left:10px}
   .cart h1{font-size:2rem}
   .stats li{padding:11px 12px 12px}
   .stats .n{font-size:1.25rem}
   section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
+}
+/* below this the six controls wrap to two rows, and a group rule left hanging
+   at the start of the second one reads as a stray mark: the gap is enough */
+@media (max-width:360px){
+  .hgrp + .hgrp{padding-left:0; border-left:0}
 }
 @media (hover:none){
   .rt{padding:2px 0}
@@ -1850,6 +1878,52 @@ THEME_JS = r"""
     at = (at + 1) % MODES.length;
     try{ localStorage.setItem(KEY, MODES[at]); }catch(e){}
     put();
+  });
+})();
+"""
+
+SHARE_JS = r"""
+(function(){
+  var TICK = 1600, timer = null;
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("#sharebtn");
+    if(!b) return;
+    var url = b.getAttribute("data-url"), title = b.getAttribute("data-title");
+    function copied(){
+      b.classList.add("ok");
+      b.setAttribute("aria-label", "Link copied");
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        b.classList.remove("ok");
+        b.setAttribute("aria-label", "Share this page");
+      }, TICK);
+    }
+    // the sheet is the whole point on a phone: it reaches WhatsApp, Messages and
+    // the rest without this page carrying a button for each of them
+    // the async clipboard needs a secure context and permission, and quietly
+    // refuses without them: this is the fallback that keeps the button honest
+    function legacy(){
+      var ta = document.createElement("textarea");
+      ta.value = url;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(err){}
+      document.body.removeChild(ta);
+      return ok;
+    }
+    if(navigator.share){
+      // a cancelled sheet rejects with AbortError, which is not a failure
+      navigator.share({title: title, text: title, url: url}).catch(function(){});
+      return;
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(copied, function(){ if(legacy()) copied(); });
+    } else if(legacy()){
+      copied();
+    }
   });
 })();
 """
@@ -2466,21 +2540,64 @@ LI_MARK = (
     '.774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 '
     '.774 23.2 0 22.225 0z"/></svg>')
 
+X_MARK = (
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 '
+    "22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 "
+    '20.644h2.039L6.486 3.24H4.298Z"/></svg>')
+
+FB_MARK = (
+    '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 '
+    "5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 "
+    "1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 "
+    '1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>')
+
+SHARE_MARK = (
+    '<svg class="i-share" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 '
+    "0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 "
+    "2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 "
+    "6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43"
+    '-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>'
+    '<svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true">'
+    '<path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>')
+
+REPO = "https://github.com/mishablank/hampstead-heath"
+
+# The footer credit keeps the profile; the masthead octocat points at the repo,
+# because "star this" and "who wrote this" are different errands.
 LINKS = (("https://www.linkedin.com/in/mishablank/", "LinkedIn", LI_MARK),
          ("https://github.com/mishablank/", "GitHub", GH_MARK))
 
 
-def hdr_actions():
-    """The controls that sit in every masthead. Anchors, not buttons, because
-    they navigate - they only look like the theme control beside them."""
-    o = ['<span class="hdr-actions">']
-    for href, name, mark in LINKS:
-        o.append('<a class="iconbtn" href="%s" target="_blank" rel="me noopener" '
-                 'aria-label="%s">%s</a>' % (href, name, mark))
+def share_urls(here, title):
+    """Plain intent links - no vendor SDK, no script from either company, so the
+    page still fetches nothing from anywhere. u= and text= are what they read."""
+    u, t = urllib.parse.quote(here, safe=""), urllib.parse.quote(title, safe="")
+    return (("https://twitter.com/intent/tweet?url=%s&text=%s" % (u, t), "X", X_MARK),
+            ("https://www.facebook.com/sharer/sharer.php?u=%s" % u, "Facebook", FB_MARK))
+
+
+def hdr_actions(here, title):
+    """The controls that sit in every masthead: share this page, then the page's
+    own affordances. Anchors where they navigate, buttons where they act."""
+    o = ['<span class="hdr-actions">', '<span class="hgrp">']
+    for href, name, mark in share_urls(here, title):
+        o.append('<a class="iconbtn" href="%s" target="_blank" rel="noopener" '
+                 'aria-label="Share on %s" title="Share on %s">%s</a>'
+                 % (esc(href), name, name, mark))
+    # the native sheet is the one a phone actually wants; desktop gets a copy
+    o.append('<button class="iconbtn" id="sharebtn" type="button" data-url="%s" '
+             'data-title="%s" aria-label="Share this page" title="Share">%s</button>'
+             % (esc(here), esc(title), SHARE_MARK))
+    o.append('</span><span class="hgrp">')
+    o.append('<a class="iconbtn" href="%s" target="_blank" rel="noopener" '
+             'aria-label="Star this guide on GitHub" title="Star on GitHub">%s</a>'
+             % (REPO, GH_MARK))
+    o.append('<a class="iconbtn" href="%s" target="_blank" rel="me noopener" '
+             'aria-label="LinkedIn" title="LinkedIn">%s</a>' % (LINKS[0][0], LI_MARK))
     o.append('<button class="themectl" id="themebtn" type="button">'
              '<i aria-hidden="true"></i><span class="tword">Theme</span> '
              '<span id="themelab">Auto</span></button>')
-    o.append("</span>")
+    o.append("</span></span>")
     return "".join(o)
 
 
@@ -2492,11 +2609,12 @@ def siglist():
                       % (href, name) for href, name, _ in LINKS))
 
 
-def topbar(lead, crumbed=False):
-    """The first line of a masthead, with the theme toggle beside it. Every page
-    carries one, so the toggle is wherever the reader happens to be standing."""
+def topbar(lead, here, title, crumbed=False):
+    """The first line of a masthead, with the controls beside it. Every page
+    carries one, so they are wherever the reader happens to be standing, and the
+    share links carry that page's own URL rather than the front door's."""
     return ('    <div class="topbar%s">%s%s</div>'
-            % (" crumbed" if crumbed else "", lead, hdr_actions()))
+            % (" crumbed" if crumbed else "", lead, hdr_actions(here, title)))
 
 
 def url(path=""):
@@ -2590,6 +2708,7 @@ def head(title, desc, path, nodes, og_title=None, og_desc=None, css=CSS):
          # every page, not just the index: a theme that reverted on the way to a
          # stop would be worse than no toggle at all
          "<script>" + THEME_JS + "</script>",
+         "<script>" + SHARE_JS + "</script>",
          ld(nodes),
          "</head>", "<body>", ""]
     return "\n".join(o)
@@ -2844,7 +2963,9 @@ def render(tracks):
     w('<header class="cart">')
     w('  <div class="cart-inner">')
     w("    <div>")
-    w(topbar('<p class="lab">The audio guide &#183; Hampstead, NW3</p>'))
+    w(topbar('<p class="lab">The audio guide &#183; Hampstead, NW3</p>', url(),
+             "%s - a free %s-stop walking audio guide to Hampstead Heath"
+             % (SITE_NAME, in_words(STOP_COUNT))))
     w("      <h1>Hampstead Heath, <em>read aloud</em></h1>")
     w('      <p class="lede">The twenty-four-stop walk as <b>%d tracks, %d minutes</b>, to be played '
       "standing in front of the thing it describes. Every track opens where you should be standing "
@@ -3057,7 +3178,9 @@ def stop_page(i, stop, fn, dur, tracks, pics, coords):
     w('  <div class="cart-inner"><div>')
     w(topbar('<p class="crumb"><a href="%s">The audio guide</a><span>/</span>'
              '<a href="../">The stops</a><span>/</span>%s</p>'
-             % (up, esc(stop["title"])), crumbed=True))
+             % (up, esc(stop["title"])), url(stop_path(stop)),
+             "%s - stop %d of the Hampstead Heath walking audio guide"
+             % (stop["title"], n), crumbed=True))
     w('    <p class="lab">Stop %d of %d &#183; %s &#183; %s</p>'
       % (n, STOP_COUNT, esc(label), esc(stop["where"])))
     w("    <h1>%s</h1>" % esc(stop["title"]))
@@ -3167,7 +3290,9 @@ def stops_index(tracks):
     w('<header class="cart">')
     w('  <div class="cart-inner"><div>')
     w(topbar('<p class="crumb"><a href="../">The audio guide</a>'
-             "<span>/</span>The stops</p>", crumbed=True))
+             "<span>/</span>The stops</p>", url("stops/"),
+             "The %s stops of the Hampstead Heath walking audio guide"
+             % in_words(STOP_COUNT), crumbed=True))
     w("    <h1>The %s stops</h1>" % in_words(STOP_COUNT))
     w('    <p class="lede">Walking order, anticlockwise from the station. Each one has the '
       "recording, the transcript, a photograph and the coordinates to stand on. "

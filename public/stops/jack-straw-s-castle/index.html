@@ -90,14 +90,27 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .topbar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px}
 .topbar > .lab,.topbar > .crumb{flex:1 1 auto; min-width:0}
 .topbar .lab{text-wrap:balance}
-.hdr-actions{display:flex; align-items:center; gap:8px; flex:none; margin-left:auto}
+/* flex:none would size this to max-content and overflow rather than wrap */
+.hdr-actions{
+  display:flex; flex-wrap:wrap; justify-content:flex-end;
+  align-items:center; gap:8px 14px; flex:0 1 auto; min-width:0; margin-left:auto;
+}
+/* two errands, two groups: share this page, then act on the page */
+.hgrp{display:flex; align-items:center; gap:8px}
+.hgrp + .hgrp{padding-left:14px; border-left:1px solid var(--rule-soft)}
 .iconbtn{
+  all:unset; box-sizing:border-box; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center; flex:none;
   width:32px; height:32px; border:1px solid var(--rule-soft); color:var(--ink-3);
 }
 .iconbtn:hover{color:var(--ink); border-color:var(--ink-3)}
 .iconbtn:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 .iconbtn svg{width:15px; height:15px; fill:currentColor; display:block}
+/* the copy confirmation: a tick where the share glyph was */
+.iconbtn .i-ok{display:none}
+.iconbtn.ok{color:var(--heath); border-color:var(--heath)}
+.iconbtn.ok .i-share{display:none}
+.iconbtn.ok .i-ok{display:block}
 .themectl{
   all:unset; box-sizing:border-box; cursor:pointer; flex:none;
   display:inline-flex; align-items:center; gap:8px;
@@ -118,6 +131,9 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
   .themectl .tword{display:none}
   .iconbtn{width:40px; height:40px}
   .iconbtn svg{width:18px; height:18px}
+  /* six controls will not sit beside the eyebrow at this width: give them the
+     whole row, and let the two groups stack if even that is not enough */
+  .hdr-actions{width:100%; margin-left:0}
 }
 .cart-inner{
   border-top:2px solid var(--ink); border-bottom:1px solid var(--rule);
@@ -355,10 +371,21 @@ footer p{margin:0 0 8px; max-width:70ch}
   .mapctl #mlocate{flex:1}   /* fills the row rather than leaving a gap */
 }
 @media (max-width:430px){
+  /* the control is the only thing stopping six buttons sharing one row: tighten
+     it rather than strip its label, since a bare swatch names nothing */
+  .themectl{padding:0 8px; gap:5px; font-size:10px; letter-spacing:.06em}
+  .hgrp{gap:6px}
+  .hdr-actions{gap:6px 10px}
+  .hgrp + .hgrp{padding-left:10px}
   .cart h1{font-size:2rem}
   .stats li{padding:11px 12px 12px}
   .stats .n{font-size:1.25rem}
   section.blk > h2 span{display:none}   /* the eyebrow crowds the heading */
+}
+/* below this the six controls wrap to two rows, and a group rule left hanging
+   at the start of the second one reads as a stray mark: the gap is enough */
+@media (max-width:360px){
+  .hgrp + .hgrp{padding-left:0; border-left:0}
 }
 @media (hover:none){
   .rt{padding:2px 0}
@@ -439,6 +466,51 @@ footer p{margin:0 0 8px; max-width:70ch}
     at = (at + 1) % MODES.length;
     try{ localStorage.setItem(KEY, MODES[at]); }catch(e){}
     put();
+  });
+})();
+</script>
+<script>
+(function(){
+  var TICK = 1600, timer = null;
+  document.addEventListener("click", function(e){
+    var b = e.target.closest && e.target.closest("#sharebtn");
+    if(!b) return;
+    var url = b.getAttribute("data-url"), title = b.getAttribute("data-title");
+    function copied(){
+      b.classList.add("ok");
+      b.setAttribute("aria-label", "Link copied");
+      clearTimeout(timer);
+      timer = setTimeout(function(){
+        b.classList.remove("ok");
+        b.setAttribute("aria-label", "Share this page");
+      }, TICK);
+    }
+    // the sheet is the whole point on a phone: it reaches WhatsApp, Messages and
+    // the rest without this page carrying a button for each of them
+    // the async clipboard needs a secure context and permission, and quietly
+    // refuses without them: this is the fallback that keeps the button honest
+    function legacy(){
+      var ta = document.createElement("textarea");
+      ta.value = url;
+      ta.setAttribute("readonly", "");
+      ta.style.cssText = "position:fixed;top:0;left:-9999px";
+      document.body.appendChild(ta);
+      ta.select();
+      var ok = false;
+      try{ ok = document.execCommand("copy"); }catch(err){}
+      document.body.removeChild(ta);
+      return ok;
+    }
+    if(navigator.share){
+      // a cancelled sheet rejects with AbortError, which is not a failure
+      navigator.share({title: title, text: title, url: url}).catch(function(){});
+      return;
+    }
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(copied, function(){ if(legacy()) copied(); });
+    } else if(legacy()){
+      copied();
+    }
   });
 })();
 </script>
@@ -592,7 +664,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <div class="wrap">
 <header class="cart">
   <div class="cart-inner"><div>
-    <div class="topbar crumbed"><p class="crumb"><a href="../../">The audio guide</a><span>/</span><a href="../">The stops</a><span>/</span>Jack Straw's Castle</p><span class="hdr-actions"><a class="iconbtn" href="https://www.linkedin.com/in/mishablank/" target="_blank" rel="me noopener" aria-label="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a><a class="iconbtn" href="https://github.com/mishablank/" target="_blank" rel="me noopener" aria-label="GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><button class="themectl" id="themebtn" type="button"><i aria-hidden="true"></i><span class="tword">Theme</span> <span id="themelab">Auto</span></button></span></div>
+    <div class="topbar crumbed"><p class="crumb"><a href="../../">The audio guide</a><span>/</span><a href="../">The stops</a><span>/</span>Jack Straw's Castle</p><span class="hdr-actions"><span class="hgrp"><a class="iconbtn" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2Fstops%2Fjack-straw-s-castle%2F&amp;text=Jack%20Straw%27s%20Castle%20-%20stop%2011%20of%20the%20Hampstead%20Heath%20walking%20audio%20guide" target="_blank" rel="noopener" aria-label="Share on X" title="Share on X"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18.901 1.153h3.68l-8.04 9.19L24 22.846h-7.406l-5.8-7.584-6.638 7.584H.474l8.6-9.83L0 1.154h7.594l5.243 6.932ZM17.61 20.644h2.039L6.486 3.24H4.298Z"/></svg></a><a class="iconbtn" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fhampstead-heath.blankm.workers.dev%2Fstops%2Fjack-straw-s-castle%2F" target="_blank" rel="noopener" aria-label="Share on Facebook" title="Share on Facebook"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a><button class="iconbtn" id="sharebtn" type="button" data-url="https://hampstead-heath.blankm.workers.dev/stops/jack-straw-s-castle/" data-title="Jack Straw's Castle - stop 11 of the Hampstead Heath walking audio guide" aria-label="Share this page" title="Share"><svg class="i-share" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg><svg class="i-ok" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.17 4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></button></span><span class="hgrp"><a class="iconbtn" href="https://github.com/mishablank/hampstead-heath" target="_blank" rel="noopener" aria-label="Star this guide on GitHub" title="Star on GitHub"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></a><a class="iconbtn" href="https://www.linkedin.com/in/mishablank/" target="_blank" rel="me noopener" aria-label="LinkedIn" title="LinkedIn"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.225 0z"/></svg></a><button class="themectl" id="themebtn" type="button"><i aria-hidden="true"></i><span class="tword">Theme</span> <span id="themelab">Auto</span></button></span></span></div>
     <p class="lab">Stop 11 of 24 &#183; Village &#183; North End Way</p>
     <h1>Jack Straw's Castle</h1>
     <p class="lede">Track 12 of the walk, 2:30 long. Play it standing where the first line tells you to stand. What is printed underneath is exactly what you will hear, which is also why the numbers are written as words.</p>
