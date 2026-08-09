@@ -1,0 +1,45 @@
+# Hampstead Heath, read aloud
+
+> A free self-guided walking audio guide to Hampstead Heath and Hampstead village, London NW3, in 24 stops. 27 tracks, 55 minutes of narration, the full transcript on the page, one photograph per stop, and a GPX route. A single anticlockwise loop from Hampstead Underground station.
+
+Nineteen of the 24 stops are free. Three more are free unless you get into the water. Two charge at the door. Opening hours were checked in August 2026. Narration is synthesised speech; the text is written to be read aloud, which is why numbers are spelled out.
+
+## The guide
+
+- [The full guide](https://hampstead-heath.blankm.workers.dev/): the map, all 24 stops in walking order, the complete script, and the questions people ask.
+- [The whole transcript as Markdown](https://hampstead-heath.blankm.workers.dev/guide.md): every word, plain text.
+- [The 24 stops](https://hampstead-heath.blankm.workers.dev/stops/): index of the per-stop pages.
+
+## The stops
+
+- [1. Hampstead Underground Station](https://hampstead-heath.blankm.workers.dev/stops/hampstead-underground-station/): Heath Street, village. 1:36, free.
+- [2. Church Row and Saint John-at-Hampstead](https://hampstead-heath.blankm.workers.dev/stops/church-row-and-saint-john-at-hampstead/): Church Row, village. 2:33, free.
+- [3. Saint Mary's, Holly Walk](https://hampstead-heath.blankm.workers.dev/stops/saint-mary-s-holly-walk/): Holly Place, village. 2:00, free.
+- [4. Holly Bush Hill](https://hampstead-heath.blankm.workers.dev/stops/holly-bush-hill/): Holly Bush Hill, house & museum. 2:19, free.
+- [5. Fenton House](https://hampstead-heath.blankm.workers.dev/stops/fenton-house/): Hampstead Grove, house & museum. 1:49, charges at the door.
+- [6. Admiral's House](https://hampstead-heath.blankm.workers.dev/stops/admiral-s-house/): Admiral's Walk, house & museum. 2:47, free.
+- [7. Hampstead Observatory](https://hampstead-heath.blankm.workers.dev/stops/hampstead-observatory/): Lower Terrace, high ground. 1:31, free.
+- [8. Whitestone Pond](https://hampstead-heath.blankm.workers.dev/stops/whitestone-pond/): the top of Heath Street, high ground. 2:11, free.
+- [9. The Hill Garden and Pergola](https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/): Inverforth Close, North End Way, high ground. 2:04, free.
+- [10. Golders Hill Park](https://hampstead-heath.blankm.workers.dev/stops/golders-hill-park/): North End Way, high ground. 1:42, free.
+- [11. Jack Straw's Castle](https://hampstead-heath.blankm.workers.dev/stops/jack-straw-s-castle/): North End Way, village. 2:30, free.
+- [12. The Vale of Health](https://hampstead-heath.blankm.workers.dev/stops/the-vale-of-health/): off East Heath Road, village. 2:07, free.
+- [13. The Spaniards Inn](https://hampstead-heath.blankm.workers.dev/stops/the-spaniards-inn/): Spaniards Road, village. 1:50, free.
+- [14. Kenwood House](https://hampstead-heath.blankm.workers.dev/stops/kenwood-house/): Hampstead Lane, house & museum. 2:11, free.
+- [15. Dido Elizabeth Belle](https://hampstead-heath.blankm.workers.dev/stops/dido-elizabeth-belle/): inside Kenwood, house & museum. 2:27, free.
+- [16. The Kenwood Ladies' Pond](https://hampstead-heath.blankm.workers.dev/stops/the-kenwood-ladies-pond/): off Millfield Lane, water. 1:53, charges at the door.
+- [17. The Highgate Men's Pond](https://hampstead-heath.blankm.workers.dev/stops/the-highgate-men-s-pond/): Millfield Lane, water. 1:37, charges at the door.
+- [18. The Tumulus](https://hampstead-heath.blankm.workers.dev/stops/the-tumulus/): south of the Highgate Ponds, high ground. 1:51, free.
+- [19. Parliament Hill](https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/): Parliament Hill Fields, high ground. 1:48, free.
+- [20. Parliament Hill Lido](https://hampstead-heath.blankm.workers.dev/stops/parliament-hill-lido/): Gordon House Road, water. 1:11, charges at the door.
+- [21. The Hampstead Ponds and the River Fleet](https://hampstead-heath.blankm.workers.dev/stops/the-hampstead-ponds-and-the-river-fleet/): the Hampstead chain, water. 2:42, free.
+- [22. Keats House](https://hampstead-heath.blankm.workers.dev/stops/keats-house/): Keats Grove, house & museum. 2:16, charges at the door.
+- [23. The Cannon Lane Lock-Up](https://hampstead-heath.blankm.workers.dev/stops/the-cannon-lane-lock-up/): Cannon Lane, village. 2:05, free.
+- [24. Well Walk and Burgh House](https://hampstead-heath.blankm.workers.dev/stops/well-walk-and-burgh-house/): Well Walk and New End Square, village. 2:11, free.
+
+## Files
+
+- [The whole walk as one audio file](https://hampstead-heath.blankm.workers.dev/hampstead-heath-full-walk.m4a)
+- [The route as GPX](https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.gpx)
+- [Podcast feed](https://hampstead-heath.blankm.workers.dev/feed.xml)
+- [Source, including the narration](https://github.com/mishablank/hampstead-heath)
