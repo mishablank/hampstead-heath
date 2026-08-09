@@ -151,8 +151,6 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 }
 @media (max-width:700px){
   .cart-inner{grid-template-columns:1fr}
-  /* stacked, the kite has no column gap left to separate it from the lede */
-  .hilldev{width:86px; margin-top:clamp(20px,4vw,52px)}
 }
 .cart h1{
   font-family:var(--font-display); font-weight:400;
@@ -162,7 +160,6 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .cart h1 em{font-style:italic; color:var(--heath)}
 .lede{margin:.8em 0 0; max-width:58ch; font-size:clamp(1rem,1.6vw,1.0625rem); color:var(--ink-2)}
 .lede b{color:var(--ink); font-weight:600}
-.hilldev{width:clamp(92px,12vw,132px); height:auto; flex:none; color:var(--ink-3)}
 
 /* ---- the hero: the map is the first thing on the page -------------- */
 /* Phone order is head, map, lede, acts: the map has to be on the first
@@ -201,10 +198,6 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 }
 .acts a{color:var(--ink-2); text-decoration:none; border-bottom:1px solid var(--rule)}
 .acts a:hover{color:var(--heath); border-bottom-color:var(--heath)}
-/* the kite sits in the slack under the column, which is the only place on the
-   front page that has room for it now */
-.hero .hilldev{grid-area:pad; width:86px; margin:0; align-self:end; justify-self:start}
-@media (max-width:899px){.hero .hilldev{display:none}}
 
 /* ---- section furniture ------------------------------------------- */
 section.blk{margin-top:clamp(42px,6vw,72px)}
@@ -1370,23 +1363,6 @@ footer p{margin:0 0 8px; max-width:70ch}
           <li><a href="stops/">A page per stop</a></li>
         </ul>
       </div>
-      <svg class="hilldev" viewBox="0 0 120 120" aria-hidden="true">
-      <g fill="none" stroke="currentColor" stroke-width="1" opacity=".85">
-        <path d="M6 92 C22 88 30 76 44 74 C58 72 66 80 82 76 C96 73 106 66 114 62"/>
-        <path d="M14 82 C28 78 34 68 46 66 C58 64 66 70 80 67 C92 64 100 58 108 55"/>
-        <path d="M24 72 C34 69 40 61 48 59 C58 57 64 61 76 59 C86 57 92 52 99 49"/>
-      </g>
-      <g stroke="currentColor" stroke-width="1" opacity=".5" fill="none">
-        <ellipse cx="40" cy="102" rx="15" ry="4"/>
-        <ellipse cx="76" cy="108" rx="19" ry="5"/>
-      </g>
-      <g stroke="currentColor" stroke-width="1.4" fill="none">
-        <path d="M62 55 L62 30"/>
-        <path d="M62 30 L74 20 L86 30 L74 40 Z" stroke-width="1.6"/>
-        <path d="M74 40 q3 6 -2 9 q-5 3 -2 8" stroke-width="1" opacity=".6"/>
-      </g>
-      <circle cx="62" cy="56" r="2.6" fill="currentColor"/>
-    </svg>
     </div>
   </div>
 </header>
