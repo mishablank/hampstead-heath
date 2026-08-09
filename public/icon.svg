@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<style>
+ svg{--p:#EFEDE5;--i:#181D16;--g:#2C6B45}
+ @media (prefers-color-scheme:dark){svg{--p:#0F1310;--i:#E4E8DF;--g:#67C08D}}
+</style>
+<rect width="64" height="64" fill="var(--p)"/>
+<ellipse cx="32" cy="70" rx="54" ry="29" fill="var(--g)"/>
+<path d="M32 8 L45 22 L32 36 L19 22 Z" fill="var(--i)"/>
+<path d="M19 22 L8 46" stroke="var(--i)" stroke-width="3" fill="none"/>
+</svg>

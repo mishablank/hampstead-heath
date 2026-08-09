@@ -1,8 +1,40 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="A twenty-four-stop walking audio guide to Hampstead Heath and its village: 27 tracks, 55 minutes, with the full transcript, a map and a photograph for every stop.">
+<title>Hampstead Heath Audio Guide &#8211; a free 24-stop self-guided walk</title>
+<meta name="description" content="A free walking audio guide to Hampstead Heath and Hampstead village: 27 tracks, 55 minutes, 24 stops, with the full transcript, a drawn map, a GPX route and a photograph for every stop.">
+<link rel="canonical" href="https://hampstead-heath.blankm.workers.dev/">
 <meta name="color-scheme" content="light dark">
-<title>The Audio Guide &#8211; Hampstead Heath &amp; Its Village</title>
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EFEDE5">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1310">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Hampstead Heath, read aloud">
+<meta property="og:locale" content="en_GB">
+<meta property="og:title" content="Hampstead Heath, read aloud">
+<meta property="og:description" content="Twenty-four stops, from the deepest station in London to the swimming ponds. 27 tracks, 55 minutes, free, and the whole script is on the page.">
+<meta property="og:url" content="https://hampstead-heath.blankm.workers.dev/">
+<meta property="og:image" content="https://hampstead-heath.blankm.workers.dev/og.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The cover of the guide: Hampstead Heath and its village, twenty-four stops, one loop.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Hampstead Heath, read aloud">
+<meta name="twitter:description" content="Twenty-four stops, from the deepest station in London to the swimming ponds. 27 tracks, 55 minutes, free, and the whole script is on the page.">
+<meta name="twitter:image" content="https://hampstead-heath.blankm.workers.dev/og.jpg">
+<meta name="twitter:image:alt" content="The cover of the guide: Hampstead Heath and its village, twenty-four stops, one loop.">
+<link rel="icon" href="/favicon.ico" sizes="32x32">
+<link rel="icon" href="/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<link rel="alternate" type="application/rss+xml" title="Hampstead Heath, read aloud" href="/feed.xml">
+<meta name="geo.region" content="GB-CMD">
+<meta name="geo.placename" content="Hampstead Heath, London">
+<meta name="geo.position" content="51.56028;-0.16083">
+<meta name="ICBM" content="51.56028, -0.16083">
 <style>
 :root{
   --paper:#EFEDE5; --paper-2:#F7F6F0; --plate:#E8E6DD;
@@ -281,7 +313,780 @@ footer p{margin:0 0 8px; max-width:70ch}
 @media (hover:none){
   .rt{padding:2px 0}
 }
+
+/* ---- crumbs, stop pages, questions ------------------------------- */
+.crumb{font-family:var(--font-label); text-transform:uppercase; letter-spacing:.12em;
+  font-size:10px; color:var(--ink-3); margin:0 0 14px; display:flex; flex-wrap:wrap; gap:8px}
+.crumb a{color:var(--ink-3)}
+.crumb span{color:var(--rule)}
+.sa{border:1px solid var(--rule); background:var(--paper-2);
+  padding:14px 16px; margin:0 0 22px; display:grid; gap:9px}
+.sa audio{width:100%; height:34px}
+.geo{font-family:var(--font-data); font-size:11px; color:var(--ink-3); margin:0}
+.stopnav{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:34px 0 0;
+  border-top:1px solid var(--rule); padding-top:18px}
+.stopnav a{display:block; text-decoration:none}
+.stopnav .lab{margin-bottom:3px}
+.stopnav .t{font-family:var(--font-display); font-size:1.05rem; line-height:1.18; color:var(--ink)}
+.stopnav .nx{text-align:right}
+.perma{font-family:var(--font-label); text-transform:uppercase; letter-spacing:.11em;
+  font-size:10px; white-space:nowrap}
+.faq{display:grid; gap:0; border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule-soft); padding:13px 0}
+.faq summary{font-family:var(--font-display); font-size:1.06rem; line-height:1.3;
+  cursor:pointer; list-style:none; display:flex; gap:12px; align-items:baseline}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+"; color:var(--heath); font-family:var(--font-data);
+  font-size:.9rem; flex:0 0 auto}
+.faq details[open] summary::before{content:"\2013"}
+.faq p{margin:9px 0 2px 24px; color:var(--ink-2)}
+.idx{list-style:none; margin:0; padding:0; border-top:1px solid var(--rule)}
+.idx li{display:flex; gap:14px; align-items:baseline; padding:9px 0;
+  border-bottom:1px solid var(--rule-soft)}
+.idx .rn{font-family:var(--font-data); font-size:11px; color:var(--ink-3); min-width:22px}
+.idx .rd{font-family:var(--font-data); font-size:11px; color:var(--ink-3); margin-left:auto}
+.idx a{font-family:var(--font-display); font-size:1.05rem}
+.idx .wh{color:var(--ink-3); font-size:12px}
 </style>
+<script type="application/ld+json">
+{
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#website",
+   "@type": "WebSite",
+   "description": "A free self-guided walking audio guide to Hampstead Heath and Hampstead village, with the full transcript.",
+   "inLanguage": "en-GB",
+   "name": "Hampstead Heath, read aloud",
+   "publisher": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#publisher"
+   },
+   "url": "https://hampstead-heath.blankm.workers.dev/"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#publisher",
+   "@type": "Organization",
+   "logo": {
+    "@type": "ImageObject",
+    "height": 512,
+    "url": "https://hampstead-heath.blankm.workers.dev/icon-512.png",
+    "width": 512
+   },
+   "name": "Hampstead Heath, read aloud",
+   "url": "https://hampstead-heath.blankm.workers.dev/"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#webpage",
+   "@type": [
+    "WebPage",
+    "CollectionPage"
+   ],
+   "about": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#heath"
+   },
+   "dateModified": "2026-08-09",
+   "datePublished": "2026-08-07",
+   "inLanguage": "en-GB",
+   "isPartOf": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#website"
+   },
+   "mainEntity": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#trip"
+   },
+   "name": "Hampstead Heath, read aloud",
+   "primaryImageOfPage": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#cover"
+   },
+   "significantLink": [
+    "https://hampstead-heath.blankm.workers.dev/stops/",
+    "https://hampstead-heath.blankm.workers.dev/feed.xml"
+   ],
+   "speakable": {
+    "@type": "SpeakableSpecification",
+    "cssSelector": [
+     ".lede",
+     ".faq"
+    ]
+   },
+   "url": "https://hampstead-heath.blankm.workers.dev/"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#trip",
+   "@type": "TouristTrip",
+   "arrivalPlace": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#start"
+   },
+   "departurePlace": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#start",
+    "@type": "TrainStation",
+    "geo": {
+     "@type": "GeoCoordinates",
+     "latitude": 51.55654,
+     "longitude": -0.17812
+    },
+    "name": "Hampstead Underground station"
+   },
+   "description": "A single anticlockwise loop from Hampstead Underground station through the village, over the highest ground in inner London to Kenwood, and back down the east side of the Heath past the swimming ponds.",
+   "inLanguage": "en-GB",
+   "isAccessibleForFree": true,
+   "itinerary": {
+    "@type": "ItemList",
+    "itemListElement": [
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Heath Street",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55654,
+        "longitude": -0.17812
+       },
+       "isAccessibleForFree": true,
+       "name": "Hampstead Underground Station",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/hampstead-underground-station/"
+      },
+      "position": 1
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Church Row",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55618,
+        "longitude": -0.18108
+       },
+       "isAccessibleForFree": true,
+       "name": "Church Row and Saint John-at-Hampstead",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/church-row-and-saint-john-at-hampstead/"
+      },
+      "position": 2
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Holly Place",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.5569,
+        "longitude": -0.18029
+       },
+       "isAccessibleForFree": true,
+       "name": "Saint Mary's, Holly Walk",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/saint-mary-s-holly-walk/"
+      },
+      "position": 3
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Holly Bush Hill",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.558,
+        "longitude": -0.17946
+       },
+       "isAccessibleForFree": true,
+       "name": "Holly Bush Hill",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/holly-bush-hill/"
+      },
+      "position": 4
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Hampstead Grove",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55888,
+        "longitude": -0.1797
+       },
+       "isAccessibleForFree": false,
+       "name": "Fenton House",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/fenton-house/"
+      },
+      "position": 5
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Admiral's Walk",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55976,
+        "longitude": -0.18001
+       },
+       "isAccessibleForFree": true,
+       "name": "Admiral's House",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/admiral-s-house/"
+      },
+      "position": 6
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "Landform"
+       ],
+       "description": "Lower Terrace",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56057,
+        "longitude": -0.18004
+       },
+       "isAccessibleForFree": true,
+       "name": "Hampstead Observatory",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/hampstead-observatory/"
+      },
+      "position": 7
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "Landform"
+       ],
+       "description": "the top of Heath Street",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56056,
+        "longitude": -0.1792
+       },
+       "isAccessibleForFree": true,
+       "name": "Whitestone Pond",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/whitestone-pond/"
+      },
+      "position": 8
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "Landform"
+       ],
+       "description": "Inverforth Close, North End Way",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.5656,
+        "longitude": -0.18397
+       },
+       "isAccessibleForFree": true,
+       "name": "The Hill Garden and Pergola",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/"
+      },
+      "position": 9
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "Landform"
+       ],
+       "description": "North End Way",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56682,
+        "longitude": -0.18938
+       },
+       "isAccessibleForFree": true,
+       "name": "Golders Hill Park",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/golders-hill-park/"
+      },
+      "position": 10
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "North End Way",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56145,
+        "longitude": -0.1801
+       },
+       "isAccessibleForFree": true,
+       "name": "Jack Straw's Castle",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/jack-straw-s-castle/"
+      },
+      "position": 11
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "off East Heath Road",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56294,
+        "longitude": -0.17628
+       },
+       "isAccessibleForFree": true,
+       "name": "The Vale of Health",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-vale-of-health/"
+      },
+      "position": 12
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Spaniards Road",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.57023,
+        "longitude": -0.17372
+       },
+       "isAccessibleForFree": true,
+       "name": "The Spaniards Inn",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-spaniards-inn/"
+      },
+      "position": 13
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Hampstead Lane",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.57155,
+        "longitude": -0.16734
+       },
+       "isAccessibleForFree": true,
+       "name": "Kenwood House",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/kenwood-house/"
+      },
+      "position": 14
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "inside Kenwood",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.57155,
+        "longitude": -0.16734
+       },
+       "isAccessibleForFree": true,
+       "name": "Dido Elizabeth Belle",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/dido-elizabeth-belle/"
+      },
+      "position": 15
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "BodyOfWater"
+       ],
+       "description": "off Millfield Lane",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56699,
+        "longitude": -0.16042
+       },
+       "isAccessibleForFree": false,
+       "name": "The Kenwood Ladies' Pond",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-kenwood-ladies-pond/"
+      },
+      "position": 16
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "BodyOfWater"
+       ],
+       "description": "Millfield Lane",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56475,
+        "longitude": -0.15905
+       },
+       "isAccessibleForFree": false,
+       "name": "The Highgate Men's Pond",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-highgate-men-s-pond/"
+      },
+      "position": 17
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "Landform"
+       ],
+       "description": "south of the Highgate Ponds",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.5606,
+        "longitude": -0.1576
+       },
+       "isAccessibleForFree": true,
+       "name": "The Tumulus",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-tumulus/"
+      },
+      "position": 18
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "Landform"
+       ],
+       "description": "Parliament Hill Fields",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.5594,
+        "longitude": -0.1545
+       },
+       "isAccessibleForFree": true,
+       "name": "Parliament Hill",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/"
+      },
+      "position": 19
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "BodyOfWater"
+       ],
+       "description": "Gordon House Road",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55644,
+        "longitude": -0.15131
+       },
+       "isAccessibleForFree": false,
+       "name": "Parliament Hill Lido",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/parliament-hill-lido/"
+      },
+      "position": 20
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "BodyOfWater"
+       ],
+       "description": "the Hampstead chain",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55758,
+        "longitude": -0.16554
+       },
+       "isAccessibleForFree": true,
+       "name": "The Hampstead Ponds and the River Fleet",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-hampstead-ponds-and-the-river-fleet/"
+      },
+      "position": 21
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Keats Grove",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55552,
+        "longitude": -0.16794
+       },
+       "isAccessibleForFree": false,
+       "name": "Keats House",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/keats-house/"
+      },
+      "position": 22
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Cannon Lane",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.56018,
+        "longitude": -0.17455
+       },
+       "isAccessibleForFree": true,
+       "name": "The Cannon Lane Lock-Up",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/the-cannon-lane-lock-up/"
+      },
+      "position": 23
+     },
+     {
+      "@type": "ListItem",
+      "item": {
+       "@type": [
+        "TouristAttraction",
+        "LandmarksOrHistoricalBuildings"
+       ],
+       "description": "Well Walk and New End Square",
+       "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": 51.55819,
+        "longitude": -0.17504
+       },
+       "isAccessibleForFree": true,
+       "name": "Well Walk and Burgh House",
+       "url": "https://hampstead-heath.blankm.workers.dev/stops/well-walk-and-burgh-house/"
+      },
+      "position": 24
+     }
+    ],
+    "itemListOrder": "https://schema.org/ItemListOrderAscending",
+    "name": "The twenty-four stops, in walking order",
+    "numberOfItems": 24
+   },
+   "name": "Hampstead Heath and its village, in twenty-four stops",
+   "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStock",
+    "price": "0",
+    "priceCurrency": "GBP",
+    "url": "https://hampstead-heath.blankm.workers.dev/"
+   },
+   "provider": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#publisher"
+   },
+   "subjectOf": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#fullwalk"
+   },
+   "touristType": [
+    "Walkers",
+    "Self-guided tours",
+    "Local history"
+   ],
+   "url": "https://hampstead-heath.blankm.workers.dev/"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#faq",
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Something over three hours of walking before you stop for anything at all, plus fifty-five minutes of narration that you listen to standing still. Half a day is the honest answer. There is a fifty-minute village version that skips the Heath itself."
+     },
+     "name": "How long does the Hampstead Heath walk take?",
+     "position": 1
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes, and there is nothing to install: it is a web page, and the tracks stream only when you press play. Of the twenty-four stops, nineteen cost nothing at all. Three more are free unless you get into the water \u2013 the Kenwood Ladies' Pond, the Highgate Men's Pond and Parliament Hill Lido. Two charge at the door: Fenton House and Keats House. Kenwood House itself is free."
+     },
+     "name": "Is the audio guide free?",
+     "position": 2
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Outside Hampstead Underground station on Heath Street, NW3. It is a single anticlockwise loop, so it finishes in the same place \u2013 four minutes from the last stop, up Flask Walk and left along the High Street."
+     },
+     "name": "Where does the walk start and finish?",
+     "position": 3
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "No. Tracks stream only when you ask for one, the photographs load as you scroll, and the map is drawn in the page rather than fetched as tiles, so it works on one bar. The middle of the Heath has patchy signal, so there is also a single continuous file to download before you set out."
+     },
+     "name": "Do I need a phone signal to use it?",
+     "position": 4
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Yes. The Kenwood Ladies' Pond and the Highgate Men's Pond are open every day of the year, the Mixed Pond only from April to October, and Parliament Hill Lido never closes. The ponds open only when lifeguards are on duty."
+     },
+     "name": "Can you swim in the Hampstead Heath ponds?",
+     "position": 5
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Two thirds of this route is unpaved, the Heath sits on London clay, and it holds water for days after rain. Wear shoes you do not mind. The village half of the walk you can do in office shoes."
+     },
+     "name": "How muddy is Hampstead Heath?",
+     "position": 6
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Three. The village hour is about fifty minutes, free, any day, and has no mud in it. The houses is half a day, Wednesday to Sunday, which is the one window when all four are open. The water is any day of the year and is best at seven in the morning."
+     },
+     "name": "Is there a shorter version of the walk?",
+     "position": 7
+    },
+    {
+     "@type": "Question",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. There is also a GPX file of the route for a map application that can navigate."
+     },
+     "name": "Do I need headphones, or can I read it instead?",
+     "position": 8
+    }
+   ]
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#heath",
+   "@type": [
+    "Park",
+    "TouristAttraction"
+   ],
+   "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "GB",
+    "addressLocality": "London",
+    "addressRegion": "Greater London",
+    "postalCode": "NW3"
+   },
+   "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": 51.56028,
+    "longitude": -0.16083
+   },
+   "isAccessibleForFree": true,
+   "name": "Hampstead Heath",
+   "publicAccess": true,
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hampstead_Heath",
+    "https://www.wikidata.org/wiki/Q1570958"
+   ]
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#hampstead",
+   "@type": "Place",
+   "address": {
+    "@type": "PostalAddress",
+    "addressCountry": "GB",
+    "addressLocality": "London",
+    "postalCode": "NW3"
+   },
+   "containsPlace": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#heath"
+   },
+   "name": "Hampstead, London NW3",
+   "sameAs": [
+    "https://en.wikipedia.org/wiki/Hampstead",
+    "https://www.wikidata.org/wiki/Q503481"
+   ]
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#cover",
+   "@type": "ImageObject",
+   "caption": "The cover of the guide: Hampstead Heath and its village, twenty-four stops, one loop.",
+   "contentUrl": "https://hampstead-heath.blankm.workers.dev/og.jpg",
+   "height": 630,
+   "url": "https://hampstead-heath.blankm.workers.dev/og.jpg",
+   "width": 1200
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#fullwalk",
+   "@type": "AudioObject",
+   "associatedArticle": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#webpage"
+   },
+   "contentSize": "20396522",
+   "contentUrl": "https://hampstead-heath.blankm.workers.dev/hampstead-heath-full-walk.m4a",
+   "duration": "PT54M56S",
+   "encodingFormat": "audio/mp4",
+   "inLanguage": "en-GB",
+   "isFamilyFriendly": true,
+   "name": "Hampstead Heath, read aloud - the whole walk"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#podcast",
+   "@type": "PodcastSeries",
+   "about": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#heath"
+   },
+   "image": "https://hampstead-heath.blankm.workers.dev/cover.jpg",
+   "inLanguage": "en-GB",
+   "name": "Hampstead Heath, read aloud",
+   "numberOfEpisodes": 27,
+   "url": "https://hampstead-heath.blankm.workers.dev/",
+   "webFeed": "https://hampstead-heath.blankm.workers.dev/feed.xml"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#gpx",
+   "@type": "DataDownload",
+   "about": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#trip"
+   },
+   "contentUrl": "https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.gpx",
+   "encodingFormat": "application/gpx+xml",
+   "name": "The route as GPX"
+  }
+ ]
+}
+</script>
+</head>
+<body>
 
 <div class="wrap">
 
@@ -319,6 +1124,8 @@ footer p{margin:0 0 8px; max-width:70ch}
   </ul>
 <p class="blk-sub" style="margin-top:18px">Press play on any stop. Tracks stream only when you ask for one and the photographs load only as you scroll to them, so this page stays cheap on mobile data. Nothing auto-advances &#8211; between stops you are walking, not listening. <a href="hampstead-heath-full-walk.m4a" download>Download the whole walk as one file</a> if you would rather have it offline, because the Heath has patchy signal in the middle.</p>
 </header>
+
+<main>
 
 <section class="blk" id="map">
   <h2>The map <span>24 stops</span></h2>
@@ -372,7 +1179,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 
 <section class="blk">
   <h2>The tape <span>54:56 of narration</span></h2>
-  <p class="blk-sub">Track order is walking order. The measure shows how long you stand in each place; the last column is the clock position if you play the whole thing straight through.</p>
+  <p class="blk-sub">Track order is walking order. The measure shows how long you stand in each place; the last column is the clock position if you play the whole thing straight through. Every numbered stop also has <a href="stops/">a page of its own</a>, which is the one to send someone who only cares about the ponds.</p>
   <nav class="tape audio">
 <div class="row intro" data-i="0"><button class="pb" aria-label="Play How to use this"></button><span class="rn">01</span><a class="rt" href="#t00">How to use this</a><span class="rbar"><i style="width:48.5%"></i></span><span class="rd">1:21</span><span class="rc">0:00</span></div>
 <div class="row village" data-i="1"><button class="pb" aria-label="Play Hampstead Underground Station"></button><span class="rn">02</span><a class="rt" href="#t01"><span class="sn">1</span>Hampstead Underground Station</a><span class="rbar"><i style="width:57.5%"></i></span><span class="rd">1:36</span><span class="rc">1:21</span></div>
@@ -420,7 +1227,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Every track starts with where you should be standing and ends by telling you where to go next. Pause it whenever you want to look at something properly. Nothing here is a race, and the walking times are honest rather than precise.</p>
 <div class="walk"><span class="lab">Walk on</span><p>So. Stand with your back to the station entrance and look up Heath Street. Stop one is the ground under your feet.</p></div>
 </div></article>
-<article class="trk village" id="t01"><div class="tmark"><span class="tn">1</span></div><div class="tbody"><p class="lab eyebrow">Track 02 &#183; Village &#183; 1:36</p><h3>Hampstead Underground Station</h3><p class="sub">Heath Street</p><div class="play" data-i="1"><button class="pb" aria-label="Play Hampstead Underground Station"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:36</span></div>
+<article class="trk village" id="t01"><div class="tmark"><span class="tn">1</span></div><div class="tbody"><p class="lab eyebrow">Track 02 &#183; Village &#183; 1:36 &#183; <a class="perma" href="stops/hampstead-underground-station/">Stop page</a></p><h3>Hampstead Underground Station</h3><p class="sub">Heath Street</p><div class="play" data-i="1"><button class="pb" aria-label="Play Hampstead Underground Station"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:36</span></div>
 <figure class="shot"><img src="images/01-hampstead-underground-station.jpg" alt="Hampstead Underground Station, Heath Street" width="1400" height="1050" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Hampstead_station_building.JPG">Sunil060902</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/3.0">CC BY-SA 3.0</a> &#183; resized</figcaption></figure>
 <p>Stop one. Hampstead Underground station, which is the deepest hole in London.</p>
 <p>The platforms are fifty-eight and a half metres beneath the pavement you are standing on. A hundred and ninety-two feet, and the deepest of any station on the network. It has never had an escalator and it never will, because the climb is too steep to build one. The lifts are the deepest on the Underground, and the emergency staircase spiralling around them runs to more than three hundred and twenty steps.</p>
@@ -429,7 +1236,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, unless you go down.</p>
 <div class="walk"><span class="lab">Walk on</span><p>South down Heath Street, on the right-hand pavement, about two minutes. Church Row opens on your right, and it will stop you where you stand.</p></div>
 </div></article>
-<article class="trk village" id="t02"><div class="tmark"><span class="tn">2</span></div><div class="tbody"><p class="lab eyebrow">Track 03 &#183; Village &#183; 2:33</p><h3>Church Row and Saint John-at-Hampstead</h3><p class="sub">Church Row</p><div class="play" data-i="2"><button class="pb" aria-label="Play Church Row and Saint John-at-Hampstead"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:33</span></div>
+<article class="trk village" id="t02"><div class="tmark"><span class="tn">2</span></div><div class="tbody"><p class="lab eyebrow">Track 03 &#183; Village &#183; 2:33 &#183; <a class="perma" href="stops/church-row-and-saint-john-at-hampstead/">Stop page</a></p><h3>Church Row and Saint John-at-Hampstead</h3><p class="sub">Church Row</p><div class="play" data-i="2"><button class="pb" aria-label="Play Church Row and Saint John-at-Hampstead"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:33</span></div>
 <figure class="shot"><img src="images/02-church-row-and-saint-john-at-hampstead.jpg" alt="Church Row and Saint John-at-Hampstead, Church Row" width="1400" height="1050" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Church_Row,_Hampstead.jpg">Chivista</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a> &#183; resized</figcaption></figure>
 <p>Stop two. Church Row, and the parish church at the end of it.</p>
 <p>Walk down the middle of the road and look at both sides at once. This is the oldest complete street in Hampstead, laid out around seventeen twenty, and it is usually called the finest Georgian row in London that is not in a square. What makes it work is the discipline. Same brick, same eaves line, same railings, and no two doorcases quite alike.</p>
@@ -440,7 +1247,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, and open most days.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Out through the top of the churchyard into Holly Walk, the narrow lane climbing north between the walls. Ninety seconds. On your right, set into the terrace and looking like a house that happens to have a bell, is stop three. You will walk past it if you are not counting doors.</p></div>
 </div></article>
-<article class="trk village" id="t03"><div class="tmark"><span class="tn">3</span></div><div class="tbody"><p class="lab eyebrow">Track 04 &#183; Village &#183; 2:00</p><h3>Saint Mary's, Holly Walk</h3><p class="sub">Holly Place</p><div class="play" data-i="3"><button class="pb" aria-label="Play Saint Mary's, Holly Walk"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:00</span></div>
+<article class="trk village" id="t03"><div class="tmark"><span class="tn">3</span></div><div class="tbody"><p class="lab eyebrow">Track 04 &#183; Village &#183; 2:00 &#183; <a class="perma" href="stops/saint-mary-s-holly-walk/">Stop page</a></p><h3>Saint Mary's, Holly Walk</h3><p class="sub">Holly Place</p><div class="play" data-i="3"><button class="pb" aria-label="Play Saint Mary's, Holly Walk"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:00</span></div>
 <figure class="shot"><img src="images/03-saint-mary-s-holly-walk.jpg" alt="Saint Mary's, Holly Walk, Holly Place" width="415" height="640" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:St._Mary%27s_Catholic_Church_-_geograph.org.uk_-_838738.jpg">Martin Addison</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop three. Saint Mary's.</p>
 <p>It does not look like a church, and that is the whole point. It was built in eighteen sixteen, when a Catholic church in England was a recent and nervous freedom, and it is one of the earliest built in London after the Reformation. So it keeps its head down. Only the bell tower and the statue of the Virgin and Child give it away, and both of those were added in the eighteen fifties, once it was safe to be obvious.</p>
@@ -450,7 +1257,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, and usually open. It is very small and very quiet, and there is a good chance you will be the only one in it.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Keep going up Holly Walk. On your left, watch for a squat little building set in the wall: that is the old watch house, where the night watchman sat before anybody had thought of police. The lane opens out at the top. Two minutes.</p></div>
 </div></article>
-<article class="trk house" id="t04"><div class="tmark"><span class="tn">4</span></div><div class="tbody"><p class="lab eyebrow">Track 05 &#183; House &amp; museum &#183; 2:19</p><h3>Holly Bush Hill</h3><p class="sub">Holly Bush Hill</p><div class="play" data-i="4"><button class="pb" aria-label="Play Holly Bush Hill"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:19</span></div>
+<article class="trk house" id="t04"><div class="tmark"><span class="tn">4</span></div><div class="tbody"><p class="lab eyebrow">Track 05 &#183; House &amp; museum &#183; 2:19 &#183; <a class="perma" href="stops/holly-bush-hill/">Stop page</a></p><h3>Holly Bush Hill</h3><p class="sub">Holly Bush Hill</p><div class="play" data-i="4"><button class="pb" aria-label="Play Holly Bush Hill"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:19</span></div>
 <figure class="shot"><img src="images/04-holly-bush-hill.jpg" alt="Holly Bush Hill, Holly Bush Hill" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Holly_Bush_Hill_and_pub_-_geograph.org.uk_-_376305.jpg">ceridwen</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop four. Holly Bush Hill, and the painter who ran away twice.</p>
 <p>The large weatherboarded building behind the pub is George Romney's house. In seventeen ninety six Romney, who was one of the three most fashionable portrait painters in England, bought the site up here and built himself a house with a picture gallery and a studio in it, which was an odd thing for a sick man in his sixties to do.</p>
@@ -461,7 +1268,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>All free. The pub is not, but that is your own affair.</p>
 <div class="walk"><span class="lab">Walk on</span><p>North up Hampstead Grove, one minute. The tall brown house behind wrought-iron gates on your right is stop five.</p></div>
 </div></article>
-<article class="trk house" id="t05"><div class="tmark"><span class="tn">5</span></div><div class="tbody"><p class="lab eyebrow">Track 06 &#183; House &amp; museum &#183; 1:49</p><h3>Fenton House</h3><p class="sub">Hampstead Grove</p><div class="play" data-i="5"><button class="pb" aria-label="Play Fenton House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:49</span></div>
+<article class="trk house" id="t05"><div class="tmark"><span class="tn">5</span></div><div class="tbody"><p class="lab eyebrow">Track 06 &#183; House &amp; museum &#183; 1:49 &#183; <a class="perma" href="stops/fenton-house/">Stop page</a></p><h3>Fenton House</h3><p class="sub">Hampstead Grove</p><div class="play" data-i="5"><button class="pb" aria-label="Play Fenton House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:49</span></div>
 <figure class="shot"><img src="images/05-fenton-house.jpg" alt="Fenton House, Hampstead Grove" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Fenton_House,_Hampstead_-_geograph.org.uk_-_1271918.jpg">ceridwen</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop five. Fenton House.</p>
 <p>Sixteen eighty six, which makes it one of the earliest and largest merchant's houses left in Hampstead, built when this was a hill village a long carriage ride from London. Lady Binning left it to the National Trust in nineteen fifty two with everything still in it.</p>
@@ -470,7 +1277,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>National Trust, so there is a charge, and this is one of only two stops on the whole walk that wants money at the door. Generally Wednesday to Sunday in season, and worth checking before you climb the hill.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Carry on north up Hampstead Grove for one minute, and take the narrow lane on your left. It is called Admiral's Walk, and the white house with the thing on the roof is stop six.</p></div>
 </div></article>
-<article class="trk house" id="t06"><div class="tmark"><span class="tn">6</span></div><div class="tbody"><p class="lab eyebrow">Track 07 &#183; House &amp; museum &#183; 2:47</p><h3>Admiral's House</h3><p class="sub">Admiral's Walk</p><div class="play" data-i="6"><button class="pb" aria-label="Play Admiral's House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:47</span></div>
+<article class="trk house" id="t06"><div class="tmark"><span class="tn">6</span></div><div class="tbody"><p class="lab eyebrow">Track 07 &#183; House &amp; museum &#183; 2:47 &#183; <a class="perma" href="stops/admiral-s-house/">Stop page</a></p><h3>Admiral's House</h3><p class="sub">Admiral's Walk</p><div class="play" data-i="6"><button class="pb" aria-label="Play Admiral's House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:47</span></div>
 <figure class="shot"><img src="images/06-admiral-s-house.jpg" alt="Admiral's House, Admiral's Walk" width="1400" height="1452" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Admiral%27s_House,_Hampstead_-_geograph.org.uk_-_5802584.jpg">Jim Osley</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop six. Admiral's House.</p>
 <p>Look at the roof. That is a quarterdeck, built on top of a house, four miles from the nearest tidal water, with a flagpole and a place to stand and take the salute. It is the least explicable roof in London.</p>
@@ -483,7 +1290,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, and private. Look from the lane and do not ring the bell.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Back to Hampstead Grove and keep going north. Lower Terrace runs off to the left, and at the end of it, behind a gate, on top of what looks like a grass-covered bunker, is stop seven.</p></div>
 </div></article>
-<article class="trk high" id="t07"><div class="tmark"><span class="tn">7</span></div><div class="tbody"><p class="lab eyebrow">Track 08 &#183; High ground &#183; 1:31</p><h3>Hampstead Observatory</h3><p class="sub">Lower Terrace</p><div class="play" data-i="7"><button class="pb" aria-label="Play Hampstead Observatory"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:31</span></div>
+<article class="trk high" id="t07"><div class="tmark"><span class="tn">7</span></div><div class="tbody"><p class="lab eyebrow">Track 08 &#183; High ground &#183; 1:31 &#183; <a class="perma" href="stops/hampstead-observatory/">Stop page</a></p><h3>Hampstead Observatory</h3><p class="sub">Lower Terrace</p><div class="play" data-i="7"><button class="pb" aria-label="Play Hampstead Observatory"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:31</span></div>
 <figure class="shot"><img src="images/07-hampstead-observatory.jpg" alt="Hampstead Observatory, Lower Terrace" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Hampstead_Scientific_Society_-_geograph.org.uk_-_609321.jpg">Martin Addison</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop seven. The Hampstead Observatory.</p>
 <p>A small white dome on the roof of a Victorian reservoir, at the highest point of the highest hill in inner London. It was built in nineteen ten by the Hampstead Scientific Society, which had been formed eleven years earlier by local people who wanted to look at things, and the Society is still running it now, with volunteers, a hundred and sixteen years later.</p>
@@ -492,7 +1299,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>You are two hundred metres from a tube station, looking at Saturn, for nothing, in a shed on a reservoir. That is the single most Hampstead sentence in this guide.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Back to Hampstead Grove and keep climbing north. Ninety seconds, and the road runs out at a junction with a pond in the middle of it.</p></div>
 </div></article>
-<article class="trk high" id="t08"><div class="tmark"><span class="tn">8</span></div><div class="tbody"><p class="lab eyebrow">Track 09 &#183; High ground &#183; 2:11</p><h3>Whitestone Pond</h3><p class="sub">the top of Heath Street</p><div class="play" data-i="8"><button class="pb" aria-label="Play Whitestone Pond"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:11</span></div>
+<article class="trk high" id="t08"><div class="tmark"><span class="tn">8</span></div><div class="tbody"><p class="lab eyebrow">Track 09 &#183; High ground &#183; 2:11 &#183; <a class="perma" href="stops/whitestone-pond/">Stop page</a></p><h3>Whitestone Pond</h3><p class="sub">the top of Heath Street</p><div class="play" data-i="8"><button class="pb" aria-label="Play Whitestone Pond"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:11</span></div>
 <figure class="shot"><img src="images/08-whitestone-pond.jpg" alt="Whitestone Pond, the top of Heath Street" width="1400" height="575" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Whitestone_Pond_Hampstead_Heath_London_134m190_20220423_1928.jpg">Karlunun</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a> &#183; resized</figcaption></figure>
 <p>Stop eight. Whitestone Pond, and the roof of London.</p>
 <p>You are standing at a hundred and thirty-four metres above sea level, and there is a flagstaff by the water marking four hundred and forty feet. This is the highest point in London, and here is the honest version of that claim. It is the highest point in inner London, comfortably. It is not the highest point in Greater London, which is Westerham Heights, out on the Kent border in Bromley, and nearly twice as high. Nobody has ever put a flagstaff on that one, because nobody would come.</p>
@@ -503,7 +1310,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, and there is a bus stop here for anyone who has already had enough.</p>
 <div class="walk"><span class="lab">Walk on</span><p>West down North End Way, keeping the Heath on your left, for about eight minutes. Watch on the left for Inverforth Close, which is a private-looking turning that is not private. Follow it to the end and go up the steps.</p></div>
 </div></article>
-<article class="trk high" id="t09"><div class="tmark"><span class="tn">9</span></div><div class="tbody"><p class="lab eyebrow">Track 10 &#183; High ground &#183; 2:04</p><h3>The Hill Garden and Pergola</h3><p class="sub">Inverforth Close, North End Way</p><div class="play" data-i="9"><button class="pb" aria-label="Play The Hill Garden and Pergola"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:04</span></div>
+<article class="trk high" id="t09"><div class="tmark"><span class="tn">9</span></div><div class="tbody"><p class="lab eyebrow">Track 10 &#183; High ground &#183; 2:04 &#183; <a class="perma" href="stops/the-hill-garden-and-pergola/">Stop page</a></p><h3>The Hill Garden and Pergola</h3><p class="sub">Inverforth Close, North End Way</p><div class="play" data-i="9"><button class="pb" aria-label="Play The Hill Garden and Pergola"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:04</span></div>
 <figure class="shot"><img src="images/09-the-hill-garden-and-pergola.jpg" alt="The Hill Garden and Pergola, Inverforth Close, North End Way" width="1400" height="1216" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Hampstead_,_Hill_Garden_and_Pergola_-_geograph.org.uk_-_8084698.jpg">Jim Osley</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; cropped and resized</figcaption></figure>
 <p>Stop nine. The Hill Garden, and the Pergola.</p>
 <p>You have found the raised walkway. Go up and along it slowly, because this is the strangest thing on the Heath and it takes a minute to work out what you are looking at.</p>
@@ -513,7 +1320,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free. Open daily from half past eight until dusk, and it is at its ridiculous best in the first two weeks of June.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Back out to North End Way and turn left, north-west, for about seven minutes. The gates of Golders Hill Park are on your left, opposite the end of West Heath Avenue.</p></div>
 </div></article>
-<article class="trk high" id="t10"><div class="tmark"><span class="tn">10</span></div><div class="tbody"><p class="lab eyebrow">Track 11 &#183; High ground &#183; 1:42</p><h3>Golders Hill Park</h3><p class="sub">North End Way</p><div class="play" data-i="10"><button class="pb" aria-label="Play Golders Hill Park"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:42</span></div>
+<article class="trk high" id="t10"><div class="tmark"><span class="tn">10</span></div><div class="tbody"><p class="lab eyebrow">Track 11 &#183; High ground &#183; 1:42 &#183; <a class="perma" href="stops/golders-hill-park/">Stop page</a></p><h3>Golders Hill Park</h3><p class="sub">North End Way</p><div class="play" data-i="10"><button class="pb" aria-label="Play Golders Hill Park"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:42</span></div>
 <figure class="shot"><img src="images/10-golders-hill-park.jpg" alt="Golders Hill Park, North End Way" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Golders_Hill_Park_in_2006.jpg">Martin Addison</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop ten. Golders Hill Park.</p>
 <p>This is the tidy end of the Heath. Thirty-six acres of Victorian park with mown grass, a bandstand, and a walled flower garden, all of it attached to a wilderness, which is a very odd thing to walk into after the Pergola.</p>
@@ -523,7 +1330,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free. Open daily, and the deer are more active in the first hour.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Out of the gates, turn round, and walk back south-east up North End Way. It is a steady climb of about twelve minutes back to Whitestone Pond. Stop eleven is the large white weatherboarded building on the corner as you arrive.</p></div>
 </div></article>
-<article class="trk village" id="t11"><div class="tmark"><span class="tn">11</span></div><div class="tbody"><p class="lab eyebrow">Track 12 &#183; Village &#183; 2:30</p><h3>Jack Straw's Castle</h3><p class="sub">North End Way</p><div class="play" data-i="11"><button class="pb" aria-label="Play Jack Straw's Castle"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:30</span></div>
+<article class="trk village" id="t11"><div class="tmark"><span class="tn">11</span></div><div class="tbody"><p class="lab eyebrow">Track 12 &#183; Village &#183; 2:30 &#183; <a class="perma" href="stops/jack-straw-s-castle/">Stop page</a></p><h3>Jack Straw's Castle</h3><p class="sub">North End Way</p><div class="play" data-i="11"><button class="pb" aria-label="Play Jack Straw's Castle"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:30</span></div>
 <figure class="shot"><img src="images/11-jack-straw-s-castle.jpg" alt="Jack Straw's Castle, North End Way" width="1280" height="853" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Jack_Straw%27s_Castle.jpg">George Rex</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop eleven. Jack Straw's Castle, which is no longer a pub and has not been one since two thousand and two.</p>
 <p>Stand back and look at it anyway, because for two hundred years this was where London came up the hill to. The name belongs to a leader of the Peasants' Revolt of thirteen eighty one, who is supposed to have addressed a crowd from a hay wagon on this spot. That is a story rather than a record, and it has been attached to the site since at least the seventeenth century.</p>
@@ -533,7 +1340,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free to look at. Nothing to go into.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Cross to the Heath side and take the path running east beside Spaniards Road for about two hundred metres. Then bear right, downhill, off the ridge. A narrow lane drops away in front of you into a hollow full of houses. Five minutes.</p></div>
 </div></article>
-<article class="trk village" id="t12"><div class="tmark"><span class="tn">12</span></div><div class="tbody"><p class="lab eyebrow">Track 13 &#183; Village &#183; 2:07</p><h3>The Vale of Health</h3><p class="sub">off East Heath Road</p><div class="play" data-i="12"><button class="pb" aria-label="Play The Vale of Health"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:07</span></div>
+<article class="trk village" id="t12"><div class="tmark"><span class="tn">12</span></div><div class="tbody"><p class="lab eyebrow">Track 13 &#183; Village &#183; 2:07 &#183; <a class="perma" href="stops/the-vale-of-health/">Stop page</a></p><h3>The Vale of Health</h3><p class="sub">off East Heath Road</p><div class="play" data-i="12"><button class="pb" aria-label="Play The Vale of Health"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:07</span></div>
 <figure class="shot"><img src="images/12-the-vale-of-health.jpg" alt="The Vale of Health, off East Heath Road" width="1400" height="1050" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Vale_of_Health,_Hampstead_-_geograph.org.uk_-_3711963.jpg">David Howard</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop twelve. The Vale of Health.</p>
 <p>A hamlet of about a hundred houses, completely surrounded by open Heath, with one road in and the same road out. There is no through traffic because there is nowhere to go through to.</p>
@@ -543,7 +1350,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free. It is somebody's street, so read the room.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Back up the lane the way you came, and rejoin Spaniards Road at the top. Turn right and follow it north-east along the ridge, with the Heath falling away on both sides, for about twelve minutes. The road narrows to a pinch, and the pinch is stop thirteen.</p></div>
 </div></article>
-<article class="trk village" id="t13"><div class="tmark"><span class="tn">13</span></div><div class="tbody"><p class="lab eyebrow">Track 14 &#183; Village &#183; 1:50</p><h3>The Spaniards Inn</h3><p class="sub">Spaniards Road</p><div class="play" data-i="13"><button class="pb" aria-label="Play The Spaniards Inn"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:50</span></div>
+<article class="trk village" id="t13"><div class="tmark"><span class="tn">13</span></div><div class="tbody"><p class="lab eyebrow">Track 14 &#183; Village &#183; 1:50 &#183; <a class="perma" href="stops/the-spaniards-inn/">Stop page</a></p><h3>The Spaniards Inn</h3><p class="sub">Spaniards Road</p><div class="play" data-i="13"><button class="pb" aria-label="Play The Spaniards Inn"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:50</span></div>
 <figure class="shot"><img src="images/13-the-spaniards-inn.jpg" alt="The Spaniards Inn, Spaniards Road" width="640" height="407" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:The_Spaniards_Inn_-_geograph.org.uk_-_1003208.jpg">Martin Addison</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop thirteen. The Spaniards Inn, and the toll house that is still in the way.</p>
 <p>Look at the road before you look at the pub. The little building on the other side is an eighteenth-century toll house, and the gap between the two of them is why every bus, van and lorry on this road has to wait its turn. A tollgate that stopped collecting tolls generations ago is still, physically, taxing your journey.</p>
@@ -552,7 +1359,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Open as a pub, with a large garden, and it is the last chance for lunch before Kenwood.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Continue east along Hampstead Lane, past the toll house, for about five minutes. The gate into the Kenwood estate is on your right. Go in and follow the drive until the trees stop.</p></div>
 </div></article>
-<article class="trk house" id="t14"><div class="tmark"><span class="tn">14</span></div><div class="tbody"><p class="lab eyebrow">Track 15 &#183; House &amp; museum &#183; 2:11</p><h3>Kenwood House</h3><p class="sub">Hampstead Lane</p><div class="play" data-i="14"><button class="pb" aria-label="Play Kenwood House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:11</span></div>
+<article class="trk house" id="t14"><div class="tmark"><span class="tn">14</span></div><div class="tbody"><p class="lab eyebrow">Track 15 &#183; House &amp; museum &#183; 2:11 &#183; <a class="perma" href="stops/kenwood-house/">Stop page</a></p><h3>Kenwood House</h3><p class="sub">Hampstead Lane</p><div class="play" data-i="14"><button class="pb" aria-label="Play Kenwood House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:11</span></div>
 <figure class="shot"><img src="images/14-kenwood-house.jpg" alt="Kenwood House, Hampstead Lane" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Kenwood_House,_south_front_-_geograph.org.uk_-_1472942.jpg">Oxyman</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop fourteen. Kenwood.</p>
 <p>A white villa at the top of a slope of grass, with a lake below it. Before you go in, look at the little bridge on the lake. It is a fake. There is no bridge, only a painted timber front, put there in the eighteenth century because the view needed one, and it has been fooling people from this exact angle for two hundred years.</p>
@@ -562,7 +1369,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free. Open daily, and book ahead if you want to be certain of the house.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Do not leave yet. Stay inside, find the portrait of two young women in the garden, one of them carrying fruit. Stop fifteen is standing in front of it.</p></div>
 </div></article>
-<article class="trk house" id="t15"><div class="tmark"><span class="tn">15</span></div><div class="tbody"><p class="lab eyebrow">Track 16 &#183; House &amp; museum &#183; 2:27</p><h3>Dido Elizabeth Belle</h3><p class="sub">inside Kenwood</p><div class="play" data-i="15"><button class="pb" aria-label="Play Dido Elizabeth Belle"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:27</span></div>
+<article class="trk house" id="t15"><div class="tmark"><span class="tn">15</span></div><div class="tbody"><p class="lab eyebrow">Track 16 &#183; House &amp; museum &#183; 2:27 &#183; <a class="perma" href="stops/dido-elizabeth-belle/">Stop page</a></p><h3>Dido Elizabeth Belle</h3><p class="sub">inside Kenwood</p><div class="play" data-i="15"><button class="pb" aria-label="Play Dido Elizabeth Belle"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:27</span></div>
 <figure class="shot"><img src="images/15-dido-elizabeth-belle.jpg" alt="Dido Elizabeth Belle, inside Kenwood" width="1000" height="858" loading="lazy" decoding="async"><figcaption class="lab"><a href="https://commons.wikimedia.org/wiki/File:Dido_Elizabeth_Belle.jpg">David Martin</a> &#183; public domain, via Wikimedia Commons</figcaption></figure>
 <p>Stop fifteen. Dido Elizabeth Belle.</p>
 <p>She was born in seventeen sixty one, the daughter of Sir John Lindsay, a naval officer and Lord Mansfield's nephew, and an enslaved woman called Maria Belle. She was brought to this house as a small child and she lived in it for about thirty years, raised alongside her cousin Elizabeth Murray, running the dairy and the poultry yard, and helping Mansfield with his correspondence. A visiting American described being unable to make sense of her position at the dinner table, which tells you rather more about him than about her.</p>
@@ -572,7 +1379,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>He did free Dido in his will, explicitly, and left her money. He knew exactly what he had not done.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Out of the house by the south front and down across the lawn. Keep the lake on your right, follow the path east out of the estate, and pick up Millfield Lane heading south. Eight minutes. The gate on your right is stop sixteen, and if you are a man you are not going through it.</p></div>
 </div></article>
-<article class="trk water" id="t16"><div class="tmark"><span class="tn">16</span></div><div class="tbody"><p class="lab eyebrow">Track 17 &#183; Water &#183; 1:53</p><h3>The Kenwood Ladies' Pond</h3><p class="sub">off Millfield Lane</p><div class="play" data-i="16"><button class="pb" aria-label="Play The Kenwood Ladies' Pond"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:53</span></div>
+<article class="trk water" id="t16"><div class="tmark"><span class="tn">16</span></div><div class="tbody"><p class="lab eyebrow">Track 17 &#183; Water &#183; 1:53 &#183; <a class="perma" href="stops/the-kenwood-ladies-pond/">Stop page</a></p><h3>The Kenwood Ladies' Pond</h3><p class="sub">off Millfield Lane</p><div class="play" data-i="16"><button class="pb" aria-label="Play The Kenwood Ladies' Pond"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:53</span></div>
 <figure class="shot"><img src="images/16-the-kenwood-ladies-pond.jpg" alt="The Kenwood Ladies' Pond, off Millfield Lane" width="1400" height="1050" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Kenwood_Ladies_Bathing_Pond_-_geograph.org.uk_-_1841422.jpg">Peter</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop sixteen. The Kenwood Ladies' Pond, which opened in nineteen twenty six and is therefore a hundred years old this year.</p>
 <p>It is the only lifeguarded women-only open-water swimming place in Britain, it is open every single day of the year, and it is spring-fed and unheated, which means about four degrees in February and low twenties in August. Women swim through the winter here in numbers that grow every year.</p>
@@ -582,7 +1389,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Small charge to swim, and free to walk past.</p>
 <div class="walk"><span class="lab">Walk on</span><p>South down Millfield Lane, with the ponds through the trees on your right. Keats met Coleridge in this lane in April eighteen nineteen and walked with him for two miles while Coleridge talked without stopping about nightingales, dreams, mermaids and metaphysics. Keats wrote the whole list down afterwards. Four minutes.</p></div>
 </div></article>
-<article class="trk water" id="t17"><div class="tmark"><span class="tn">17</span></div><div class="tbody"><p class="lab eyebrow">Track 18 &#183; Water &#183; 1:37</p><h3>The Highgate Men's Pond</h3><p class="sub">Millfield Lane</p><div class="play" data-i="17"><button class="pb" aria-label="Play The Highgate Men's Pond"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:37</span></div>
+<article class="trk water" id="t17"><div class="tmark"><span class="tn">17</span></div><div class="tbody"><p class="lab eyebrow">Track 18 &#183; Water &#183; 1:37 &#183; <a class="perma" href="stops/the-highgate-men-s-pond/">Stop page</a></p><h3>The Highgate Men's Pond</h3><p class="sub">Millfield Lane</p><div class="play" data-i="17"><button class="pb" aria-label="Play The Highgate Men's Pond"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:37</span></div>
 <figure class="shot"><img src="images/17-the-highgate-men-s-pond.jpg" alt="The Highgate Men's Pond, Millfield Lane" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Highgate_Men%27s_Bathing_Pond_-_geograph.org.uk_-_1570343.jpg">Peter Smyly</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop seventeen. The Highgate Men's Pond.</p>
 <p>Also open every day of the year. Also lifeguarded, also unheated, and rather less discreet than the one you have just walked past: there is a diving board, a concrete deck, and a large meadow beside it where the sunbathing has been famously and legally unclothed for decades.</p>
@@ -591,7 +1398,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Small charge to swim.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Leave the lane and strike west across the Heath, uphill, away from the water. Aim for the trees on the skyline. Seven minutes, and you are looking for a low round mound inside an iron fence, which is easy to walk straight past.</p></div>
 </div></article>
-<article class="trk high" id="t18"><div class="tmark"><span class="tn">18</span></div><div class="tbody"><p class="lab eyebrow">Track 19 &#183; High ground &#183; 1:51</p><h3>The Tumulus</h3><p class="sub">south of the Highgate Ponds</p><div class="play" data-i="18"><button class="pb" aria-label="Play The Tumulus"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:51</span></div>
+<article class="trk high" id="t18"><div class="tmark"><span class="tn">18</span></div><div class="tbody"><p class="lab eyebrow">Track 19 &#183; High ground &#183; 1:51 &#183; <a class="perma" href="stops/the-tumulus/">Stop page</a></p><h3>The Tumulus</h3><p class="sub">south of the Highgate Ponds</p><div class="play" data-i="18"><button class="pb" aria-label="Play The Tumulus"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:51</span></div>
 <figure class="shot"><img src="images/18-the-tumulus.jpg" alt="The Tumulus, south of the Highgate Ponds" width="1400" height="1051" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Boudicca%27s_Grave,_Hampstead_Heath_(South_Face_-_01).jpg">Ethan Doyle White</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a> &#183; resized</figcaption></figure>
 <p>Stop eighteen. The tumulus, which the whole of north London calls Boudica's grave.</p>
 <p>It is a round mound, about thirty-six metres across and three metres high, ringed with railings and padlocked, with trees growing out of the top of it. It is a scheduled ancient monument, which is the same legal protection given to Stonehenge.</p>
@@ -601,7 +1408,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, and you cannot go in, and neither can anybody else.</p>
 <div class="walk"><span class="lab">Walk on</span><p>South-west, up the last of the slope, three minutes, until the ground stops rising and there are benches and a great many people facing the same way.</p></div>
 </div></article>
-<article class="trk high" id="t19"><div class="tmark"><span class="tn">19</span></div><div class="tbody"><p class="lab eyebrow">Track 20 &#183; High ground &#183; 1:48</p><h3>Parliament Hill</h3><p class="sub">Parliament Hill Fields</p><div class="play" data-i="19"><button class="pb" aria-label="Play Parliament Hill"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:48</span></div>
+<article class="trk high" id="t19"><div class="tmark"><span class="tn">19</span></div><div class="tbody"><p class="lab eyebrow">Track 20 &#183; High ground &#183; 1:48 &#183; <a class="perma" href="stops/parliament-hill/">Stop page</a></p><h3>Parliament Hill</h3><p class="sub">Parliament Hill Fields</p><div class="play" data-i="19"><button class="pb" aria-label="Play Parliament Hill"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:48</span></div>
 <figure class="shot"><img src="images/19-parliament-hill.jpg" alt="Parliament Hill, Parliament Hill Fields" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Parliament_Hill_view_of_Central_London_-_geograph.org.uk_-_1568116.jpg">Peter Smyly</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop nineteen. Parliament Hill. Ninety-eight metres, and the best free view in London.</p>
 <p>Take it left to right. Canary Wharf on the far left, then the towers of the City in a clump, then the dome of Saint Paul's sitting low and pale in front of them, then the Shard, and on a good day the transmitter at Crystal Palace on the ridge beyond.</p>
@@ -611,7 +1418,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, and the first hour after sunrise is the version to see.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Down the north-west slope, past the running track, and keep going down to the bottom corner of the Heath on Gordon House Road. Eight minutes. Stop seventeen is the long blue rectangle behind the fence.</p></div>
 </div></article>
-<article class="trk water" id="t20"><div class="tmark"><span class="tn">20</span></div><div class="tbody"><p class="lab eyebrow">Track 21 &#183; Water &#183; 1:11</p><h3>Parliament Hill Lido</h3><p class="sub">Gordon House Road</p><div class="play" data-i="20"><button class="pb" aria-label="Play Parliament Hill Lido"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:11</span></div>
+<article class="trk water" id="t20"><div class="tmark"><span class="tn">20</span></div><div class="tbody"><p class="lab eyebrow">Track 21 &#183; Water &#183; 1:11 &#183; <a class="perma" href="stops/parliament-hill-lido/">Stop page</a></p><h3>Parliament Hill Lido</h3><p class="sub">Gordon House Road</p><div class="play" data-i="20"><button class="pb" aria-label="Play Parliament Hill Lido"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">1:11</span></div>
 <figure class="shot"><img src="images/20-parliament-hill-lido.jpg" alt="Parliament Hill Lido, Gordon House Road" width="1400" height="933" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Parliament_Hill_Lido_(6448960385).jpg">Tom Page from London, UK</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop twenty. Parliament Hill Lido.</p>
 <p>Sixty metres of unheated open-air water, opened in nineteen thirty eight at the very end of the great age of London lido building, when the London County Council was putting these things up across the city on the theory that working people were entitled to swim outdoors in the sun.</p>
@@ -620,7 +1427,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Charged, cheaper early, and towels are your own problem.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Back up onto the Heath and head north-east, downhill, to the bottom of the chain of ponds on the Hampstead side, near South End Green. Ten minutes. Walk up the path with the water on your left.</p></div>
 </div></article>
-<article class="trk water" id="t21"><div class="tmark"><span class="tn">21</span></div><div class="tbody"><p class="lab eyebrow">Track 22 &#183; Water &#183; 2:42</p><h3>The Hampstead Ponds and the River Fleet</h3><p class="sub">the Hampstead chain</p><div class="play" data-i="21"><button class="pb" aria-label="Play The Hampstead Ponds and the River Fleet"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:42</span></div>
+<article class="trk water" id="t21"><div class="tmark"><span class="tn">21</span></div><div class="tbody"><p class="lab eyebrow">Track 22 &#183; Water &#183; 2:42 &#183; <a class="perma" href="stops/the-hampstead-ponds-and-the-river-fleet/">Stop page</a></p><h3>The Hampstead Ponds and the River Fleet</h3><p class="sub">the Hampstead chain</p><div class="play" data-i="21"><button class="pb" aria-label="Play The Hampstead Ponds and the River Fleet"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:42</span></div>
 <figure class="shot"><img src="images/21-the-hampstead-ponds-and-the-river-fleet.jpg" alt="The Hampstead Ponds and the River Fleet, the Hampstead chain" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Pond_on_Hampstead_Heath_-_geograph.org.uk_-_1850332.jpg">Alex McGregor</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop twenty-one. The ponds, and the river underneath them.</p>
 <p>None of these is a lake. Every pond on this Heath is a dammed valley, and the grass bank you are walking along is the dam. The water in them is the River Fleet, which rises in two arms up on this hill, one under this chain and one under the Highgate chain, and which meets itself at Camden Town before running down under Farringdon and out into the Thames at Blackfriars.</p>
@@ -631,7 +1438,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Carry on down to the bottom of the ponds and out onto South End Green. Take Keats Grove, which runs west off it. Three minutes. The white house behind the garden wall on your left is stop twenty-two.</p></div>
 </div></article>
-<article class="trk house" id="t22"><div class="tmark"><span class="tn">22</span></div><div class="tbody"><p class="lab eyebrow">Track 23 &#183; House &amp; museum &#183; 2:16</p><h3>Keats House</h3><p class="sub">Keats Grove</p><div class="play" data-i="22"><button class="pb" aria-label="Play Keats House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:16</span></div>
+<article class="trk house" id="t22"><div class="tmark"><span class="tn">22</span></div><div class="tbody"><p class="lab eyebrow">Track 23 &#183; House &amp; museum &#183; 2:16 &#183; <a class="perma" href="stops/keats-house/">Stop page</a></p><h3>Keats House</h3><p class="sub">Keats Grove</p><div class="play" data-i="22"><button class="pb" aria-label="Play Keats House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:16</span></div>
 <figure class="shot"><img src="images/22-keats-house.jpg" alt="Keats House, Keats Grove" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Keats%27_House,_Hampstead_-_geograph.org.uk_-_221032.jpg">ceridwen</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop twenty-two. Keats House.</p>
 <p>It was built as a pair of semi-detached houses called Wentworth Place, and it is why you are on this street rather than any other. John Keats moved into one half in December eighteen eighteen, at twenty-three, having just nursed his brother Tom through the tuberculosis that killed him and that was going to kill Keats. The Brawne family moved into the other half. Fanny Brawne was eighteen. They became engaged over the garden wall, more or less literally.</p>
@@ -641,7 +1448,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Ticketed, and inexpensive. Generally Wednesday to Friday and Sunday, so check before you come.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Out of the gate, west along Keats Grove to Downshire Hill, then right into Willow Road. You will pass number two, which is a museum and is on a longer list than this one. Cross East Heath Road, climb, and bear left into Cannon Place. Cannon Lane drops away on your left. Eight minutes, and stop twenty-three is a door in a wall.</p></div>
 </div></article>
-<article class="trk village" id="t23"><div class="tmark"><span class="tn">23</span></div><div class="tbody"><p class="lab eyebrow">Track 24 &#183; Village &#183; 2:05</p><h3>The Cannon Lane Lock-Up</h3><p class="sub">Cannon Lane</p><div class="play" data-i="23"><button class="pb" aria-label="Play The Cannon Lane Lock-Up"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:05</span></div>
+<article class="trk village" id="t23"><div class="tmark"><span class="tn">23</span></div><div class="tbody"><p class="lab eyebrow">Track 24 &#183; Village &#183; 2:05 &#183; <a class="perma" href="stops/the-cannon-lane-lock-up/">Stop page</a></p><h3>The Cannon Lane Lock-Up</h3><p class="sub">Cannon Lane</p><div class="play" data-i="23"><button class="pb" aria-label="Play The Cannon Lane Lock-Up"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:05</span></div>
 <figure class="shot"><img src="images/23-the-cannon-lane-lock-up.jpg" alt="The Cannon Lane Lock-Up, Cannon Lane" width="1400" height="1050" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Former_Hampstead_parish_lock_up,_Cannon_Lane.jpg">No Swan So Fine</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/4.0">CC BY-SA 4.0</a> &#183; resized</figcaption></figure>
 <p>Stop twenty-three. The parish lock-up, in the wall on your left.</p>
 <p>A heavy studded door, a barred slit at head height, and behind it a single windowless cell, built into the garden wall of the house above in about seventeen thirty. This is a village prison, and it is one of very few left anywhere in London.</p>
@@ -652,7 +1459,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <p>Free, visible from the lane at any hour, and easy to walk past.</p>
 <div class="walk"><span class="lab">Walk on</span><p>Back down Cannon Place the way you came, then right and downhill into Well Walk. Two minutes. You will pass a small stone drinking fountain, and it is the reason the whole village exists.</p></div>
 </div></article>
-<article class="trk village" id="t24"><div class="tmark"><span class="tn">24</span></div><div class="tbody"><p class="lab eyebrow">Track 25 &#183; Village &#183; 2:11</p><h3>Well Walk and Burgh House</h3><p class="sub">Well Walk and New End Square</p><div class="play" data-i="24"><button class="pb" aria-label="Play Well Walk and Burgh House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:11</span></div>
+<article class="trk village" id="t24"><div class="tmark"><span class="tn">24</span></div><div class="tbody"><p class="lab eyebrow">Track 25 &#183; Village &#183; 2:11 &#183; <a class="perma" href="stops/well-walk-and-burgh-house/">Stop page</a></p><h3>Well Walk and Burgh House</h3><p class="sub">Well Walk and New End Square</p><div class="play" data-i="24"><button class="pb" aria-label="Play Well Walk and Burgh House"></button><span class="plab">Play</span><span class="pgs"><i></i></span><span class="ptime">2:11</span></div>
 <figure class="shot"><img src="images/24-well-walk-and-burgh-house.jpg" alt="Well Walk and Burgh House, Well Walk and New End Square" width="640" height="480" loading="lazy" decoding="async"><figcaption class="lab">Photograph by <a href="https://commons.wikimedia.org/wiki/File:Burgh_House_in_New_End_Square_-_geograph.org.uk_-_674944.jpg">ceridwen</a> &#183; <a href="https://creativecommons.org/licenses/by-sa/2.0">CC BY-SA 2.0</a> &#183; resized</figcaption></figure>
 <p>Stop twenty-four. Well Walk, the well, and Burgh House.</p>
 <p>Start at the fountain. That is the chalybeate well, and chalybeate means the water has iron in it. In sixteen ninety eight the young Earl of Gainsborough and his mother gave six acres of ground around these springs to trustees, in perpetuity, for the benefit of the poor of Hampstead. The trust they set up that day still exists and still gives money away in this parish, three hundred and twenty-eight years later.</p>
@@ -684,6 +1491,21 @@ footer p{margin:0 0 8px; max-width:70ch}
 </div></article>
 </section>
 
+<section class="blk" id="questions">
+  <h2>The questions <span>Asked and answered</span></h2>
+  <p class="blk-sub">Everything below is already somewhere in the narration. It is repeated here in the order people ask it.</p>
+  <div class="faq">
+    <details><summary>How long does the Hampstead Heath walk take?</summary><p>Something over three hours of walking before you stop for anything at all, plus fifty-five minutes of narration that you listen to standing still. Half a day is the honest answer. There is a fifty-minute village version that skips the Heath itself.</p></details>
+    <details><summary>Is the audio guide free?</summary><p>Yes, and there is nothing to install: it is a web page, and the tracks stream only when you press play. Of the twenty-four stops, nineteen cost nothing at all. Three more are free unless you get into the water &#8211; the Kenwood Ladies' Pond, the Highgate Men's Pond and Parliament Hill Lido. Two charge at the door: Fenton House and Keats House. Kenwood House itself is free.</p></details>
+    <details><summary>Where does the walk start and finish?</summary><p>Outside Hampstead Underground station on Heath Street, NW3. It is a single anticlockwise loop, so it finishes in the same place &#8211; four minutes from the last stop, up Flask Walk and left along the High Street.</p></details>
+    <details><summary>Do I need a phone signal to use it?</summary><p>No. Tracks stream only when you ask for one, the photographs load as you scroll, and the map is drawn in the page rather than fetched as tiles, so it works on one bar. The middle of the Heath has patchy signal, so there is also a single continuous file to download before you set out.</p></details>
+    <details><summary>Can you swim in the Hampstead Heath ponds?</summary><p>Yes. The Kenwood Ladies' Pond and the Highgate Men's Pond are open every day of the year, the Mixed Pond only from April to October, and Parliament Hill Lido never closes. The ponds open only when lifeguards are on duty.</p></details>
+    <details><summary>How muddy is Hampstead Heath?</summary><p>Two thirds of this route is unpaved, the Heath sits on London clay, and it holds water for days after rain. Wear shoes you do not mind. The village half of the walk you can do in office shoes.</p></details>
+    <details><summary>Is there a shorter version of the walk?</summary><p>Three. The village hour is about fifty minutes, free, any day, and has no mud in it. The houses is half a day, Wednesday to Sunday, which is the one window when all four are open. The water is any day of the year and is best at seven in the morning.</p></details>
+    <details><summary>Do I need headphones, or can I read it instead?</summary><p>Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. There is also a GPX file of the route for a map application that can navigate.</p></details>
+  </div>
+</section>
+
 <section class="blk">
   <h2>How it was made <span>Colophon</span></h2>
   <div class="colo">
@@ -692,8 +1514,11 @@ footer p{margin:0 0 8px; max-width:70ch}
     <div><p class="lab">Pictures</p><p>One photograph per track, picked to show the thing you are standing in front of rather than the prettiest view of it. All of them are Creative Commons or public domain, from Wikimedia Commons, credited under the picture and fetched by <code>fetch_images.py</code>.</p></div>
     <div><p class="lab">Rebuilding it</p><p>The narration lives in one Python file, <code>build.py</code>. The audio and this page are both generated from it, so the transcript can never drift out of step with the recording.</p></div>
     <div><p class="lab">Changing the voice</p><p>Any installed system voice works. Swap the name and the pace at the top of the generator and re-run it; the whole set rebuilds in about a minute.</p></div>
+    <div><p class="lab">Other shapes</p><p>The same walk as <a href="feed.xml">a podcast feed</a>, for Apple, Spotify or Overcast; as <a href="guide.md">plain Markdown</a>, for anything that would rather read than render; as <a href="hampstead-heath-walk.gpx">GPX</a>, for a map application; and as <a href="stops/">one page per stop</a>. <a href="https://github.com/mishablank/hampstead-heath">The source</a> is the narration.</p></div>
   </div>
 </section>
+
+</main>
 
 <footer>
   <p>Walking directions were written from the Heath's own path network and the streets between them. They are accurate enough to follow and are not a substitute for looking up. The Heath is not a park with a fence and a plan; several of these turnings are deliberately unmarked, which is the reason they are still worth finding.</p>
@@ -1084,3 +1909,5 @@ body.playing{padding-bottom:76px}
   }
 })();
 </script>
+</body>
+</html>

@@ -8,7 +8,8 @@ out of step with the recording.
 
     python3 build.py              audio, then the page
     python3 build.py --page       page only, timed from the audio already there
-    python3 build.py --cover      redraw cover.jpg
+    python3 build.py --cover      redraw cover.jpg and og.jpg
+    python3 build.py --icons      redraw the favicon set and the web manifest
     python3 build.py --voices     list the voices available for this engine
     python3 build.py --sample     render one track so you can hear the voice
     python3 build.py --cost       how many credits a full rebuild costs
@@ -17,6 +18,8 @@ Needs macOS (afconvert) and mutagen. The voice comes from Amazon Polly by
 default; see the ENGINE note below for why, and for the local alternative.
 """
 
+import datetime
+import email.utils
 import html as _html
 import json
 import math
@@ -78,6 +81,30 @@ SITE = os.path.join(HERE, "public")
 AUDIO = os.path.join(SITE, "audio")
 FULL = os.path.join(SITE, "hampstead-heath-full-walk.m4a")
 STAMP = os.path.join(HERE, "voice.json")   # what actually made the audio here
+
+# --------------------------------------------------------------------------
+# how the thing is found. ORIGIN is the canonical origin - scheme and host,
+# no trailing slash. Every absolute URL in the head, the sitemap, the feed and
+# the structured data is built from it, so moving to a real domain is a
+# one-line change here. Not to be confused with SITE above, which is the
+# directory those URLs are served from.
+# --------------------------------------------------------------------------
+
+ORIGIN = "https://hampstead-heath.blankm.workers.dev"    # no trailing slash
+UPDATED = "2026-08-09"    # dateModified. Bump it when the narration changes.
+AUTHOR = ""               # a byline, if you want one in the structured data
+OWNER_EMAIL = ""          # Apple Podcasts will not accept the feed without one
+
+# what this walk is about, said in the vocabulary search engines already know.
+# The Wikipedia and Wikidata links are the whole point of sameAs: they tell a
+# machine which Hampstead Heath this is, and there is only one.
+HEATH = {
+    "name": "Hampstead Heath",
+    "lat": 51.56028, "lon": -0.16083,
+    "same": ["https://en.wikipedia.org/wiki/Hampstead_Heath",
+             "https://www.wikidata.org/wiki/Q1570958"],
+}
+START = {"name": "Hampstead Underground station", "lat": 51.55654, "lon": -0.17812}
 
 # --------------------------------------------------------------------------
 # the narration. body = spoken paragraphs; walk = the "walk on" instruction,
@@ -1018,6 +1045,58 @@ for _s in STOPS:
         _n += 1
         _s["n"] = _n
 STOP_COUNT = _n
+
+# The questions people actually type, answered in the first sentence. Every
+# answer here is already somewhere in the narration above; nothing new is
+# claimed. It is printed on the page and repeated as FAQPage data, from this
+# one list, so the two can never disagree.
+FAQ = [
+    ("How long does the Hampstead Heath walk take?",
+     "Something over three hours of walking before you stop for anything at all, "
+     "plus fifty-five minutes of narration that you listen to standing still. Half "
+     "a day is the honest answer. There is a fifty-minute village version that "
+     "skips the Heath itself."),
+
+    ("Is the audio guide free?",
+     "Yes, and there is nothing to install: it is a web page, and the tracks stream "
+     "only when you press play. Of the twenty-four stops, nineteen cost nothing at "
+     "all. Three more are free unless you get into the water – the Kenwood "
+     "Ladies' Pond, the Highgate Men's Pond and Parliament Hill Lido. Two charge at "
+     "the door: Fenton House and Keats House. Kenwood House itself is free."),
+
+    ("Where does the walk start and finish?",
+     "Outside Hampstead Underground station on Heath Street, NW3. It is a single "
+     "anticlockwise loop, so it finishes in the same place – four minutes from "
+     "the last stop, up Flask Walk and left along the High Street."),
+
+    ("Do I need a phone signal to use it?",
+     "No. Tracks stream only when you ask for one, the photographs load as you "
+     "scroll, and the map is drawn in the page rather than fetched as tiles, so it "
+     "works on one bar. The middle of the Heath has patchy signal, so there is also "
+     "a single continuous file to download before you set out."),
+
+    ("Can you swim in the Hampstead Heath ponds?",
+     "Yes. The Kenwood Ladies' Pond and the Highgate Men's Pond are open every day "
+     "of the year, the Mixed Pond only from April to October, and Parliament Hill "
+     "Lido never closes. The ponds open only when lifeguards are on duty."),
+
+    ("How muddy is Hampstead Heath?",
+     "Two thirds of this route is unpaved, the Heath sits on London clay, and it "
+     "holds water for days after rain. Wear shoes you do not mind. The village "
+     "half of the walk you can do in office shoes."),
+
+    ("Is there a shorter version of the walk?",
+     "Three. The village hour is about fifty minutes, free, any day, and has no mud "
+     "in it. The houses is half a day, Wednesday to Sunday, which is the one window "
+     "when all four are open. The water is any day of the year and is best at seven "
+     "in the morning."),
+
+    ("Do I need headphones, or can I read it instead?",
+     "Either. The whole script is printed on the page, word for word, so you can "
+     "read it on the train, hand it to someone without headphones, or follow it "
+     "with the sound off. There is also a GPX file of the route for a map "
+     "application that can navigate."),
+]
 
 KIND = {
     "intro":   ("Introduction",   "intro"),
@@ -2213,6 +2292,379 @@ def figure(i, stop, pics):
             % (esc(p["file"]), esc(alt), p["w"], p["h"], credit))
 
 
+# --------------------------------------------------------------------------
+# being found. Three audiences read this site and only one of them has eyes:
+# a person, a search crawler, and a language model answering someone's
+# question. The page below is written for the first; everything in this
+# section is what the other two need, generated from the same STOPS list so
+# it cannot describe a walk that isn't there.
+# --------------------------------------------------------------------------
+
+EXTRA_CSS = """
+/* ---- crumbs, stop pages, questions ------------------------------- */
+.crumb{font-family:var(--font-label); text-transform:uppercase; letter-spacing:.12em;
+  font-size:10px; color:var(--ink-3); margin:0 0 14px; display:flex; flex-wrap:wrap; gap:8px}
+.crumb a{color:var(--ink-3)}
+.crumb span{color:var(--rule)}
+.sa{border:1px solid var(--rule); background:var(--paper-2);
+  padding:14px 16px; margin:0 0 22px; display:grid; gap:9px}
+.sa audio{width:100%; height:34px}
+.geo{font-family:var(--font-data); font-size:11px; color:var(--ink-3); margin:0}
+.stopnav{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:34px 0 0;
+  border-top:1px solid var(--rule); padding-top:18px}
+.stopnav a{display:block; text-decoration:none}
+.stopnav .lab{margin-bottom:3px}
+.stopnav .t{font-family:var(--font-display); font-size:1.05rem; line-height:1.18; color:var(--ink)}
+.stopnav .nx{text-align:right}
+.perma{font-family:var(--font-label); text-transform:uppercase; letter-spacing:.11em;
+  font-size:10px; white-space:nowrap}
+.faq{display:grid; gap:0; border-top:1px solid var(--rule)}
+.faq details{border-bottom:1px solid var(--rule-soft); padding:13px 0}
+.faq summary{font-family:var(--font-display); font-size:1.06rem; line-height:1.3;
+  cursor:pointer; list-style:none; display:flex; gap:12px; align-items:baseline}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::before{content:"+"; color:var(--heath); font-family:var(--font-data);
+  font-size:.9rem; flex:0 0 auto}
+.faq details[open] summary::before{content:"\\2013"}
+.faq p{margin:9px 0 2px 24px; color:var(--ink-2)}
+.idx{list-style:none; margin:0; padding:0; border-top:1px solid var(--rule)}
+.idx li{display:flex; gap:14px; align-items:baseline; padding:9px 0;
+  border-bottom:1px solid var(--rule-soft)}
+.idx .rn{font-family:var(--font-data); font-size:11px; color:var(--ink-3); min-width:22px}
+.idx .rd{font-family:var(--font-data); font-size:11px; color:var(--ink-3); margin-left:auto}
+.idx a{font-family:var(--font-display); font-size:1.05rem}
+.idx .wh{color:var(--ink-3); font-size:12px}
+"""
+
+# schema.org has a type for most of what this walk stands in front of. Using
+# the specific one is the difference between "a page about a place" and "a
+# pond you can swim in".
+SCHEMA_KIND = {
+    "village": "LandmarksOrHistoricalBuildings",
+    "house":   "LandmarksOrHistoricalBuildings",
+    "high":    "Landform",
+    "water":   "BodyOfWater",
+}
+
+SITE_NAME = "Hampstead Heath, read aloud"
+OG_ALT = ("The cover of the guide: Hampstead Heath and its village, "
+          "twenty-four stops, one loop.")
+
+
+def url(path=""):
+    """An absolute URL, which is the only kind a crawler or a feed can use."""
+    return ORIGIN + "/" + path.lstrip("/")
+
+
+# Prose on this site spells its numbers, for the same reason the narration
+# does. Labels and title tags keep the numerals: one is read by a person at
+# walking pace, the other by someone scanning ten blue links.
+NUMBER_WORDS = {
+    12: "twelve", 13: "thirteen", 14: "fourteen", 15: "fifteen", 16: "sixteen",
+    17: "seventeen", 18: "eighteen", 19: "nineteen", 20: "twenty",
+    21: "twenty-one", 22: "twenty-two", 23: "twenty-three", 24: "twenty-four",
+    25: "twenty-five", 26: "twenty-six", 27: "twenty-seven", 28: "twenty-eight",
+    29: "twenty-nine", 30: "thirty",
+}
+
+
+def in_words(n):
+    return NUMBER_WORDS.get(n, "%d" % n)
+
+
+def iso_dur(seconds):
+    """ISO 8601, which schema.org wants and nothing else does."""
+    s = int(round(seconds))
+    return "PT%dM%dS" % (s // 60, s % 60)
+
+
+def stop_path(stop):
+    return "stops/%s/" % slug(stop["title"])
+
+
+def ld(nodes):
+    """A JSON-LD block. The </ guard is not paranoia: one of these strings
+    ending up containing a closing script tag would end the script early."""
+    text = json.dumps({"@context": "https://schema.org", "@graph": nodes},
+                      indent=1, sort_keys=True)
+    return ('<script type="application/ld+json">\n%s\n</script>'
+            % text.replace("</", "<\\/"))
+
+
+def head(title, desc, path, nodes, og_title=None, og_desc=None, css=CSS):
+    """Everything read before a word of the page is. Absolute URLs throughout,
+    because half of these are consumed off-site."""
+    here = url(path)
+    og_title = og_title or title
+    og_desc = og_desc or desc
+    o = ['<!DOCTYPE html>', '<html lang="en-GB">', '<head>',
+         '<meta charset="utf-8">',
+         '<meta name="viewport" content="width=device-width, initial-scale=1">',
+         "<title>%s</title>" % esc(title),
+         '<meta name="description" content="%s">' % esc(desc),
+         '<link rel="canonical" href="%s">' % here,
+         '<meta name="color-scheme" content="light dark">',
+         '<meta name="robots" content="index, follow, max-image-preview:large, '
+         'max-snippet:-1, max-video-preview:-1">',
+         '<meta name="theme-color" media="(prefers-color-scheme: light)" content="#EFEDE5">',
+         '<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1310">',
+         # sharing. This is the half that decides whether a pasted link looks
+         # like a guide or like a stranger's URL.
+         '<meta property="og:type" content="website">',
+         '<meta property="og:site_name" content="%s">' % esc(SITE_NAME),
+         '<meta property="og:locale" content="en_GB">',
+         '<meta property="og:title" content="%s">' % esc(og_title),
+         '<meta property="og:description" content="%s">' % esc(og_desc),
+         '<meta property="og:url" content="%s">' % here,
+         '<meta property="og:image" content="%s">' % url("og.jpg"),
+         '<meta property="og:image:type" content="image/jpeg">',
+         '<meta property="og:image:width" content="1200">',
+         '<meta property="og:image:height" content="630">',
+         '<meta property="og:image:alt" content="%s">' % esc(OG_ALT),
+         '<meta name="twitter:card" content="summary_large_image">',
+         '<meta name="twitter:title" content="%s">' % esc(og_title),
+         '<meta name="twitter:description" content="%s">' % esc(og_desc),
+         '<meta name="twitter:image" content="%s">' % url("og.jpg"),
+         '<meta name="twitter:image:alt" content="%s">' % esc(OG_ALT),
+         # a favicon is also the icon Google puts beside a mobile result
+         '<link rel="icon" href="/favicon.ico" sizes="32x32">',
+         '<link rel="icon" href="/icon.svg" type="image/svg+xml">',
+         '<link rel="apple-touch-icon" href="/apple-touch-icon.png">',
+         '<link rel="manifest" href="/site.webmanifest">',
+         '<link rel="alternate" type="application/rss+xml" title="%s" href="/feed.xml">'
+         % esc(SITE_NAME),
+         # where, in the vocabulary a local search index reads
+         '<meta name="geo.region" content="GB-CMD">',
+         '<meta name="geo.placename" content="Hampstead Heath, London">',
+         '<meta name="geo.position" content="%.5f;%.5f">' % (HEATH["lat"], HEATH["lon"]),
+         '<meta name="ICBM" content="%.5f, %.5f">' % (HEATH["lat"], HEATH["lon"]),
+         "<style>" + css + EXTRA_CSS + "</style>",
+         ld(nodes),
+         "</head>", "<body>", ""]
+    return "\n".join(o)
+
+
+def node_site():
+    n = {"@type": "WebSite", "@id": ORIGIN + "/#website", "url": url(),
+         "name": SITE_NAME, "inLanguage": "en-GB",
+         "description": "A free self-guided walking audio guide to Hampstead Heath "
+                        "and Hampstead village, with the full transcript.",
+         "publisher": {"@id": ORIGIN + "/#publisher"}}
+    return n
+
+
+def node_publisher():
+    n = {"@type": "Organization", "@id": ORIGIN + "/#publisher", "name": SITE_NAME,
+         "url": url(), "logo": {"@type": "ImageObject", "url": url("icon-512.png"),
+                                "width": 512, "height": 512}}
+    if AUTHOR:
+        n["founder"] = {"@type": "Person", "name": AUTHOR}
+    return n
+
+
+def node_places():
+    """Two places, and the links that say which ones they are."""
+    return [
+        {"@type": ["Park", "TouristAttraction"], "@id": ORIGIN + "/#heath",
+         "name": HEATH["name"], "sameAs": HEATH["same"],
+         "geo": {"@type": "GeoCoordinates", "latitude": HEATH["lat"],
+                 "longitude": HEATH["lon"]},
+         "address": {"@type": "PostalAddress", "addressLocality": "London",
+                     "addressRegion": "Greater London", "postalCode": "NW3",
+                     "addressCountry": "GB"},
+         "isAccessibleForFree": True,
+         "publicAccess": True},
+        {"@type": "Place", "@id": ORIGIN + "/#hampstead", "name": "Hampstead, London NW3",
+         "sameAs": ["https://en.wikipedia.org/wiki/Hampstead",
+                    "https://www.wikidata.org/wiki/Q503481"],
+         "containsPlace": {"@id": ORIGIN + "/#heath"},
+         "address": {"@type": "PostalAddress", "addressLocality": "London",
+                     "postalCode": "NW3", "addressCountry": "GB"}},
+    ]
+
+
+def node_image(i, stop, pics, page):
+    """The photograph, with the credit its licence requires said in machine
+    form as well as under the picture."""
+    p = pics.get(str(i))
+    if not p:
+        return None
+    n = {"@type": "ImageObject", "@id": url(page) + "#image",
+         "contentUrl": url("images/" + p["file"]), "url": url("images/" + p["file"]),
+         "width": p["w"], "height": p["h"],
+         "creditText": p["by"], "creator": {"@type": "Person", "name": p["by"]},
+         "acquireLicensePage": p["src"],
+         "representativeOfPage": True,
+         "caption": "%s, %s" % (stop["title"], stop["where"])}
+    if p["licurl"]:
+        n["license"] = p["licurl"]
+    elif p["lic"].lower().startswith("public domain"):
+        n["license"] = "https://creativecommons.org/publicdomain/mark/1.0/"
+    return n
+
+
+def node_audio(i, stop, fn, dur, page=None, transcript=False):
+    n = {"@type": "AudioObject",
+         "@id": (url(page) if page else url()) + "#audio",
+         "name": ("%d. %s" % (stop["n"], stop["title"])) if stop["n"] else stop["title"],
+         "contentUrl": url("audio/" + fn), "encodingFormat": "audio/mp4",
+         "duration": iso_dur(dur), "inLanguage": "en-GB",
+         "isFamilyFriendly": True,
+         "isPartOf": {"@id": ORIGIN + "/#podcast"}}
+    if transcript:
+        n["transcript"] = spoken(stop)
+    return n
+
+
+def node_trip(tracks, total):
+    """The walk itself: an ordered list of places, each one a page of its own.
+    This is the node that can win a rich result."""
+    d = mapdata() or {"stops": {}}
+    coords = {int(k): v for k, v in d["stops"].items()}
+    items = []
+    for stop, fn, dur in tracks:
+        if not stop["n"]:
+            continue
+        item = {"@type": ["TouristAttraction", SCHEMA_KIND[stop["kind"]]],
+                "name": stop["title"], "url": url(stop_path(stop)),
+                "description": stop["where"],
+                "isAccessibleForFree": stop["n"] not in PAID}
+        if stop["n"] in coords:
+            lat, lon = coords[stop["n"]]
+            item["geo"] = {"@type": "GeoCoordinates", "latitude": lat, "longitude": lon}
+        items.append({"@type": "ListItem", "position": stop["n"], "item": item})
+    return {
+        "@type": "TouristTrip", "@id": ORIGIN + "/#trip",
+        "name": "Hampstead Heath and its village, in twenty-four stops",
+        "description": "A single anticlockwise loop from Hampstead Underground station "
+                       "through the village, over the highest ground in inner London to "
+                       "Kenwood, and back down the east side of the Heath past the "
+                       "swimming ponds.",
+        "url": url(),
+        "touristType": ["Walkers", "Self-guided tours", "Local history"],
+        "inLanguage": "en-GB",
+        "isAccessibleForFree": True,
+        "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP",
+                   "availability": "https://schema.org/InStock", "url": url()},
+        "provider": {"@id": ORIGIN + "/#publisher"},
+        "arrivalPlace": {"@id": ORIGIN + "/#start"},
+        "departurePlace": {"@type": "TrainStation", "@id": ORIGIN + "/#start",
+                           "name": START["name"],
+                           "geo": {"@type": "GeoCoordinates", "latitude": START["lat"],
+                                   "longitude": START["lon"]}},
+        "subjectOf": {"@id": ORIGIN + "/#fullwalk"},
+        "itinerary": {"@type": "ItemList", "name": "The twenty-four stops, in walking order",
+                      "numberOfItems": STOP_COUNT, "itemListOrder":
+                      "https://schema.org/ItemListOrderAscending",
+                      "itemListElement": items},
+    }
+
+
+def node_faq():
+    return {"@type": "FAQPage", "@id": ORIGIN + "/#faq",
+            "mainEntity": [{"@type": "Question", "name": q, "position": i + 1,
+                            "acceptedAnswer": {"@type": "Answer", "text": a}}
+                           for i, (q, a) in enumerate(FAQ)]}
+
+
+def graph_index(tracks, pics, total):
+    """The home page, said twice: once in the page and once here."""
+    full = os.path.basename(FULL)
+    page = {"@type": ["WebPage", "CollectionPage"], "@id": ORIGIN + "/#webpage",
+            "url": url(), "name": SITE_NAME,
+            "isPartOf": {"@id": ORIGIN + "/#website"},
+            "about": {"@id": ORIGIN + "/#heath"},
+            "primaryImageOfPage": {"@id": ORIGIN + "/#cover"},
+            "inLanguage": "en-GB", "dateModified": UPDATED, "datePublished": "2026-08-07",
+            "mainEntity": {"@id": ORIGIN + "/#trip"},
+            "significantLink": [url("stops/"), url("feed.xml")],
+            "speakable": {"@type": "SpeakableSpecification",
+                          "cssSelector": [".lede", ".faq"]}}
+    if AUTHOR:
+        page["author"] = {"@type": "Person", "name": AUTHOR}
+    nodes = [node_site(), node_publisher(), page, node_trip(tracks, total), node_faq()]
+    nodes += node_places()
+    nodes.append({"@type": "ImageObject", "@id": ORIGIN + "/#cover",
+                  "url": url("og.jpg"), "contentUrl": url("og.jpg"),
+                  "width": 1200, "height": 630, "caption": OG_ALT})
+    # the whole walk as one file, and the feed the same tracks are served by
+    nodes.append({"@type": "AudioObject", "@id": ORIGIN + "/#fullwalk",
+                  "name": "Hampstead Heath, read aloud - the whole walk",
+                  "contentUrl": url(full), "encodingFormat": "audio/mp4",
+                  "duration": iso_dur(total), "inLanguage": "en-GB",
+                  "isFamilyFriendly": True, "contentSize": "%d" % os.path.getsize(FULL),
+                  "associatedArticle": {"@id": ORIGIN + "/#webpage"}})
+    nodes.append({"@type": "PodcastSeries", "@id": ORIGIN + "/#podcast",
+                  "name": SITE_NAME, "url": url(), "webFeed": url("feed.xml"),
+                  "numberOfEpisodes": len(tracks), "inLanguage": "en-GB",
+                  "about": {"@id": ORIGIN + "/#heath"},
+                  "image": url("cover.jpg")})
+    nodes.append({"@type": "DataDownload", "@id": ORIGIN + "/#gpx",
+                  "name": "The route as GPX", "encodingFormat": "application/gpx+xml",
+                  "contentUrl": url("hampstead-heath-walk.gpx"),
+                  "about": {"@id": ORIGIN + "/#trip"}})
+    return nodes
+
+
+def graph_stop(i, stop, fn, dur, pics, coords):
+    """One stop, on its own page: the thing, the recording of it, the
+    photograph of it, and where it sits in the walk."""
+    page = stop_path(stop)
+    here = url(page)
+    place = {"@type": ["TouristAttraction", SCHEMA_KIND[stop["kind"]]],
+             "@id": here + "#place", "name": stop["title"],
+             "description": "%s. Stop %d of %d on a walking audio guide to Hampstead "
+                            "Heath and its village." % (stop["where"], stop["n"], STOP_COUNT),
+             "url": here,
+             "isAccessibleForFree": stop["n"] not in PAID,
+             "containedInPlace": {"@id": ORIGIN + "/#hampstead"},
+             "address": {"@type": "PostalAddress", "addressLocality": "London",
+                         "postalCode": "NW3", "addressCountry": "GB"},
+             "subjectOf": {"@id": here + "#audio"},
+             "touristType": ["Walkers", "Self-guided tours"]}
+    if stop["n"] in coords:
+        lat, lon = coords[stop["n"]]
+        place["geo"] = {"@type": "GeoCoordinates", "latitude": lat, "longitude": lon}
+        place["hasMap"] = ("https://www.openstreetmap.org/?mlat=%.5f&mlon=%.5f#map=17/%.5f/%.5f"
+                           % (lat, lon, lat, lon))
+    webpage = {"@type": "WebPage", "@id": here + "#webpage", "url": here,
+               "name": "%s - stop %d" % (stop["title"], stop["n"]),
+               "isPartOf": {"@id": ORIGIN + "/#website"},
+               "inLanguage": "en-GB", "dateModified": UPDATED,
+               "mainEntity": {"@id": here + "#place"},
+               "breadcrumb": {"@id": here + "#crumb"},
+               "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".tbody p"]}}
+    crumb = {"@type": "BreadcrumbList", "@id": here + "#crumb", "itemListElement": [
+        {"@type": "ListItem", "position": 1, "name": "The audio guide", "item": url()},
+        {"@type": "ListItem", "position": 2, "name": "The stops", "item": url("stops/")},
+        {"@type": "ListItem", "position": 3, "name": stop["title"]}]}
+    nodes = [webpage, crumb, place,
+             node_audio(i, stop, fn, dur, page, transcript=True),
+             {"@id": ORIGIN + "/#website", "@type": "WebSite", "url": url(),
+              "name": SITE_NAME, "publisher": {"@id": ORIGIN + "/#publisher"}},
+             node_publisher()]
+    img = node_image(i, stop, pics, page)
+    if img:
+        nodes.append(img)
+        place["image"] = {"@id": url(page) + "#image"}
+        webpage["primaryImageOfPage"] = {"@id": url(page) + "#image"}
+    return nodes
+
+
+def faq_section():
+    """The questions, on the page. A question answered in a page nobody can
+    see is not an answer."""
+    o = ['<section class="blk" id="questions">',
+         "  <h2>The questions <span>Asked and answered</span></h2>",
+         '  <p class="blk-sub">Everything below is already somewhere in the '
+         "narration. It is repeated here in the order people ask it.</p>",
+         '  <div class="faq">']
+    for q, a in FAQ:
+        o.append("    <details><summary>%s</summary><p>%s</p></details>" % (esc(q), esc(a)))
+    o += ["  </div>", "</section>\n"]
+    return "\n".join(o)
+
+
 def render(tracks):
     """tracks: list of (stop, filename, duration)"""
     pics = pictures()
@@ -2222,14 +2674,19 @@ def render(tracks):
 
     out = []
     w = out.append
-    w('<meta charset="utf-8">')
-    w('<meta name="viewport" content="width=device-width, initial-scale=1">')
-    w('<meta name="description" content="A twenty-four-stop walking audio guide to Hampstead Heath '
-      'and its village: %d tracks, %d minutes, with the full transcript, a map and a photograph '
-      'for every stop.">' % (len(tracks), round(total / 60)))
-    w('<meta name="color-scheme" content="light dark">')
-    w("<title>The Audio Guide &#8211; Hampstead Heath &amp; Its Village</title>")
-    w("<style>" + CSS + "</style>\n")
+    # The title is the one line that has to work in a list of ten blue links,
+    # so it says what the thing is rather than what it is called. The masthead
+    # and the og: title keep the name.
+    w(head("Hampstead Heath Audio Guide – a free %d-stop self-guided walk" % STOP_COUNT,
+           "A free walking audio guide to Hampstead Heath and Hampstead village: %d "
+           "tracks, %d minutes, %d stops, with the full transcript, a drawn map, a GPX "
+           "route and a photograph for every stop."
+           % (len(tracks), round(total / 60), STOP_COUNT),
+           "", graph_index(tracks, pics, total),
+           og_title=SITE_NAME,
+           og_desc="Twenty-four stops, from the deepest station in London to the swimming "
+                   "ponds. %d tracks, %d minutes, free, and the whole script is on the page."
+                   % (len(tracks), round(total / 60))))
     w('<div class="wrap">\n')
 
     # masthead ------------------------------------------------------------
@@ -2263,6 +2720,7 @@ def render(tracks):
       "if you would rather have it offline, because the Heath has patchy signal in the "
       "middle.</p>")
     w("</header>\n")
+    w("<main>\n")
 
     # map -----------------------------------------------------------------
     svg = map_svg(tracks)
@@ -2289,7 +2747,8 @@ def render(tracks):
     w("  <h2>The tape <span>%s of narration</span></h2>" % clock(total))
     w('  <p class="blk-sub">Track order is walking order. The measure shows how long you stand in '
       "each place; the last column is the clock position if you play the whole thing straight "
-      "through.</p>")
+      'through. Every numbered stop also has <a href="stops/">a page of its own</a>, which is '
+      "the one to send someone who only cares about the ponds.</p>")
     w('  <nav class="tape audio">')
     at = 0.0
     for i, (stop, fn, dur) in enumerate(tracks):
@@ -2318,13 +2777,15 @@ def render(tracks):
         label = KIND[stop["kind"]][0]
         mark = ('<span class="tn">%d</span>' % stop["n"] if stop["n"]
                 else '<span class="tn sym">&#183;</span>')
+        perma = ('' if not stop["n"] else
+                 ' &#183; <a class="perma" href="%s">Stop page</a>' % stop_path(stop))
         w('<article class="trk %s" id="t%02d"><div class="tmark">%s</div><div class="tbody">'
-          '<p class="lab eyebrow">Track %02d &#183; %s &#183; %s</p><h3>%s</h3>'
+          '<p class="lab eyebrow">Track %02d &#183; %s &#183; %s%s</p><h3>%s</h3>'
           '<p class="sub">%s</p>'
           '<div class="play" data-i="%d"><button class="pb" aria-label="Play %s"></button>'
           '<span class="plab">Play</span><span class="pgs"><i></i></span>'
           '<span class="ptime">%s</span></div>'
-          % (stop["kind"], i, mark, i + 1, esc(label), clock(dur), esc(stop["title"]),
+          % (stop["kind"], i, mark, i + 1, esc(label), clock(dur), perma, esc(stop["title"]),
              esc(stop["where"]), i, esc(stop["title"]), clock(dur)))
         w(figure(i, stop, pics))
         w("\n".join("<p>%s</p>" % esc(p) for p in stop["body"]))
@@ -2333,6 +2794,9 @@ def render(tracks):
               % esc(stop["walk"]))
         w("</div></article>")
     w("</section>\n")
+
+    # questions -----------------------------------------------------------
+    w(faq_section())
 
     # colophon ------------------------------------------------------------
     w('<section class="blk">')
@@ -2355,8 +2819,16 @@ def render(tracks):
     w('    <div><p class="lab">Changing the voice</p><p>Any installed system voice works. Swap the '
       "name and the pace at the top of the generator and re-run it; the whole set rebuilds in "
       "about a minute.</p></div>")
+    w('    <div><p class="lab">Other shapes</p><p>The same walk as <a href="feed.xml">a podcast '
+      'feed</a>, for Apple, Spotify or Overcast; as <a href="guide.md">plain Markdown</a>, for '
+      'anything that would rather read than render; as <a href="hampstead-heath-walk.gpx">GPX'
+      '</a>, for a map application; and as <a href="stops/">one page per stop</a>. '
+      '<a href="https://github.com/mishablank/hampstead-heath">The source</a> is the '
+      "narration.</p></div>")
     w("  </div>")
     w("</section>\n")
+
+    w("</main>\n")
 
     w("<footer>")
     w("  <p>Walking directions were written from the Heath's own path network and the streets "
@@ -2398,7 +2870,382 @@ def render(tracks):
           .replace("__TRACKS__", json.dumps(data, ensure_ascii=False))
           .replace("__MAPBBOX__", json.dumps(d["bbox"]) if d else "null"))
     w("<script>" + js.encode("ascii", "xmlcharrefreplace").decode() + "</script>")
+    w("</body>\n</html>")
     return "\n".join(out) + "\n"
+
+
+# --------------------------------------------------------------------------
+# a page per stop. The long page is the thing to walk with; these are the
+# pages to be found by. Someone searching for the ladies' pond does not want
+# twenty-three other stops first, and a search engine cannot rank one page
+# twenty-four times.
+# --------------------------------------------------------------------------
+
+def stop_page(i, stop, fn, dur, tracks, pics, coords):
+    n = stop["n"]
+    numbered = [t[0] for t in tracks if t[0]["n"]]
+    prev = numbered[n - 2] if n > 1 else None
+    nxt = numbered[n] if n < STOP_COUNT else None
+    label = KIND[stop["kind"]][0]
+    up = "../../"
+
+    title = "%s – Hampstead Heath audio guide, stop %d of %d" % (stop["title"], n, STOP_COUNT)
+    desc = ("%s. Stop %d of %d on a free self-guided walking audio guide to Hampstead "
+            "Heath and its village: %s of narration, the transcript word for word, and a "
+            "photograph of what you are looking at."
+            % (stop["where"], n, STOP_COUNT, clock(dur)))
+
+    o = [head(title, desc, stop_path(stop), graph_stop(i, stop, fn, dur, pics, coords),
+              og_title="%d. %s" % (n, stop["title"]),
+              og_desc="%s · %s of the Hampstead Heath walking audio guide."
+                      % (stop["where"], clock(dur)))]
+    w = o.append
+    w('<div class="wrap">')
+    w('<header class="cart">')
+    w('  <div class="cart-inner"><div>')
+    w('    <p class="crumb"><a href="%s">The audio guide</a><span>/</span>'
+      '<a href="../">The stops</a><span>/</span>%s</p>' % (up, esc(stop["title"])))
+    w('    <p class="lab">Stop %d of %d &#183; %s &#183; %s</p>'
+      % (n, STOP_COUNT, esc(label), esc(stop["where"])))
+    w("    <h1>%s</h1>" % esc(stop["title"]))
+    w('    <p class="lede">Track %02d of the walk, %s long. Play it standing where the first '
+      "line tells you to stand. What is printed underneath is exactly what you will hear, "
+      "which is also why the numbers are written as words.</p>" % (i + 1, clock(dur)))
+    w("  </div></div>")
+    w("</header>")
+
+    w("<main>")
+    w('<article class="trk %s">' % stop["kind"])
+    w('  <div class="tmark"><span class="tn">%d</span></div>' % n)
+    w('  <div class="tbody">')
+    w('    <div class="sa">')
+    w('      <p class="lab">Track %02d &#183; %s &#183; %s</p>' % (i + 1, esc(label), clock(dur)))
+    w('      <audio controls preload="none" src="%saudio/%s"></audio>' % (up, fn))
+    w('      <p class="lab"><a href="%s%s" download>The whole walk as one file</a> &#183; '
+      '<a href="%shampstead-heath-walk.gpx" download>the route as GPX</a> &#183; '
+      '<a href="%sfeed.xml">the podcast feed</a></p>'
+      % (up, os.path.basename(FULL), up, up))
+    w("    </div>")
+
+    fig = figure(i, stop, pics)
+    if fig:
+        # this photograph is above the fold here, unlike on the long page,
+        # so it is the thing to load first rather than last
+        fig = fig.replace('loading="lazy" decoding="async"',
+                          'loading="eager" fetchpriority="high" decoding="async"')
+        w("    " + fig.replace('src="images/', 'src="%simages/' % up))
+
+    w("\n".join("    <p>%s</p>" % esc(p) for p in stop["body"]))
+    if stop.get("walk"):
+        w('    <div class="walk"><span class="lab">Walk on</span><p>%s</p></div>'
+          % esc(stop["walk"]))
+    if n in coords:
+        lat, lon = coords[n]
+        w('    <p class="geo">%.5f, %.5f &#183; <a href="https://www.openstreetmap.org/'
+          '?mlat=%.5f&amp;mlon=%.5f#map=17/%.5f/%.5f">where this is on a map</a></p>'
+          % (lat, lon, lat, lon, lat, lon))
+    w("  </div>")
+    w("</article>")
+
+    w('<nav class="stopnav">')
+    if prev:
+        w('  <a href="../%s/"><span class="lab">Stop %d, before this</span>'
+          '<span class="t">%s</span></a>' % (slug(prev["title"]), prev["n"], esc(prev["title"])))
+    else:
+        w('  <a href="%s"><span class="lab">This is the first one</span>'
+          '<span class="t">Start at the beginning</span></a>' % up)
+    if nxt:
+        w('  <a class="nx" href="../%s/"><span class="lab">Stop %d, next</span>'
+          '<span class="t">%s</span></a>' % (slug(nxt["title"]), nxt["n"], esc(nxt["title"])))
+    else:
+        w('  <a class="nx" href="%s#t25"><span class="lab">That is the twenty-four</span>'
+          '<span class="t">Three shorter ways to walk it</span></a>' % up)
+    w("</nav>")
+    w('<p class="blk-sub" style="margin-top:22px">In its place: <a href="%s#t%02d">the full '
+      "guide</a> has all %s stops in walking order, with the map, the complete script and the "
+      'questions people ask. <a href="../">Every stop has a page like this one</a>.</p>'
+      % (up, i, in_words(STOP_COUNT)))
+    w("</main>")
+
+    w("<footer>")
+    w("  <p>Walking directions are accurate enough to follow and are not a substitute for "
+      "looking up. Opening hours were checked in August 2026 and are the first thing to "
+      "change; confirm before setting out for anything ticketed.</p>")
+    w("  <p>Audio is synthesised speech. The narration and this page are generated from one "
+      "Python file, so the transcript cannot drift out of step with the recording.</p>")
+    w("</footer>")
+    w("</div>")
+    w("</body>\n</html>")
+    return "\n".join(o) + "\n"
+
+
+def stops_index(tracks):
+    """The hub. Twenty-four pages one hop from the home page, which is how a
+    crawler finds them and how a person picks one."""
+    rows = [(s, fn, d) for s, fn, d in tracks if s["n"]]
+    items = [{"@type": "ListItem", "position": s["n"], "name": s["title"],
+              "item": url(stop_path(s))} for s, _, _ in rows]
+    nodes = [
+        {"@type": ["CollectionPage", "WebPage"], "@id": url("stops/") + "#webpage",
+         "url": url("stops/"), "name": "The %d stops" % STOP_COUNT,
+         "isPartOf": {"@id": ORIGIN + "/#website"}, "inLanguage": "en-GB",
+         "dateModified": UPDATED, "about": {"@id": ORIGIN + "/#heath"},
+         "mainEntity": {"@id": url("stops/") + "#list"},
+         "breadcrumb": {"@id": url("stops/") + "#crumb"}},
+        {"@type": "ItemList", "@id": url("stops/") + "#list",
+         "name": "The %d stops, in walking order" % STOP_COUNT,
+         "numberOfItems": STOP_COUNT,
+         "itemListOrder": "https://schema.org/ItemListOrderAscending",
+         "itemListElement": items},
+        {"@type": "BreadcrumbList", "@id": url("stops/") + "#crumb", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "The audio guide", "item": url()},
+            {"@type": "ListItem", "position": 2, "name": "The stops"}]},
+        node_site(), node_publisher(),
+    ]
+    o = [head("The %d stops – Hampstead Heath audio guide" % STOP_COUNT,
+              "Every stop on the Hampstead Heath walking audio guide, in walking order, each "
+              "with its own recording, transcript, photograph and coordinates.",
+              "stops/", nodes, og_title="The %d stops" % STOP_COUNT,
+              og_desc="One page per stop, in walking order, from Hampstead station to "
+                      "Well Walk.")]
+    w = o.append
+    w('<div class="wrap">')
+    w('<header class="cart">')
+    w('  <div class="cart-inner"><div>')
+    w('    <p class="crumb"><a href="../">The audio guide</a><span>/</span>The stops</p>')
+    w("    <h1>The %s stops</h1>" % in_words(STOP_COUNT))
+    w('    <p class="lede">Walking order, anticlockwise from the station. Each one has the '
+      "recording, the transcript, a photograph and the coordinates to stand on. "
+      '<a href="../">The full guide</a> is the page to walk with; these are the pages to '
+      "send someone.</p>")
+    w("  </div></div>")
+    w("</header>")
+    w("<main>")
+    for kind in ("village", "high", "water", "house"):
+        group = [(s, d) for s, _, d in rows if s["kind"] == kind]
+        if not group:
+            continue
+        w('<section class="blk">')
+        w("  <h2>%s <span>%d stops</span></h2>" % (esc(KIND[kind][0]), len(group)))
+        w('  <ul class="idx">')
+        for s, d in group:
+            w('    <li class="%s"><span class="rn">%02d</span>'
+              '<a href="%s/">%s</a> <span class="wh">%s</span>'
+              '<span class="rd">%s</span></li>'
+              % (kind, s["n"], slug(s["title"]), esc(s["title"]), esc(s["where"]), clock(d)))
+        w("  </ul>")
+        w("</section>")
+    w("</main>")
+    w("<footer><p>Opening hours were checked in August 2026. The Heath has no lighting and "
+      "the swimming ponds are open only when lifeguards are on duty.</p></footer>")
+    w("</div>")
+    w("</body>\n</html>")
+    return "\n".join(o) + "\n"
+
+
+# --------------------------------------------------------------------------
+# the files nobody looks at. A crawler, a feed reader and a language model
+# each want the same walk in a different shape, and none of them will guess.
+# --------------------------------------------------------------------------
+
+# Every agent that has to be told yes. Silence is not consent to some of
+# these, and search-only crawlers are a different question from training.
+CRAWLERS = ["Googlebot", "Googlebot-Image", "Google-Extended", "Bingbot",
+            "Applebot", "Applebot-Extended", "DuckDuckBot", "Slurp",
+            "OAI-SearchBot", "ChatGPT-User", "GPTBot",
+            "ClaudeBot", "Claude-User", "Claude-SearchBot",
+            "PerplexityBot", "Perplexity-User", "Amazonbot",
+            "meta-externalagent", "DuckAssistBot", "MistralAI-User", "YouBot"]
+
+
+def robots_txt():
+    """The point of this walk is that people go on it, so everything is
+    allowed: indexes, AI answers, training. The one thing worth being explicit
+    about is that the answer is yes, because several of these crawlers treat
+    an unanswered question as a no."""
+    o = ["# Everything here is meant to be found, quoted and answered with.",
+         "# The photographs belong to their photographers - see images/credits.json.",
+         "",
+         "User-agent: *",
+         "Allow: /",
+         "Content-Signal: search=yes, ai-input=yes, ai-train=yes",
+         ""]
+    for ua in CRAWLERS:
+        o += ["User-agent: %s" % ua, "Allow: /", ""]
+    o += ["Sitemap: %s" % url("sitemap.xml"), ""]
+    return "\n".join(o)
+
+
+def sitemap_xml(tracks):
+    pages = [(url(), "1.0"), (url("stops/"), "0.8")]
+    pages += [(url(stop_path(s)), "0.7") for s, _, _ in tracks if s["n"]]
+    o = ['<?xml version="1.0" encoding="UTF-8"?>',
+         '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
+    for loc, pri in pages:
+        o.append("  <url><loc>%s</loc><lastmod>%s</lastmod><priority>%s</priority></url>"
+                 % (loc, UPDATED, pri))
+    o += ["</urlset>", ""]
+    return "\n".join(o)
+
+
+def feed_xml(tracks):
+    """The same twenty-seven tracks as a podcast. Apple, Spotify and Overcast
+    are a search engine each, and this is the only door into them."""
+    base = datetime.datetime.strptime(UPDATED, "%Y-%m-%d").replace(
+        tzinfo=datetime.timezone.utc)
+    total = sum(d for _, _, d in tracks)
+    x = esc
+    o = ['<?xml version="1.0" encoding="UTF-8"?>',
+         '<rss version="2.0" xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" '
+         'xmlns:content="http://purl.org/rss/1.0/modules/content/" '
+         'xmlns:atom="http://www.w3.org/2005/Atom">',
+         "<channel>",
+         "  <title>%s</title>" % x(SITE_NAME),
+         "  <link>%s</link>" % url(),
+         '  <atom:link href="%s" rel="self" type="application/rss+xml"/>' % url("feed.xml"),
+         "  <language>en-gb</language>",
+         "  <description>A walking audio guide to Hampstead Heath and its village in "
+         "%d stops: the deepest station in London, the highest ground in it, Kenwood, and "
+         "the swimming ponds. %d tracks, %d minutes, and the full transcript at %s.</description>"
+         % (STOP_COUNT, len(tracks), round(total / 60), url()),
+         "  <itunes:summary>A self-guided walking audio guide to Hampstead Heath and "
+         "Hampstead village, in %d stops. Each track is meant to be played standing in "
+         "front of the thing it describes.</itunes:summary>" % STOP_COUNT,
+         "  <itunes:type>serial</itunes:type>",
+         "  <itunes:explicit>false</itunes:explicit>",
+         '  <itunes:image href="%s"/>' % url("cover.jpg"),
+         '  <itunes:category text="Society &amp; Culture">'
+         '<itunes:category text="Places &amp; Travel"/></itunes:category>',
+         '  <itunes:category text="History"/>',
+         "  <itunes:author>%s</itunes:author>" % x(AUTHOR or SITE_NAME),
+         "  <copyright>Narration free to use; photographs belong to their "
+         "photographers.</copyright>",
+         "  <generator>build.py</generator>",
+         "  <lastBuildDate>%s</lastBuildDate>" % email.utils.format_datetime(base)]
+    if OWNER_EMAIL:
+        o.append("  <itunes:owner><itunes:name>%s</itunes:name>"
+                 "<itunes:email>%s</itunes:email></itunes:owner>"
+                 % (x(AUTHOR or SITE_NAME), x(OWNER_EMAIL)))
+    else:
+        o.append("  <!-- itunes:owner with an email address is required before Apple "
+                 "Podcasts will accept this feed: set OWNER_EMAIL in build.py. -->")
+    for i, (stop, fn, dur) in enumerate(tracks):
+        path = os.path.join(AUDIO, fn)
+        size = os.path.getsize(path)
+        name = ("%d. %s" % (stop["n"], stop["title"])) if stop["n"] else stop["title"]
+        page = url(stop_path(stop)) if stop["n"] else (url() + "#t%02d" % i)
+        o += ["  <item>",
+              "    <title>%s</title>" % x(name),
+              "    <itunes:episode>%d</itunes:episode>" % (i + 1),
+              "    <guid isPermaLink=\"false\">%s</guid>" % url("audio/" + fn),
+              "    <link>%s</link>" % page,
+              "    <pubDate>%s</pubDate>"
+              % email.utils.format_datetime(base + datetime.timedelta(minutes=i)),
+              '    <enclosure url="%s" length="%d" type="audio/x-m4a"/>'
+              % (url("audio/" + fn), size),
+              "    <itunes:duration>%s</itunes:duration>" % clock(dur),
+              "    <itunes:explicit>false</itunes:explicit>",
+              "    <description>%s</description>" % x(stop["where"] + ". " + stop["body"][0]),
+              "    <content:encoded><![CDATA[%s]]></content:encoded>"
+              % "".join("<p>%s</p>" % _html.escape(p, quote=False)
+                        for p in stop["body"] + ([stop["walk"]] if stop.get("walk") else [])),
+              "  </item>"]
+    o += ["</channel>", "</rss>", ""]
+    return "\n".join(o)
+
+
+def llms_txt(tracks):
+    """llmstxt.org's index file. No crawler has promised to read it, so this is
+    a cheap bet rather than a plan; guide.md next to it is the part that
+    actually gets quoted."""
+    total = sum(d for _, _, d in tracks)
+    o = ["# %s" % SITE_NAME, "",
+         "> A free self-guided walking audio guide to Hampstead Heath and Hampstead "
+         "village, London NW3, in %d stops. %d tracks, %d minutes of narration, the full "
+         "transcript on the page, one photograph per stop, and a GPX route. A single "
+         "anticlockwise loop from Hampstead Underground station."
+         % (STOP_COUNT, len(tracks), round(total / 60)), "",
+         "Nineteen of the %d stops are free. Three more are free unless you get into the "
+         "water. Two charge at the door. Opening hours were checked in August 2026. "
+         "Narration is synthesised speech; the text is written to be read aloud, which is "
+         "why numbers are spelled out." % STOP_COUNT, "",
+         "## The guide", "",
+         "- [The full guide](%s): the map, all %d stops in walking order, the complete "
+         "script, and the questions people ask." % (url(), STOP_COUNT),
+         "- [The whole transcript as Markdown](%s): every word, plain text." % url("guide.md"),
+         "- [The %d stops](%s): index of the per-stop pages." % (STOP_COUNT, url("stops/")),
+         "", "## The stops", ""]
+    for stop, fn, dur in tracks:
+        if not stop["n"]:
+            continue
+        paid = "charges at the door" if stop["n"] in PAID else "free"
+        o.append("- [%d. %s](%s): %s, %s. %s, %s."
+                 % (stop["n"], stop["title"], url(stop_path(stop)), stop["where"],
+                    KIND[stop["kind"]][0].lower(), clock(dur), paid))
+    o += ["", "## Files", "",
+          "- [The whole walk as one audio file](%s)" % url(os.path.basename(FULL)),
+          "- [The route as GPX](%s)" % url("hampstead-heath-walk.gpx"),
+          "- [Podcast feed](%s)" % url("feed.xml"),
+          "- [Source, including the narration](https://github.com/mishablank/hampstead-heath)",
+          ""]
+    return "\n".join(o)
+
+
+def guide_md(tracks):
+    """The whole thing as plain Markdown: the shape anything that reads for a
+    living would rather have than 130 kilobytes of styled HTML."""
+    total = sum(d for _, _, d in tracks)
+    o = ["# Hampstead Heath and its village: a walking audio guide", "",
+         "A self-guided walking audio guide to Hampstead Heath and Hampstead village, "
+         "London NW3, in %d stops. %d tracks, %d minutes. A single anticlockwise loop from "
+         "Hampstead Underground station. Free. Web version: %s"
+         % (STOP_COUNT, len(tracks), round(total / 60), url()), "",
+         "Last checked: August 2026. Narration is synthesised speech, and the text is "
+         "written to be spoken, which is why the numbers are words.", "",
+         "## Questions", ""]
+    for q, a in FAQ:
+        o += ["**%s**" % q, "", a, ""]
+    o += ["## The script", ""]
+    for i, (stop, fn, dur) in enumerate(tracks):
+        head_ = ("### %d. %s" % (stop["n"], stop["title"])) if stop["n"] \
+            else "### %s" % stop["title"]
+        o += [head_, "",
+              "*%s · %s · track %02d, %s*"
+              % (stop["where"], KIND[stop["kind"]][0], i + 1, clock(dur)), ""]
+        if stop["n"]:
+            o += ["Page: %s" % url(stop_path(stop)), ""]
+        o += list(stop["body"]) + [""]
+        if stop.get("walk"):
+            o += ["**Walk on.** %s" % stop["walk"], ""]
+    return "\n".join(o)
+
+
+def build_discovery(tracks, pics):
+    """The pages and files that make the walk findable."""
+    d = mapdata() or {"stops": {}}
+    coords = {int(k): v for k, v in d["stops"].items()}
+
+    made = 0
+    for i, (stop, fn, dur) in enumerate(tracks):
+        if not stop["n"]:
+            continue
+        folder = os.path.join(SITE, "stops", slug(stop["title"]))
+        if not os.path.isdir(folder):
+            os.makedirs(folder)
+        open(os.path.join(folder, "index.html"), "w").write(
+            stop_page(i, stop, fn, dur, tracks, pics, coords))
+        made += 1
+    open(os.path.join(SITE, "stops", "index.html"), "w").write(stops_index(tracks))
+    print("  stops/: %d stop pages and an index" % made)
+
+    for name, text in (("robots.txt", robots_txt()),
+                       ("sitemap.xml", sitemap_xml(tracks)),
+                       ("feed.xml", feed_xml(tracks)),
+                       ("llms.txt", llms_txt(tracks)),
+                       ("guide.md", guide_md(tracks))):
+        open(os.path.join(SITE, name), "w").write(text)
+    print("  robots.txt, sitemap.xml (%d urls), feed.xml (%d episodes), llms.txt, guide.md"
+          % (STOP_COUNT + 2, len(tracks)))
 
 
 def build_page():
@@ -2418,35 +3265,55 @@ def build_page():
         open(os.path.join(SITE, "hampstead-heath-walk.gpx"), "w").write(route)
         print("  hampstead-heath-walk.gpx: %d waypoints" % STOP_COUNT)
 
+    build_discovery(tracks, pictures())
+    build_manifest()
+    if not os.path.exists(os.path.join(SITE, "favicon.ico")):
+        build_icons()
+    if not os.path.exists(os.path.join(SITE, "og.jpg")):
+        build_og()
+
+    # html_handling is what serves stops/kenwood-house/index.html at
+    # /stops/kenwood-house, which is the URL the sitemap and every link use.
     open(os.path.join(HERE, "wrangler.jsonc"), "w").write(
         '{\n  "name": "hampstead-heath",\n'
         '  "compatibility_date": "2026-08-07",\n'
-        '  "assets": { "directory": "./public" }\n}\n')
+        '  "assets": {\n'
+        '    "directory": "./public",\n'
+        '    "html_handling": "auto-trailing-slash",\n'
+        '    "not_found_handling": "none"\n'
+        "  }\n}\n")
 
 
 # --------------------------------------------------------------------------
 # cover
 # --------------------------------------------------------------------------
 
+PAPER, INK, SOFT, GREEN = "#EFEDE5", "#181D16", "#8A9384", "#2C6B45"
+
+
+def pil_font(names, size):
+    """The first of these fonts that is actually installed on this Mac."""
+    from PIL import ImageFont
+    for n in names:
+        for base in ("/System/Library/Fonts/Supplemental/", "/System/Library/Fonts/",
+                     "/Library/Fonts/"):
+            p = base + n
+            if os.path.exists(p):
+                try:
+                    return ImageFont.truetype(p, size)
+                except OSError:
+                    pass
+    return ImageFont.load_default()
+
+
 def build_cover():
     os.makedirs(SITE, exist_ok=True)
-    from PIL import Image, ImageDraw, ImageFont
+    from PIL import Image, ImageDraw
     S = 1400
-    paper, ink, soft, green = "#EFEDE5", "#181D16", "#8A9384", "#2C6B45"
+    paper, ink, soft, green = PAPER, INK, SOFT, GREEN
     img = Image.new("RGB", (S, S), paper)
     d = ImageDraw.Draw(img)
-
-    def font(names, size):
-        for n in names:
-            for base in ("/System/Library/Fonts/Supplemental/", "/System/Library/Fonts/",
-                         "/Library/Fonts/"):
-                p = base + n
-                if os.path.exists(p):
-                    try:
-                        return ImageFont.truetype(p, size)
-                    except OSError:
-                        pass
-        return ImageFont.load_default()
+    font = pil_font
 
     disp = font(["Big Caslon.ttf", "Baskerville.ttc", "Didot.ttc", "Georgia.ttf"], 132)
     disp_i = font(["Baskerville.ttc", "Big Caslon.ttf", "Georgia Italic.ttf"], 132)
@@ -2499,6 +3366,127 @@ def build_cover():
     print("  cover.jpg")
 
 
+# --------------------------------------------------------------------------
+# icons and the sharing card. A missing favicon is the icon Google shows
+# beside a result on a phone, and og.jpg is the difference between a pasted
+# link that looks like a guide and one that looks like a stranger's URL.
+# --------------------------------------------------------------------------
+
+ICON_SVG = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<style>
+ svg{--p:#EFEDE5;--i:#181D16;--g:#2C6B45}
+ @media (prefers-color-scheme:dark){svg{--p:#0F1310;--i:#E4E8DF;--g:#67C08D}}
+</style>
+<rect width="64" height="64" fill="var(--p)"/>
+<ellipse cx="32" cy="70" rx="54" ry="29" fill="var(--g)"/>
+<path d="M32 8 L45 22 L32 36 L19 22 Z" fill="var(--i)"/>
+<path d="M19 22 L8 46" stroke="var(--i)" stroke-width="3" fill="none"/>
+</svg>
+"""
+
+
+def icon(size):
+    """The cover's motif: a kite over the hill. Filled shapes only, because a
+    stroke thin enough to fit turns to porridge. At sixteen pixels there is
+    room for one shape and a horizon, so the string goes and the kite grows -
+    a favicon is recognised at a glance or not at all."""
+    from PIL import Image, ImageDraw
+    s = float(size)
+    img = Image.new("RGB", (size, size), PAPER)
+    d = ImageDraw.Draw(img)
+    tiny = size < 28
+
+    # the hill: a shallow band at the bottom, not a dome filling the square
+    d.ellipse([-0.45 * s, (0.80 if tiny else 0.76) * s, 1.45 * s, 1.85 * s], fill=GREEN)
+
+    if tiny:
+        cx, cy, hw, hh = 0.5 * s, 0.40 * s, 0.30 * s, 0.36 * s
+    else:
+        cx, cy, hw, hh = 0.53 * s, 0.34 * s, 0.20 * s, 0.245 * s
+        d.line([(cx - 0.55 * hw, cy + 0.7 * hh), (0.24 * s, 0.80 * s)],
+               fill=INK, width=max(1, int(round(s * 0.042))))
+    d.polygon([(cx, cy - hh), (cx + hw, cy), (cx, cy + hh), (cx - hw, cy)], fill=INK)
+    return img
+
+
+def build_icons():
+    from PIL import Image
+    open(os.path.join(SITE, "icon.svg"), "w").write(ICON_SVG)
+    big = icon(512)
+    big.save(os.path.join(SITE, "icon-512.png"))
+    icon(192).save(os.path.join(SITE, "icon-192.png"))
+    icon(180).save(os.path.join(SITE, "apple-touch-icon.png"))
+    # an .ico is three images in a trench coat; give it three real renders
+    # rather than one downscale, or the kite loses its point
+    icon(48).save(os.path.join(SITE, "favicon.ico"), format="ICO",
+                  sizes=[(16, 16), (32, 32), (48, 48)],
+                  append_images=[icon(32), icon(16)])
+    print("  favicon.ico, icon.svg, icon-192.png, icon-512.png, apple-touch-icon.png")
+
+
+def build_og():
+    """1200 by 630, which is what every messaging app crops to."""
+    from PIL import Image, ImageDraw
+    W, H = 1200, 630
+    img = Image.new("RGB", (W, H), PAPER)
+    d = ImageDraw.Draw(img)
+    d.rectangle([26, 26, W - 27, H - 27], outline=INK, width=3)
+    d.rectangle([40, 40, W - 41, H - 41], outline=SOFT, width=1)
+
+    disp = pil_font(["Big Caslon.ttf", "Baskerville.ttc", "Didot.ttc", "Georgia.ttf"], 86)
+    disp_i = pil_font(["Baskerville.ttc", "Big Caslon.ttf", "Georgia Italic.ttf"], 86)
+    caps = pil_font(["Optima.ttc", "GillSans.ttc", "Futura.ttc", "Helvetica.ttc"], 24)
+
+    def spaced(text, f, x, y, fill, track=7):
+        for c in text:
+            d.text((x, y), c, font=f, fill=fill)
+            x += d.textlength(c, font=f) + track
+
+    x0 = 96
+    spaced("A WALKING AUDIO GUIDE", caps, x0, 118, SOFT)
+    d.text((x0 - 4, 186), "Hampstead Heath", font=disp, fill=INK)
+    d.text((x0 - 4, 288), "& its village", font=disp_i, fill=GREEN)
+    d.line([(x0, 424), (x0 + 430, 424)], fill=SOFT, width=2)
+    spaced("TWENTY-FOUR STOPS", caps, x0, 452, SOFT)
+    spaced("ONE LOOP  ·  LONDON NW3", caps, x0, 492, SOFT)
+
+    # the hill and the kite again, on the right where the crop keeps them
+    cx, cy = 960, 400
+    for k, (sx, sy) in enumerate([(1.0, 1.0), (0.70, 0.68), (0.44, 0.44)]):
+        pts = []
+        for a in range(0, 361, 6):
+            r = 150 * (1 + 0.12 * math.sin(math.radians(a * 3 + 40))
+                       + 0.06 * math.sin(math.radians(a * 5)))
+            pts.append((cx + r * sx * math.cos(math.radians(a)),
+                        cy + r * sy * 0.62 * math.sin(math.radians(a))))
+        d.line(pts + [pts[0]], fill=SOFT, width=2 if k else 3)
+    d.ellipse([cx - 6, cy - 6, cx + 6, cy + 6], fill=INK)
+    kx, ky = cx + 44, cy - 168
+    d.line([(cx, cy), (kx, ky)], fill=INK, width=3)
+    d.polygon([(kx, ky - 44), (kx + 37, ky), (kx, ky + 44), (kx - 37, ky)],
+              outline=INK, fill=PAPER, width=3)
+    d.line([(kx - 37, ky), (kx + 37, ky)], fill=SOFT, width=2)
+    d.line([(kx, ky - 44), (kx, ky + 44)], fill=SOFT, width=2)
+
+    img.save(os.path.join(SITE, "og.jpg"), quality=90)
+    print("  og.jpg 1200x630")
+
+
+def build_manifest():
+    m = {"name": SITE_NAME,
+         "short_name": "Heath, read aloud",
+         "description": "A free walking audio guide to Hampstead Heath and its village, "
+                        "in %d stops." % STOP_COUNT,
+         "start_url": "/", "scope": "/", "display": "browser", "lang": "en-GB",
+         "background_color": PAPER, "theme_color": PAPER,
+         "icons": [{"src": "/icon-512.png", "sizes": "512x512", "type": "image/png"},
+                   {"src": "/icon-192.png", "sizes": "192x192", "type": "image/png"},
+                   {"src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png"},
+                   {"src": "/icon.svg", "sizes": "any", "type": "image/svg+xml"}]}
+    open(os.path.join(SITE, "site.webmanifest"), "w").write(
+        json.dumps(m, indent=2, sort_keys=True) + "\n")
+
+
 if __name__ == "__main__":
     args = sys.argv[1:]
     if args == ["--voices"]:
@@ -2509,6 +3497,10 @@ if __name__ == "__main__":
         sample()
     elif args == ["--cover"]:
         build_cover()
+        build_og()
+    elif args == ["--icons"]:
+        build_icons()
+        build_manifest()
     elif args == ["--page"]:
         build_page()
     elif not args:

@@ -1,0 +1,33 @@
+{
+  "background_color": "#EFEDE5",
+  "description": "A free walking audio guide to Hampstead Heath and its village, in 24 stops.",
+  "display": "browser",
+  "icons": [
+    {
+      "sizes": "512x512",
+      "src": "/icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "192x192",
+      "src": "/icon-192.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "180x180",
+      "src": "/apple-touch-icon.png",
+      "type": "image/png"
+    },
+    {
+      "sizes": "any",
+      "src": "/icon.svg",
+      "type": "image/svg+xml"
+    }
+  ],
+  "lang": "en-GB",
+  "name": "Hampstead Heath, read aloud",
+  "scope": "/",
+  "short_name": "Heath, read aloud",
+  "start_url": "/",
+  "theme_color": "#EFEDE5"
+}

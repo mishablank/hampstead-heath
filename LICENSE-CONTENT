@@ -1,0 +1,35 @@
+The narration
+=============
+
+The walk, the narration, the transcript and the written text of this guide -
+the STOPS list in build.py, and everything generated from it: index.html, the
+pages under stops/, guide.md, feed.xml and the audio in audio/ - are licensed
+under a Creative Commons Attribution 4.0 International Licence (CC BY 4.0).
+
+    https://creativecommons.org/licenses/by/4.0/
+
+Copyright (c) 2026 Mike Blank (github.com/mishablank)
+
+You may copy, redistribute, remix and build on this material, for any purpose,
+including commercially, provided you give appropriate credit, link to the
+licence, and say whether you changed anything.
+
+Attribute it as:
+
+    "Hampstead Heath, read aloud" by Mike Blank, CC BY 4.0
+    https://hampstead-heath.blankm.workers.dev
+
+
+Not covered by this licence
+---------------------------
+
+The photographs. Every one of them belongs to its photographer and comes with
+its own Creative Commons or public domain terms, recorded per file in
+images/credits.json and credited under each picture on the page. Reusing a
+photograph means honouring its licence, not this one - several are CC BY-SA,
+which is a share-alike condition this licence does not impose.
+
+The map geometry, which is © OpenStreetMap contributors and available under the
+Open Database Licence (ODbL).
+
+The code, which is MIT. See LICENSE.
