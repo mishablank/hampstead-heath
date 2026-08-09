@@ -1531,7 +1531,9 @@ a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 /* wraps rather than squeezes: on a phone the controls take their own row and
    the eyebrow gets its full line back */
-.topbar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px}
+/* spans the masthead grid, so the controls end at the page's right margin
+   rather than at the edge of the column the kite sits beside */
+.topbar{display:flex; flex-wrap:wrap; align-items:center; gap:10px 14px; grid-column:1 / -1}
 .topbar > .lab,.topbar > .crumb{flex:1 1 auto; min-width:0}
 .topbar .lab{text-wrap:balance}
 /* flex:none would size this to max-content and overflow rather than wrap */
@@ -1590,9 +1592,15 @@ header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
 .cart-inner{
   border-top:2px solid var(--ink); border-bottom:1px solid var(--rule);
   padding:clamp(20px,3vw,32px) 0 clamp(18px,2.5vw,28px);
-  display:grid; grid-template-columns:1fr auto; gap:clamp(20px,4vw,52px); align-items:start;
+  /* row gap 0: the topbar now occupies its own row and the h1 below it already
+     carries the spacing. Columns keep theirs. */
+  display:grid; grid-template-columns:1fr auto; gap:0 clamp(20px,4vw,52px); align-items:start;
 }
-@media (max-width:700px){.cart-inner{grid-template-columns:1fr} .hilldev{width:86px}}
+@media (max-width:700px){
+  .cart-inner{grid-template-columns:1fr}
+  /* stacked, the kite has no column gap left to separate it from the lede */
+  .hilldev{width:86px; margin-top:clamp(20px,4vw,52px)}
+}
 .cart h1{
   font-family:var(--font-display); font-weight:400;
   font-size:clamp(2rem,5.6vw,3.15rem); line-height:1.03; letter-spacing:-.015em;
@@ -2963,10 +2971,10 @@ def render(tracks):
     # masthead ------------------------------------------------------------
     w('<header class="cart">')
     w('  <div class="cart-inner">')
-    w("    <div>")
     w(topbar('<p class="lab">The audio guide &#183; Hampstead, NW3</p>', url(),
              "%s - a free %s-stop walking audio guide to Hampstead Heath"
              % (SITE_NAME, in_words(STOP_COUNT))))
+    w("    <div>")
     w("      <h1>Hampstead Heath, <em>read aloud</em></h1>")
     w('      <p class="lede">The twenty-four-stop walk as <b>%d tracks, %d minutes</b>, to be played '
       "standing in front of the thing it describes. Every track opens where you should be standing "
@@ -3176,12 +3184,13 @@ def stop_page(i, stop, fn, dur, tracks, pics, coords):
     w = o.append
     w('<div class="wrap">')
     w('<header class="cart">')
-    w('  <div class="cart-inner"><div>')
+    w('  <div class="cart-inner">')
     w(topbar('<p class="crumb"><a href="%s">The audio guide</a><span>/</span>'
              '<a href="../">The stops</a><span>/</span>%s</p>'
              % (up, esc(stop["title"])), url(stop_path(stop)),
              "%s - stop %d of the Hampstead Heath walking audio guide"
              % (stop["title"], n), crumbed=True))
+    w("    <div>")
     w('    <p class="lab">Stop %d of %d &#183; %s &#183; %s</p>'
       % (n, STOP_COUNT, esc(label), esc(stop["where"])))
     w("    <h1>%s</h1>" % esc(stop["title"]))
@@ -3291,11 +3300,12 @@ def stops_index(tracks):
     w = o.append
     w('<div class="wrap">')
     w('<header class="cart">')
-    w('  <div class="cart-inner"><div>')
+    w('  <div class="cart-inner">')
     w(topbar('<p class="crumb"><a href="../">The audio guide</a>'
              "<span>/</span>The stops</p>", url("stops/"),
              "The %s stops of the Hampstead Heath walking audio guide"
              % in_words(STOP_COUNT), crumbed=True))
+    w("    <div>")
     w("    <h1>The %s stops</h1>" % in_words(STOP_COUNT))
     w('    <p class="lede">Walking order, anticlockwise from the station. Each one has the '
       "recording, the transcript, a photograph and the coordinates to stand on. "
