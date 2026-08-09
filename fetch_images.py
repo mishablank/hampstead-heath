@@ -66,7 +66,7 @@ UA = {"User-Agent": "hampstead-heath-audio-guide/1.0 "
                     "(https://github.com/mishablank/hampstead-heath)"}
 MAXW = 1400
 HERE = os.path.dirname(os.path.abspath(__file__))
-OUT = os.path.join(HERE, "images")
+OUT = os.path.join(HERE, "public", "images")
 
 
 def strip(s):

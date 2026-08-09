@@ -71,8 +71,12 @@ AAC_BITRATE = "48000"     # mono speech; 64k is twice what this needs
 
 ALBUM = "Hampstead Heath - a walking gazetteer"
 HERE = os.path.dirname(os.path.abspath(__file__))
-AUDIO = os.path.join(HERE, "audio")
-FULL = os.path.join(HERE, "hampstead-heath-full-walk.m4a")
+# everything the Worker serves lives under SITE and nothing else does, so the
+# deploy is an allowlist. Sources, drafts and build inputs stay in HERE, where
+# no amount of misconfiguration can publish them.
+SITE = os.path.join(HERE, "public")
+AUDIO = os.path.join(SITE, "audio")
+FULL = os.path.join(SITE, "hampstead-heath-full-walk.m4a")
 STAMP = os.path.join(HERE, "voice.json")   # what actually made the audio here
 
 # --------------------------------------------------------------------------
@@ -1342,7 +1346,7 @@ def sample(i=4):
 def build_audio():
     os.makedirs(AUDIO, exist_ok=True)
     art = None
-    cover = os.path.join(HERE, "cover.jpg")
+    cover = os.path.join(SITE, "cover.jpg")
     if os.path.exists(cover):
         art = open(cover, "rb").read()
 
@@ -2184,7 +2188,7 @@ def gpx(tracks):
 def pictures():
     """images/credits.json, written by fetch_images.py. Optional: without it
     the page still builds, just without photographs."""
-    path = os.path.join(HERE, "images", "credits.json")
+    path = os.path.join(SITE, "images", "credits.json")
     return json.load(open(path)) if os.path.exists(path) else {}
 
 
@@ -2398,6 +2402,7 @@ def render(tracks):
 
 
 def build_page():
+    os.makedirs(SITE, exist_ok=True)
     tracks = []
     for i, stop in enumerate(STOPS):
         fn = "%02d-%s.m4a" % (i, slug(stop["title"]))
@@ -2405,18 +2410,18 @@ def build_page():
         if not os.path.exists(path):
             sys.exit("missing %s - run without --page first" % path)
         tracks.append((stop, fn, length(path)))
-    open(os.path.join(HERE, "index.html"), "w").write(render(tracks))
+    open(os.path.join(SITE, "index.html"), "w").write(render(tracks))
     print("  index.html: %d tracks, %s" % (len(tracks), clock(sum(t[2] for t in tracks))))
 
     route = gpx(tracks)
     if route:
-        open(os.path.join(HERE, "hampstead-heath-walk.gpx"), "w").write(route)
+        open(os.path.join(SITE, "hampstead-heath-walk.gpx"), "w").write(route)
         print("  hampstead-heath-walk.gpx: %d waypoints" % STOP_COUNT)
 
     open(os.path.join(HERE, "wrangler.jsonc"), "w").write(
         '{\n  "name": "hampstead-heath",\n'
         '  "compatibility_date": "2026-08-07",\n'
-        '  "assets": { "directory": "." }\n}\n')
+        '  "assets": { "directory": "./public" }\n}\n')
 
 
 # --------------------------------------------------------------------------
@@ -2424,6 +2429,7 @@ def build_page():
 # --------------------------------------------------------------------------
 
 def build_cover():
+    os.makedirs(SITE, exist_ok=True)
     from PIL import Image, ImageDraw, ImageFont
     S = 1400
     paper, ink, soft, green = "#EFEDE5", "#181D16", "#8A9384", "#2C6B45"
@@ -2489,7 +2495,7 @@ def build_cover():
     # about its own length is worse than one that says nothing
     spaced("TWENTY-FOUR STOPS  ·  ONE LOOP", caps_s, 1266, soft)
 
-    img.save(os.path.join(HERE, "cover.jpg"), quality=92)
+    img.save(os.path.join(SITE, "cover.jpg"), quality=92)
     print("  cover.jpg")
 
 
@@ -2506,7 +2512,7 @@ if __name__ == "__main__":
     elif args == ["--page"]:
         build_page()
     elif not args:
-        if not os.path.exists(os.path.join(HERE, "cover.jpg")):
+        if not os.path.exists(os.path.join(SITE, "cover.jpg")):
             build_cover()
         build_audio()
         build_page()

@@ -1,5 +1,5 @@
 {
   "name": "hampstead-heath",
   "compatibility_date": "2026-08-07",
-  "assets": { "directory": "." }
+  "assets": { "directory": "./public" }
 }
