@@ -53,16 +53,19 @@
   --heath:#67C08D; --water:#6FB2D6; --contour:#D3A257; --brick:#DC8579;
 }}
 :root[data-theme="dark"]{
+  color-scheme:dark;
   --paper:#0F1310; --paper-2:#171C16; --plate:#131813;
   --ink:#E4E8DF; --ink-2:#9AA495; --ink-3:#727C6E;
   --rule:#2A322A; --rule-soft:#1D231D;
   --heath:#67C08D; --water:#6FB2D6; --contour:#D3A257; --brick:#DC8579;
 }
-:root[data-theme="light"]{
-  --paper:#EFEDE5; --paper-2:#F7F6F0; --plate:#E8E6DD;
-  --ink:#181D16; --ink-2:#525C4C; --ink-3:#7C8676;
-  --rule:#C7CBBC; --rule-soft:#DDE0D2;
-  --heath:#2C6B45; --water:#2A6A8E; --contour:#96591C; --brick:#94413A;
+/* white paper rather than the default's parchment: for reading outdoors, in sun */
+:root[data-theme="bright"]{
+  color-scheme:light;
+  --paper:#FFFFFF; --paper-2:#F4F6F2; --plate:#EDF0EA;
+  --ink:#0A0D09; --ink-2:#3A4436; --ink-3:#5E6959;
+  --rule:#B6BDAC; --rule-soft:#DCE1D4;
+  --heath:#186B3A; --water:#12608C; --contour:#8A4E0B; --brick:#9B2F26;
 }
 
 *{box-sizing:border-box}
@@ -82,6 +85,28 @@ a:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
 
 /* ---- masthead ---------------------------------------------------- */
 header.cart{padding:clamp(38px,6vw,72px) 0 clamp(24px,3vw,34px)}
+.topbar{display:flex; justify-content:space-between; align-items:center; gap:14px}
+/* the button costs the eyebrow its single line on a phone: break it evenly, not orphaned */
+.topbar .lab{text-wrap:balance}
+.themectl{
+  all:unset; box-sizing:border-box; cursor:pointer; flex:none;
+  display:inline-flex; align-items:center; gap:8px;
+  min-height:32px; padding:5px 11px; border:1px solid var(--rule-soft);
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:10.5px; color:var(--ink-3);
+}
+.themectl:hover{color:var(--ink); border-color:var(--ink-3)}
+.themectl:focus-visible{outline:2px solid var(--heath); outline-offset:2px}
+/* the swatch is just var(--paper): it shows you which theme you are in */
+.themectl i{
+  width:11px; height:11px; border-radius:50%; flex:none;
+  background:var(--paper); border:1px solid var(--ink-3);
+}
+/* thumb-sized on a phone, and the eyebrow beside it needs the room back */
+@media (max-width:700px){
+  .themectl{min-height:40px; padding:5px 13px}
+  .themectl .tword{display:none}
+}
 .cart-inner{
   border-top:2px solid var(--ink); border-bottom:1px solid var(--rule);
   padding:clamp(20px,3vw,32px) 0 clamp(18px,2.5vw,28px);
@@ -256,7 +281,7 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 /* photographs shot in daylight glare on a dark page */
 @media (prefers-color-scheme:dark){.shot img{filter:brightness(.86) contrast(1.03)}}
 :root[data-theme="dark"] .shot img{filter:brightness(.86) contrast(1.03)}
-:root[data-theme="light"] .shot img{filter:none}
+:root[data-theme="bright"] .shot img{filter:none}
 
 /* the one device this page adds: standing still vs moving */
 .walk{
@@ -276,6 +301,14 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 footer{margin-top:clamp(42px,6vw,68px); padding-top:20px; border-top:1px solid var(--rule);
   color:var(--ink-3); font-size:.85rem}
 footer p{margin:0 0 8px; max-width:70ch}
+.sig{
+  list-style:none; margin:16px 0 0; padding:0;
+  display:flex; flex-wrap:wrap; gap:7px 20px;
+  font-family:var(--font-label); text-transform:uppercase;
+  letter-spacing:.12em; font-size:11px;
+}
+.sig a{color:var(--ink-3); text-decoration:none; border-bottom:1px solid var(--rule)}
+.sig a:hover{color:var(--heath); border-bottom-color:var(--heath)}
 
 @media (prefers-reduced-motion:reduce){*{transition:none !important; animation:none !important}}
 
@@ -319,6 +352,11 @@ footer p{margin:0 0 8px; max-width:70ch}
   font-size:10px; color:var(--ink-3); margin:0 0 14px; display:flex; flex-wrap:wrap; gap:8px}
 .crumb a{color:var(--ink-3)}
 .crumb span{color:var(--rule)}
+/* the crumb carries the masthead's lower gap; inside a topbar the row does */
+.topbar .crumb{margin-bottom:0}
+/* the longest stop titles run the crumb to three lines: keep the button in the
+   corner rather than letting it drift to the middle of them */
+.topbar.crumbed{margin-bottom:14px; align-items:flex-start}
 .sa{border:1px solid var(--rule); background:var(--paper-2);
   padding:14px 16px; margin:0 0 22px; display:grid; gap:9px}
 .sa audio{width:100%; height:34px}
@@ -348,6 +386,43 @@ footer p{margin:0 0 8px; max-width:70ch}
 .idx a{font-family:var(--font-display); font-size:1.05rem}
 .idx .wh{color:var(--ink-3); font-size:12px}
 </style>
+<script>
+(function(){
+  // runs before the page is painted, so a forced theme never flashes the other one
+  var KEY = "hh-theme", MODES = ["auto","bright","dark"], root = document.documentElement, at = 0;
+  var SAYS = {auto:"Follows your device", bright:"White paper, for sun", dark:"Dark paper"};
+  try{ at = Math.max(0, MODES.indexOf(localStorage.getItem(KEY))); }catch(e){}
+  var PAPER = {bright:"#FFFFFF", dark:"#0F1310"};
+  function put(){
+    var m = MODES[at];
+    if(m === "auto") root.removeAttribute("data-theme");
+    else root.setAttribute("data-theme", m);
+    var b = document.getElementById("themebtn"), lab = document.getElementById("themelab");
+    if(lab) lab.textContent = m.charAt(0).toUpperCase() + m.slice(1);
+    if(b) b.setAttribute("aria-label", "Page theme: " + m + ". " + SAYS[m] + ". Tap to change.");
+    // the two theme-color metas are keyed to prefers-color-scheme, which a forced
+    // theme has just overruled: pin one that matches, or the browser chrome lies
+    var pinned = document.getElementById("tcolor");
+    if(m === "auto"){ if(pinned) pinned.remove(); return; }
+    if(!pinned){
+      pinned = document.createElement("meta");
+      pinned.id = "tcolor"; pinned.name = "theme-color";
+      // first match in tree order wins, and this one carries no media query,
+      // so it has to go in front of the pair head() wrote
+      document.head.insertBefore(pinned, document.head.firstChild);
+    }
+    pinned.setAttribute("content", PAPER[m]);
+  }
+  put();
+  document.addEventListener("DOMContentLoaded", put);
+  document.addEventListener("click", function(e){
+    if(!e.target.closest || !e.target.closest("#themebtn")) return;
+    at = (at + 1) % MODES.length;
+    try{ localStorage.setItem(KEY, MODES[at]); }catch(e){}
+    put();
+  });
+})();
+</script>
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -498,7 +573,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <div class="wrap">
 <header class="cart">
   <div class="cart-inner"><div>
-    <p class="crumb"><a href="../../">The audio guide</a><span>/</span><a href="../">The stops</a><span>/</span>Well Walk and Burgh House</p>
+    <div class="topbar crumbed"><p class="crumb"><a href="../../">The audio guide</a><span>/</span><a href="../">The stops</a><span>/</span>Well Walk and Burgh House</p><button class="themectl" id="themebtn" type="button"><i aria-hidden="true"></i><span class="tword">Theme</span> <span id="themelab">Auto</span></button></div>
     <p class="lab">Stop 24 of 24 &#183; Village &#183; Well Walk and New End Square</p>
     <h1>Well Walk and Burgh House</h1>
     <p class="lede">Track 25 of the walk, 2:11 long. Play it standing where the first line tells you to stand. What is printed underneath is exactly what you will hear, which is also why the numbers are written as words.</p>
@@ -532,6 +607,7 @@ footer p{margin:0 0 8px; max-width:70ch}
 <footer>
   <p>Walking directions are accurate enough to follow and are not a substitute for looking up. Opening hours were checked in August 2026 and are the first thing to change; confirm before setting out for anything ticketed.</p>
   <p>Audio is synthesised speech. The narration and this page are generated from one Python file, so the transcript cannot drift out of step with the recording.</p>
+  <ul class="sig"><li><a href="https://www.linkedin.com/in/mishablank/" target="_blank" rel="me noopener">LinkedIn</a></li><li><a href="https://github.com/mishablank/" target="_blank" rel="me noopener">GitHub</a></li></ul>
 </footer>
 </div>
 </body>
