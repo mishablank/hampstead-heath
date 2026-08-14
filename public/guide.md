@@ -36,7 +36,7 @@ Three. The village hour is about fifty minutes, free, any day, and has no mud in
 
 **Do I need headphones, or can I read it instead?**
 
-Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. There is also a GPX file of the route for a map application that can navigate.
+Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. The route can also be downloaded as GPX, KML or CSV, for a walking app, Google Earth or a spreadsheet.
 
 ## The script
 

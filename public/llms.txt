@@ -1,6 +1,6 @@
 # Hampstead Heath, read aloud
 
-> A free self-guided walking audio guide to Hampstead Heath and Hampstead village, London NW3, in 24 stops. 27 tracks, 55 minutes of narration, the full transcript on the page, one photograph per stop, and a GPX route. A single anticlockwise loop from Hampstead Underground station.
+> A free self-guided walking audio guide to Hampstead Heath and Hampstead village, London NW3, in 24 stops. 27 tracks, 55 minutes of narration, the full transcript on the page, one photograph per stop, and the route to download as GPX, KML or CSV. A single anticlockwise loop from Hampstead Underground station.
 
 Nineteen of the 24 stops are free. Three more are free unless you get into the water. Two charge at the door. Opening hours were checked in August 2026. Narration is synthesised speech; the text is written to be read aloud, which is why numbers are spelled out.
 
@@ -40,6 +40,8 @@ Nineteen of the 24 stops are free. Three more are free unless you get into the w
 ## Files
 
 - [The whole walk as one audio file](https://hampstead-heath.blankm.workers.dev/hampstead-heath-full-walk.m4a)
-- [The route as GPX](https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.gpx)
+- [The route as GPX](https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.gpx): the 24 stops in walking order, for a GPS or a walking app.
+- [The route as KML](https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.kml): the 24 stops in walking order, for Google Earth, Google My Maps or desktop GIS.
+- [The route as CSV](https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.csv): the 24 stops in walking order, for a spreadsheet or a database.
 - [Podcast feed](https://hampstead-heath.blankm.workers.dev/feed.xml)
 - [Source, including the narration](https://github.com/mishablank/hampstead-heath)
