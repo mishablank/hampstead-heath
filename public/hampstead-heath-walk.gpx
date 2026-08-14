@@ -1,54 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="hampstead-heath audio guide" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata><name>Hampstead Heath and its village</name><desc>24 stops, in walking order.</desc></metadata>
-  <wpt lat="51.55654" lon="-0.17812"><name>1. Hampstead Underground Station</name><desc>Heath Street</desc></wpt>
-  <wpt lat="51.55618" lon="-0.18108"><name>2. Church Row and Saint John-at-Hampstead</name><desc>Church Row</desc></wpt>
-  <wpt lat="51.55690" lon="-0.18029"><name>3. Saint Mary's, Holly Walk</name><desc>Holly Place</desc></wpt>
-  <wpt lat="51.55800" lon="-0.17946"><name>4. Holly Bush Hill</name><desc>Holly Bush Hill</desc></wpt>
-  <wpt lat="51.55888" lon="-0.17970"><name>5. Fenton House</name><desc>Hampstead Grove</desc></wpt>
-  <wpt lat="51.55976" lon="-0.18001"><name>6. Admiral's House</name><desc>Admiral's Walk</desc></wpt>
-  <wpt lat="51.56057" lon="-0.18004"><name>7. Hampstead Observatory</name><desc>Lower Terrace</desc></wpt>
-  <wpt lat="51.56056" lon="-0.17920"><name>8. Whitestone Pond</name><desc>the top of Heath Street</desc></wpt>
-  <wpt lat="51.56560" lon="-0.18397"><name>9. The Hill Garden and Pergola</name><desc>Inverforth Close, North End Way</desc></wpt>
-  <wpt lat="51.56682" lon="-0.18938"><name>10. Golders Hill Park</name><desc>North End Way</desc></wpt>
-  <wpt lat="51.56145" lon="-0.18010"><name>11. Jack Straw's Castle</name><desc>North End Way</desc></wpt>
-  <wpt lat="51.56294" lon="-0.17628"><name>12. The Vale of Health</name><desc>off East Heath Road</desc></wpt>
-  <wpt lat="51.57023" lon="-0.17372"><name>13. The Spaniards Inn</name><desc>Spaniards Road</desc></wpt>
-  <wpt lat="51.57155" lon="-0.16734"><name>14. Kenwood House</name><desc>Hampstead Lane</desc></wpt>
-  <wpt lat="51.57155" lon="-0.16734"><name>15. Dido Elizabeth Belle</name><desc>inside Kenwood</desc></wpt>
-  <wpt lat="51.56699" lon="-0.16042"><name>16. The Kenwood Ladies' Pond</name><desc>off Millfield Lane</desc></wpt>
-  <wpt lat="51.56475" lon="-0.15905"><name>17. The Highgate Men's Pond</name><desc>Millfield Lane</desc></wpt>
-  <wpt lat="51.56060" lon="-0.15760"><name>18. The Tumulus</name><desc>south of the Highgate Ponds</desc></wpt>
-  <wpt lat="51.55940" lon="-0.15450"><name>19. Parliament Hill</name><desc>Parliament Hill Fields</desc></wpt>
-  <wpt lat="51.55644" lon="-0.15131"><name>20. Parliament Hill Lido</name><desc>Gordon House Road</desc></wpt>
-  <wpt lat="51.55758" lon="-0.16554"><name>21. The Hampstead Ponds and the River Fleet</name><desc>the Hampstead chain</desc></wpt>
-  <wpt lat="51.55552" lon="-0.16794"><name>22. Keats House</name><desc>Keats Grove</desc></wpt>
-  <wpt lat="51.56018" lon="-0.17455"><name>23. The Cannon Lane Lock-Up</name><desc>Cannon Lane</desc></wpt>
-  <wpt lat="51.55819" lon="-0.17504"><name>24. Well Walk and Burgh House</name><desc>Well Walk and New End Square</desc></wpt>
-  <rte><name>Hampstead Heath, 24 stops</name>
-    <rtept lat="51.55654" lon="-0.17812"><name>1</name></rtept>
-    <rtept lat="51.55618" lon="-0.18108"><name>2</name></rtept>
-    <rtept lat="51.55690" lon="-0.18029"><name>3</name></rtept>
-    <rtept lat="51.55800" lon="-0.17946"><name>4</name></rtept>
-    <rtept lat="51.55888" lon="-0.17970"><name>5</name></rtept>
-    <rtept lat="51.55976" lon="-0.18001"><name>6</name></rtept>
-    <rtept lat="51.56057" lon="-0.18004"><name>7</name></rtept>
-    <rtept lat="51.56056" lon="-0.17920"><name>8</name></rtept>
-    <rtept lat="51.56560" lon="-0.18397"><name>9</name></rtept>
-    <rtept lat="51.56682" lon="-0.18938"><name>10</name></rtept>
-    <rtept lat="51.56145" lon="-0.18010"><name>11</name></rtept>
-    <rtept lat="51.56294" lon="-0.17628"><name>12</name></rtept>
-    <rtept lat="51.57023" lon="-0.17372"><name>13</name></rtept>
-    <rtept lat="51.57155" lon="-0.16734"><name>14</name></rtept>
-    <rtept lat="51.57155" lon="-0.16734"><name>15</name></rtept>
-    <rtept lat="51.56699" lon="-0.16042"><name>16</name></rtept>
-    <rtept lat="51.56475" lon="-0.15905"><name>17</name></rtept>
-    <rtept lat="51.56060" lon="-0.15760"><name>18</name></rtept>
-    <rtept lat="51.55940" lon="-0.15450"><name>19</name></rtept>
-    <rtept lat="51.55644" lon="-0.15131"><name>20</name></rtept>
-    <rtept lat="51.55758" lon="-0.16554"><name>21</name></rtept>
-    <rtept lat="51.55552" lon="-0.16794"><name>22</name></rtept>
-    <rtept lat="51.56018" lon="-0.17455"><name>23</name></rtept>
-    <rtept lat="51.55819" lon="-0.17504"><name>24</name></rtept>
+  <metadata><name>Hampstead Heath and its village</name><desc>A self-guided walking audio guide in 24 stops: one anticlockwise loop from Hampstead Underground station, over the top of the Heath to Kenwood and back down past the swimming ponds. The line joins the stops in walking order and is not the path you walk.</desc><link href="https://hampstead-heath.blankm.workers.dev/"><text>Hampstead Heath, read aloud</text></link><time>2026-08-09T00:00:00Z</time></metadata>
+  <wpt lat="51.55654" lon="-0.17812"><name>1. Hampstead Underground Station</name><desc>Heath Street</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/hampstead-underground-station/"><text>Listen to stop 1</text></link><type>Village</type></wpt>
+  <wpt lat="51.55618" lon="-0.18108"><name>2. Church Row and Saint John-at-Hampstead</name><desc>Church Row</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/church-row-and-saint-john-at-hampstead/"><text>Listen to stop 2</text></link><type>Village</type></wpt>
+  <wpt lat="51.55690" lon="-0.18029"><name>3. Saint Mary's, Holly Walk</name><desc>Holly Place</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/saint-mary-s-holly-walk/"><text>Listen to stop 3</text></link><type>Village</type></wpt>
+  <wpt lat="51.55800" lon="-0.17946"><name>4. Holly Bush Hill</name><desc>Holly Bush Hill</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/holly-bush-hill/"><text>Listen to stop 4</text></link><type>House &amp; museum</type></wpt>
+  <wpt lat="51.55888" lon="-0.17970"><name>5. Fenton House</name><desc>Hampstead Grove</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/fenton-house/"><text>Listen to stop 5</text></link><type>House &amp; museum</type></wpt>
+  <wpt lat="51.55976" lon="-0.18001"><name>6. Admiral's House</name><desc>Admiral's Walk</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/admiral-s-house/"><text>Listen to stop 6</text></link><type>House &amp; museum</type></wpt>
+  <wpt lat="51.56057" lon="-0.18004"><name>7. Hampstead Observatory</name><desc>Lower Terrace</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/hampstead-observatory/"><text>Listen to stop 7</text></link><type>High ground</type></wpt>
+  <wpt lat="51.56056" lon="-0.17920"><name>8. Whitestone Pond</name><desc>the top of Heath Street</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/whitestone-pond/"><text>Listen to stop 8</text></link><type>High ground</type></wpt>
+  <wpt lat="51.56560" lon="-0.18397"><name>9. The Hill Garden and Pergola</name><desc>Inverforth Close, North End Way</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/"><text>Listen to stop 9</text></link><type>High ground</type></wpt>
+  <wpt lat="51.56682" lon="-0.18938"><name>10. Golders Hill Park</name><desc>North End Way</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/golders-hill-park/"><text>Listen to stop 10</text></link><type>High ground</type></wpt>
+  <wpt lat="51.56145" lon="-0.18010"><name>11. Jack Straw's Castle</name><desc>North End Way</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/jack-straw-s-castle/"><text>Listen to stop 11</text></link><type>Village</type></wpt>
+  <wpt lat="51.56294" lon="-0.17628"><name>12. The Vale of Health</name><desc>off East Heath Road</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-vale-of-health/"><text>Listen to stop 12</text></link><type>Village</type></wpt>
+  <wpt lat="51.57023" lon="-0.17372"><name>13. The Spaniards Inn</name><desc>Spaniards Road</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-spaniards-inn/"><text>Listen to stop 13</text></link><type>Village</type></wpt>
+  <wpt lat="51.57155" lon="-0.16734"><name>14. Kenwood House</name><desc>Hampstead Lane</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/kenwood-house/"><text>Listen to stop 14</text></link><type>House &amp; museum</type></wpt>
+  <wpt lat="51.57155" lon="-0.16734"><name>15. Dido Elizabeth Belle</name><desc>inside Kenwood</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/dido-elizabeth-belle/"><text>Listen to stop 15</text></link><type>House &amp; museum</type></wpt>
+  <wpt lat="51.56699" lon="-0.16042"><name>16. The Kenwood Ladies' Pond</name><desc>off Millfield Lane</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-kenwood-ladies-pond/"><text>Listen to stop 16</text></link><type>Water</type></wpt>
+  <wpt lat="51.56475" lon="-0.15905"><name>17. The Highgate Men's Pond</name><desc>Millfield Lane</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-highgate-men-s-pond/"><text>Listen to stop 17</text></link><type>Water</type></wpt>
+  <wpt lat="51.56060" lon="-0.15760"><name>18. The Tumulus</name><desc>south of the Highgate Ponds</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-tumulus/"><text>Listen to stop 18</text></link><type>High ground</type></wpt>
+  <wpt lat="51.55940" lon="-0.15450"><name>19. Parliament Hill</name><desc>Parliament Hill Fields</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/"><text>Listen to stop 19</text></link><type>High ground</type></wpt>
+  <wpt lat="51.55644" lon="-0.15131"><name>20. Parliament Hill Lido</name><desc>Gordon House Road</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill-lido/"><text>Listen to stop 20</text></link><type>Water</type></wpt>
+  <wpt lat="51.55758" lon="-0.16554"><name>21. The Hampstead Ponds and the River Fleet</name><desc>the Hampstead chain</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-hampstead-ponds-and-the-river-fleet/"><text>Listen to stop 21</text></link><type>Water</type></wpt>
+  <wpt lat="51.55552" lon="-0.16794"><name>22. Keats House</name><desc>Keats Grove</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/keats-house/"><text>Listen to stop 22</text></link><type>House &amp; museum</type></wpt>
+  <wpt lat="51.56018" lon="-0.17455"><name>23. The Cannon Lane Lock-Up</name><desc>Cannon Lane</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/the-cannon-lane-lock-up/"><text>Listen to stop 23</text></link><type>Village</type></wpt>
+  <wpt lat="51.55819" lon="-0.17504"><name>24. Well Walk and Burgh House</name><desc>Well Walk and New End Square</desc><link href="https://hampstead-heath.blankm.workers.dev/stops/well-walk-and-burgh-house/"><text>Listen to stop 24</text></link><type>Village</type></wpt>
+  <rte><name>Hampstead Heath, 24 stops</name><desc>A self-guided walking audio guide in 24 stops: one anticlockwise loop from Hampstead Underground station, over the top of the Heath to Kenwood and back down past the swimming ponds. The line joins the stops in walking order and is not the path you walk.</desc><link href="https://hampstead-heath.blankm.workers.dev/"><text>Hampstead Heath, read aloud</text></link>
+    <rtept lat="51.55654" lon="-0.17812"><name>1. Hampstead Underground Station</name><desc>Heath Street</desc></rtept>
+    <rtept lat="51.55618" lon="-0.18108"><name>2. Church Row and Saint John-at-Hampstead</name><desc>Church Row</desc></rtept>
+    <rtept lat="51.55690" lon="-0.18029"><name>3. Saint Mary's, Holly Walk</name><desc>Holly Place</desc></rtept>
+    <rtept lat="51.55800" lon="-0.17946"><name>4. Holly Bush Hill</name><desc>Holly Bush Hill</desc></rtept>
+    <rtept lat="51.55888" lon="-0.17970"><name>5. Fenton House</name><desc>Hampstead Grove</desc></rtept>
+    <rtept lat="51.55976" lon="-0.18001"><name>6. Admiral's House</name><desc>Admiral's Walk</desc></rtept>
+    <rtept lat="51.56057" lon="-0.18004"><name>7. Hampstead Observatory</name><desc>Lower Terrace</desc></rtept>
+    <rtept lat="51.56056" lon="-0.17920"><name>8. Whitestone Pond</name><desc>the top of Heath Street</desc></rtept>
+    <rtept lat="51.56560" lon="-0.18397"><name>9. The Hill Garden and Pergola</name><desc>Inverforth Close, North End Way</desc></rtept>
+    <rtept lat="51.56682" lon="-0.18938"><name>10. Golders Hill Park</name><desc>North End Way</desc></rtept>
+    <rtept lat="51.56145" lon="-0.18010"><name>11. Jack Straw's Castle</name><desc>North End Way</desc></rtept>
+    <rtept lat="51.56294" lon="-0.17628"><name>12. The Vale of Health</name><desc>off East Heath Road</desc></rtept>
+    <rtept lat="51.57023" lon="-0.17372"><name>13. The Spaniards Inn</name><desc>Spaniards Road</desc></rtept>
+    <rtept lat="51.57155" lon="-0.16734"><name>14. Kenwood House</name><desc>Hampstead Lane</desc></rtept>
+    <rtept lat="51.57155" lon="-0.16734"><name>15. Dido Elizabeth Belle</name><desc>inside Kenwood</desc></rtept>
+    <rtept lat="51.56699" lon="-0.16042"><name>16. The Kenwood Ladies' Pond</name><desc>off Millfield Lane</desc></rtept>
+    <rtept lat="51.56475" lon="-0.15905"><name>17. The Highgate Men's Pond</name><desc>Millfield Lane</desc></rtept>
+    <rtept lat="51.56060" lon="-0.15760"><name>18. The Tumulus</name><desc>south of the Highgate Ponds</desc></rtept>
+    <rtept lat="51.55940" lon="-0.15450"><name>19. Parliament Hill</name><desc>Parliament Hill Fields</desc></rtept>
+    <rtept lat="51.55644" lon="-0.15131"><name>20. Parliament Hill Lido</name><desc>Gordon House Road</desc></rtept>
+    <rtept lat="51.55758" lon="-0.16554"><name>21. The Hampstead Ponds and the River Fleet</name><desc>the Hampstead chain</desc></rtept>
+    <rtept lat="51.55552" lon="-0.16794"><name>22. Keats House</name><desc>Keats Grove</desc></rtept>
+    <rtept lat="51.56018" lon="-0.17455"><name>23. The Cannon Lane Lock-Up</name><desc>Cannon Lane</desc></rtept>
+    <rtept lat="51.55819" lon="-0.17504"><name>24. Well Walk and Burgh House</name><desc>Well Walk and New End Square</desc></rtept>
   </rte>
 </gpx>

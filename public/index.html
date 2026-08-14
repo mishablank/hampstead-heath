@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Hampstead Heath Audio Guide &#8211; a free 24-stop self-guided walk</title>
-<meta name="description" content="A free walking audio guide to Hampstead Heath and Hampstead village: 27 tracks, 55 minutes, 24 stops, with the full transcript, a drawn map, a GPX route and a photograph for every stop.">
+<meta name="description" content="A free walking audio guide to Hampstead Heath and Hampstead village: 27 tracks, 55 minutes, 24 stops, with the full transcript, a drawn map, a photograph for every stop, and the route as GPX, KML or CSV.">
 <link rel="canonical" href="https://hampstead-heath.blankm.workers.dev/">
 <meta name="color-scheme" content="light dark">
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -1191,7 +1191,7 @@ footer p{margin:0 0 8px; max-width:70ch}
      "@type": "Question",
      "acceptedAnswer": {
       "@type": "Answer",
-      "text": "Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. There is also a GPX file of the route for a map application that can navigate."
+      "text": "Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. The route can also be downloaded as GPX, KML or CSV, for a walking app, Google Earth or a spreadsheet."
      },
      "name": "Do I need headphones, or can I read it instead?",
      "position": 8
@@ -1285,8 +1285,31 @@ footer p{margin:0 0 8px; max-width:70ch}
     "@id": "https://hampstead-heath.blankm.workers.dev/#trip"
    },
    "contentUrl": "https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.gpx",
+   "description": "The 24 stops in walking order, for a GPS or a walking app.",
    "encodingFormat": "application/gpx+xml",
    "name": "The route as GPX"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#kml",
+   "@type": "DataDownload",
+   "about": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#trip"
+   },
+   "contentUrl": "https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.kml",
+   "description": "The 24 stops in walking order, for Google Earth, Google My Maps or desktop GIS.",
+   "encodingFormat": "application/vnd.google-earth.kml+xml",
+   "name": "The route as KML"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/#csv",
+   "@type": "DataDownload",
+   "about": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/#trip"
+   },
+   "contentUrl": "https://hampstead-heath.blankm.workers.dev/hampstead-heath-walk.csv",
+   "description": "The 24 stops in walking order, for a spreadsheet or a database.",
+   "encodingFormat": "text/csv",
+   "name": "The route as CSV"
   }
  ]
 }
@@ -1358,7 +1381,7 @@ footer p{margin:0 0 8px; max-width:70ch}
       <div class="hero-acts">
         <div class="play hero-play" data-i="0"><button class="pb" aria-label="Play How to use this"></button><span class="plab">From the start</span><span class="pgs"><i></i></span><span class="ptime">1:21</span></div>
         <ul class="acts">
-          <li><a href="hampstead-heath-walk.gpx" download>The route as GPX</a></li>
+          <li>The route: <a href="hampstead-heath-walk.gpx" download title="for a GPS or a walking app">GPX</a> / <a href="hampstead-heath-walk.kml" download title="for Google Earth, Google My Maps or desktop GIS">KML</a> / <a href="hampstead-heath-walk.csv" download title="for a spreadsheet or a database">CSV</a></li>
           <li><a href="hampstead-heath-full-walk.m4a" download>The whole walk, one file</a></li>
           <li><a href="stops/">A page per stop</a></li>
         </ul>
@@ -1698,7 +1721,7 @@ footer p{margin:0 0 8px; max-width:70ch}
     <details><summary>Can you swim in the Hampstead Heath ponds?</summary><p>Yes. The Kenwood Ladies' Pond and the Highgate Men's Pond are open every day of the year, the Mixed Pond only from April to October, and Parliament Hill Lido never closes. The ponds open only when lifeguards are on duty.</p></details>
     <details><summary>How muddy is Hampstead Heath?</summary><p>Two thirds of this route is unpaved, the Heath sits on London clay, and it holds water for days after rain. Wear shoes you do not mind. The village half of the walk you can do in office shoes.</p></details>
     <details><summary>Is there a shorter version of the walk?</summary><p>Three. The village hour is about fifty minutes, free, any day, and has no mud in it. The houses is half a day, Wednesday to Sunday, which is the one window when all four are open. The water is any day of the year and is best at seven in the morning.</p></details>
-    <details><summary>Do I need headphones, or can I read it instead?</summary><p>Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. There is also a GPX file of the route for a map application that can navigate.</p></details>
+    <details><summary>Do I need headphones, or can I read it instead?</summary><p>Either. The whole script is printed on the page, word for word, so you can read it on the train, hand it to someone without headphones, or follow it with the sound off. The route can also be downloaded as GPX, KML or CSV, for a walking app, Google Earth or a spreadsheet.</p></details>
   </div>
 </section>
 
@@ -1710,7 +1733,7 @@ footer p{margin:0 0 8px; max-width:70ch}
     <div><p class="lab">Pictures</p><p>One photograph per track, picked to show the thing you are standing in front of rather than the prettiest view of it. All of them are Creative Commons or public domain, from Wikimedia Commons, credited under the picture and fetched by <code>fetch_images.py</code>.</p></div>
     <div><p class="lab">Rebuilding it</p><p>The narration lives in one Python file, <code>build.py</code>. The audio and this page are both generated from it, so the transcript can never drift out of step with the recording.</p></div>
     <div><p class="lab">Changing the voice</p><p>Any installed system voice works. Swap the name and the pace at the top of the generator and re-run it; the whole set rebuilds in about a minute.</p></div>
-    <div><p class="lab">Other shapes</p><p>The same walk as <a href="feed.xml">a podcast feed</a>, for Apple, Spotify or Overcast; as <a href="guide.md">plain Markdown</a>, for anything that would rather read than render; as <a href="hampstead-heath-walk.gpx">GPX</a>, for a map application; and as <a href="stops/">one page per stop</a>. <a href="https://github.com/mishablank/hampstead-heath">The source</a> is the narration.</p></div>
+    <div><p class="lab">Other shapes</p><p>The same walk as <a href="feed.xml">a podcast feed</a>, for Apple, Spotify or Overcast; as <a href="guide.md">plain Markdown</a>, for anything that would rather read than render; as <a href="hampstead-heath-walk.gpx" download title="for a GPS or a walking app">GPX</a> / <a href="hampstead-heath-walk.kml" download title="for Google Earth, Google My Maps or desktop GIS">KML</a> / <a href="hampstead-heath-walk.csv" download title="for a spreadsheet or a database">CSV</a>, for a walking app, Google Earth or a spreadsheet; and as <a href="stops/">one page per stop</a>. None of the route files is the path you walk &#8211; they join the stops in straight lines, and nothing on the Heath is straight. <a href="https://github.com/mishablank/hampstead-heath">The source</a> is the narration.</p></div>
   </div>
 </section>
 

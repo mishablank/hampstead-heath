@@ -18,9 +18,11 @@ Needs macOS (afconvert) and mutagen. The voice comes from Amazon Polly by
 default; see the ENGINE note below for why, and for the local alternative.
 """
 
+import csv as _csv
 import datetime
 import email.utils
 import html as _html
+import io
 import json
 import math
 import os
@@ -82,6 +84,30 @@ SITE = os.path.join(HERE, "public")
 AUDIO = os.path.join(SITE, "audio")
 FULL = os.path.join(SITE, "hampstead-heath-full-walk.m4a")
 STAMP = os.path.join(HERE, "voice.json")   # what actually made the audio here
+
+# --------------------------------------------------------------------------
+# the route, taken away. The same twenty-four stops in the same order, written
+# three times over, because the thing that will open the file is not the same
+# thing for everybody: a walking app wants GPX, Google wants KML, and a
+# spreadsheet wants a table. One stem and three extensions, so a person who
+# has seen one of these links can guess the other two. Every one of them is
+# generated from STOPS and map.json in build_page, so none can describe a
+# walk that is not there.
+# --------------------------------------------------------------------------
+
+ROUTE = "hampstead-heath-walk"      # .gpx, .kml, .csv
+# ext, label, media type, and what will open it. The note is written to sit in
+# a sentence, because it has to: it is printed in the colophon, hung on the
+# link as a tooltip, put in the structured data and repeated in llms.txt, all
+# from here.
+ROUTE_FORMATS = [
+    ("gpx", "GPX", "application/gpx+xml",
+     "for a GPS or a walking app"),
+    ("kml", "KML", "application/vnd.google-earth.kml+xml",
+     "for Google Earth, Google My Maps or desktop GIS"),
+    ("csv", "CSV", "text/csv",
+     "for a spreadsheet or a database"),
+]
 
 # --------------------------------------------------------------------------
 # how the thing is found. ORIGIN is the canonical origin - scheme and host,
@@ -1095,8 +1121,8 @@ FAQ = [
     ("Do I need headphones, or can I read it instead?",
      "Either. The whole script is printed on the page, word for word, so you can "
      "read it on the train, hand it to someone without headphones, or follow it "
-     "with the sound off. There is also a GPX file of the route for a map "
-     "application that can navigate."),
+     "with the sound off. The route can also be downloaded as GPX, KML or CSV, "
+     "for a walking app, Google Earth or a spreadsheet."),
 ]
 
 KIND = {
@@ -2415,28 +2441,182 @@ def map_svg(tracks):
     return "\n".join(out)
 
 
-def gpx(tracks):
-    """The stops as waypoints and a route, for a real map application."""
+ROUTE_NAME = "Hampstead Heath and its village"
+ROUTE_DESC = ("A self-guided walking audio guide in %d stops: one anticlockwise "
+              "loop from Hampstead Underground station, over the top of the Heath "
+              "to Kenwood and back down past the swimming ponds. The line joins "
+              "the stops in walking order and is not the path you walk." % STOP_COUNT)
+
+
+def route_stops(tracks):
+    """The numbered stops in walking order, each with its coordinate and the
+    track that describes it. The three route files are these same rows in
+    three notations, so they are gathered once and written three ways: a stop
+    cannot be in the GPX and missing from the CSV."""
     d = mapdata()
     if not d:
         return None
-    stops = {int(k): v for k, v in d["stops"].items()}
-    by_n = {s["n"]: s for s, _, _ in tracks}
+    coords = {int(k): v for k, v in d["stops"].items()}
+    rows = []
+    for i, (stop, fn, dur) in enumerate(tracks):
+        n = stop["n"]
+        if not n or n not in coords:
+            continue
+        lat, lon = coords[n]
+        rows.append({
+            "n": n, "lat": lat, "lon": lon, "title": stop["title"],
+            "where": stop["where"], "kind": stop["kind"],
+            "cat": KIND[stop["kind"]][0], "track": i + 1, "dur": dur,
+            "page": url(stop_path(stop)), "audio": url("audio/" + fn),
+            "admission": "charges at the door" if n in PAID else "free",
+        })
+    return sorted(rows, key=lambda r: r["n"])
+
+
+def gpx(tracks):
+    """The stops as waypoints and a route, for a GPS or a walking app.
+
+    Element order inside wpt and rte is the order the GPX 1.1 schema demands
+    rather than the order that reads best; a validating importer rejects the
+    file otherwise."""
+    rows = route_stops(tracks)
+    if not rows:
+        return None
     o = ['<?xml version="1.0" encoding="UTF-8"?>',
          '<gpx version="1.1" creator="hampstead-heath audio guide" '
          'xmlns="http://www.topografix.com/GPX/1/1">',
-         "  <metadata><name>Hampstead Heath and its village</name>"
-         "<desc>%d stops, in walking order.</desc></metadata>" % STOP_COUNT]
-    for n in sorted(stops):
-        lat, lon = stops[n]
-        o.append('  <wpt lat="%.5f" lon="%.5f"><name>%d. %s</name><desc>%s</desc></wpt>'
-                 % (lat, lon, n, esc(by_n[n]["title"]), esc(by_n[n]["where"])))
-    o.append("  <rte><name>Hampstead Heath, %d stops</name>" % STOP_COUNT)
-    for n in sorted(stops):
-        lat, lon = stops[n]
-        o.append('    <rtept lat="%.5f" lon="%.5f"><name>%d</name></rtept>' % (lat, lon, n))
+         "  <metadata><name>%s</name><desc>%s</desc>"
+         '<link href="%s"><text>%s</text></link><time>%sT00:00:00Z</time>'
+         "</metadata>" % (esc(ROUTE_NAME), esc(ROUTE_DESC), url(),
+                          esc(SITE_NAME), UPDATED)]
+    for r in rows:
+        o.append('  <wpt lat="%.5f" lon="%.5f"><name>%d. %s</name><desc>%s</desc>'
+                 '<link href="%s"><text>Listen to stop %d</text></link>'
+                 "<type>%s</type></wpt>"
+                 % (r["lat"], r["lon"], r["n"], esc(r["title"]), esc(r["where"]),
+                    esc(r["page"]), r["n"], esc(r["cat"])))
+    o.append("  <rte><name>Hampstead Heath, %d stops</name><desc>%s</desc>"
+             '<link href="%s"><text>%s</text></link>'
+             % (STOP_COUNT, esc(ROUTE_DESC), url(), esc(SITE_NAME)))
+    for r in rows:
+        o.append('    <rtept lat="%.5f" lon="%.5f"><name>%d. %s</name>'
+                 "<desc>%s</desc></rtept>"
+                 % (r["lat"], r["lon"], r["n"], esc(r["title"]), esc(r["where"])))
     o += ["  </rte>", "</gpx>", ""]
     return "\n".join(o)
+
+
+# Google's own icon set, one paddle per kind, in the same four colours the
+# drawn map uses. Named rather than tinted: KML tints multiply against the
+# default yellow pin, which turns the blue of the water black.
+KML_PIN = {"village": "grn", "high": "orange", "water": "blu", "house": "red"}
+# aabbggrr, not rrggbb, and the alpha comes first. This is the heath green of
+# the map, opaque, for the line between the stops.
+KML_LINE = "ff3a6b18"
+
+
+def kml(tracks):
+    """The same stops for Google Earth, Google My Maps and desktop GIS.
+
+    A style per kind, so the loop reads as the map does; ExtendedData as well
+    as a description, because My Maps turns those fields into the columns of
+    its table and a balloon of prose into one unsearchable blob."""
+    rows = route_stops(tracks)
+    if not rows:
+        return None
+
+    def cdata(text):
+        # a ]]> inside the payload would close the section early. Nothing in
+        # STOPS contains one, which is exactly why it is worth the one line.
+        return "<![CDATA[%s]]>" % text.replace("]]>", "]]]]><![CDATA[>")
+
+    o = ['<?xml version="1.0" encoding="UTF-8"?>',
+         '<kml xmlns="http://www.opengis.net/kml/2.2">',
+         "  <Document>",
+         # name, open, description, then the styles: the order KML 2.2 demands
+         # of every Feature, not the order that reads best. Google Earth is
+         # forgiving about it and half the desktop GIS world is not.
+         "    <name>%s</name>" % esc(ROUTE_NAME),
+         "    <open>1</open>",
+         "    <description>%s</description>"
+         % cdata('%s <a href="%s">%s</a>' % (ROUTE_DESC, url(), SITE_NAME))]
+    for kind, pin in KML_PIN.items():
+        o += ['    <Style id="%s">' % kind,
+              "      <IconStyle><scale>1.1</scale><Icon><href>"
+              "https://maps.google.com/mapfiles/kml/paddle/%s-blank.png"
+              "</href></Icon>"
+              '<hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/></IconStyle>'
+              % pin,
+              "      <ListStyle><ItemIcon><href>"
+              "https://maps.google.com/mapfiles/kml/paddle/%s-blank-lv.png"
+              "</href></ItemIcon></ListStyle>" % pin,
+              "    </Style>"]
+    o += ['    <Style id="route">',
+          "      <LineStyle><color>%s</color><width>4</width></LineStyle>" % KML_LINE,
+          "    </Style>",
+          "    <Folder>",
+          "      <name>The stops</name>",
+          "      <open>1</open>"]
+    for r in rows:
+        balloon = ("%s &#183; %s &#183; track %02d, %s &#183; %s<br/>"
+                   '<a href="%s">Listen to stop %d</a>'
+                   % (esc(r["where"]), esc(r["cat"]), r["track"], clock(r["dur"]),
+                      esc(r["admission"]), esc(r["page"]), r["n"]))
+        o += ["      <Placemark>",
+              "        <name>%d. %s</name>" % (r["n"], esc(r["title"])),
+              "        <description>%s</description>" % cdata(balloon),
+              "        <styleUrl>#%s</styleUrl>" % r["kind"],
+              "        <ExtendedData>"]
+        for field, value in (("stop", "%d" % r["n"]), ("where", r["where"]),
+                             ("category", r["cat"]), ("track", "%02d" % r["track"]),
+                             ("duration", clock(r["dur"])),
+                             ("admission", r["admission"]), ("page", r["page"])):
+            o.append('          <Data name="%s"><value>%s</value></Data>'
+                     % (field, esc(value)))
+        o += ["        </ExtendedData>",
+              "        <Point><coordinates>%.5f,%.5f,0</coordinates></Point>"
+              % (r["lon"], r["lat"]),
+              "      </Placemark>"]
+    o += ["    </Folder>",
+          "    <Folder>",
+          "      <name>The loop</name>",
+          "      <Placemark>",
+          "        <name>Hampstead Heath, %d stops</name>" % STOP_COUNT,
+          "        <description>%s</description>"
+          % cdata("The order of the stops, not the path you walk."),
+          "        <styleUrl>#route</styleUrl>",
+          "        <LineString><tessellate>1</tessellate><coordinates>"]
+    for r in rows:
+        o.append("          %.5f,%.5f,0" % (r["lon"], r["lat"]))
+    o += ["        </coordinates></LineString>",
+          "      </Placemark>",
+          "    </Folder>",
+          "  </Document>",
+          "</kml>", ""]
+    return "\n".join(o)
+
+
+def csv(tracks):
+    """The same stops as a table: latitude and longitude in named columns, so
+    Google My Maps and every spreadsheet will place them without being told
+    which column is which. Written by the csv module rather than by joining
+    on commas, because one of the stops stands at 'Inverforth Close, North
+    End Way'."""
+    rows = route_stops(tracks)
+    if not rows:
+        return None
+    buf = io.StringIO()
+    # LF, not the CRLF of RFC 4180: every reader that matters takes either,
+    # and everything else generated here is LF.
+    out = _csv.writer(buf, lineterminator="\n")
+    out.writerow(["stop", "title", "category", "where", "latitude", "longitude",
+                  "track", "duration", "seconds", "admission", "page", "audio"])
+    for r in rows:
+        out.writerow([r["n"], r["title"], r["cat"], r["where"],
+                      "%.5f" % r["lat"], "%.5f" % r["lon"],
+                      "%02d" % r["track"], clock(r["dur"]), int(round(r["dur"])),
+                      r["admission"], r["page"], r["audio"]])
+    return buf.getvalue()
 
 
 def pictures():
@@ -2888,10 +3068,17 @@ def graph_index(tracks, pics, total):
                   "numberOfEpisodes": len(tracks), "inLanguage": "en-GB",
                   "about": {"@id": ORIGIN + "/#heath"},
                   "image": url("cover.jpg")})
-    nodes.append({"@type": "DataDownload", "@id": ORIGIN + "/#gpx",
-                  "name": "The route as GPX", "encodingFormat": "application/gpx+xml",
-                  "contentUrl": url("hampstead-heath-walk.gpx"),
-                  "about": {"@id": ORIGIN + "/#trip"}})
+    # the route, one node per format. Three DataDownloads of the same walk
+    # rather than one, because a machine looking for a KML should be able to
+    # find that it exists without first knowing that a GPX does.
+    for ext, label, mime, note in ROUTE_FORMATS:
+        nodes.append({"@type": "DataDownload", "@id": ORIGIN + "/#" + ext,
+                      "name": "The route as %s" % label,
+                      "description": "The %d stops in walking order, %s."
+                                     % (STOP_COUNT, note),
+                      "encodingFormat": mime,
+                      "contentUrl": url("%s.%s" % (ROUTE, ext)),
+                      "about": {"@id": ORIGIN + "/#trip"}})
     return nodes
 
 
@@ -2967,8 +3154,8 @@ def render(tracks):
     # and the og: title keep the name.
     w(head("Hampstead Heath Audio Guide – a free %d-stop self-guided walk" % STOP_COUNT,
            "A free walking audio guide to Hampstead Heath and Hampstead village: %d "
-           "tracks, %d minutes, %d stops, with the full transcript, a drawn map, a GPX "
-           "route and a photograph for every stop."
+           "tracks, %d minutes, %d stops, with the full transcript, a drawn map, a "
+           "photograph for every stop, and the route as GPX, KML or CSV."
            % (len(tracks), round(total / 60), STOP_COUNT),
            "", graph_index(tracks, pics, total),
            og_title=SITE_NAME,
@@ -3023,7 +3210,12 @@ def render(tracks):
       '<span class="ptime">%s</span></div>'
       % (esc(tracks[0][0]["title"]), clock(tracks[0][2])))
     w('        <ul class="acts">')
-    w('          <li><a href="hampstead-heath-walk.gpx" download>The route as GPX</a></li>')
+    # three links rather than three list items: the formats are one thing to
+    # take away, and a row of five actions reads as no action at all
+    w("          <li>The route: %s</li>"
+      % " / ".join('<a href="%s.%s" download title="%s">%s</a>'
+                   % (ROUTE, ext, esc(note), label)
+                   for ext, label, _, note in ROUTE_FORMATS))
     w('          <li><a href="hampstead-heath-full-walk.m4a" download>The whole walk, one '
       "file</a></li>")
     w('          <li><a href="stops/">A page per stop</a></li>')
@@ -3114,12 +3306,19 @@ def render(tracks):
     w('    <div><p class="lab">Changing the voice</p><p>Any installed system voice works. Swap the '
       "name and the pace at the top of the generator and re-run it; the whole set rebuilds in "
       "about a minute.</p></div>")
+    # the colophon is a three-up grid, so this cell stays one cell: the route
+    # formats are named here and linked properly, and the place they are meant
+    # to be taken from is the masthead
     w('    <div><p class="lab">Other shapes</p><p>The same walk as <a href="feed.xml">a podcast '
       'feed</a>, for Apple, Spotify or Overcast; as <a href="guide.md">plain Markdown</a>, for '
-      'anything that would rather read than render; as <a href="hampstead-heath-walk.gpx">GPX'
-      '</a>, for a map application; and as <a href="stops/">one page per stop</a>. '
-      '<a href="https://github.com/mishablank/hampstead-heath">The source</a> is the '
-      "narration.</p></div>")
+      "anything that would rather read than render; as %s, for a walking app, Google Earth or "
+      'a spreadsheet; and as <a href="stops/">one page per stop</a>. None of the route files '
+      "is the path you walk &#8211; they join the stops in straight lines, and nothing on the "
+      'Heath is straight. <a href="https://github.com/mishablank/hampstead-heath">The source'
+      "</a> is the narration.</p></div>"
+      % " / ".join('<a href="%s.%s" download title="%s">%s</a>'
+                   % (ROUTE, ext, esc(note), label)
+                   for ext, label, _, note in ROUTE_FORMATS))
     w("  </div>")
     w("</section>\n")
 
@@ -3227,9 +3426,13 @@ def stop_page(i, stop, fn, dur, tracks, pics, coords):
     w('      <p class="lab">Track %02d &#183; %s &#183; %s</p>' % (i + 1, esc(label), clock(dur)))
     w('      <audio controls preload="none" src="%saudio/%s"></audio>' % (up, fn))
     w('      <p class="lab"><a href="%s%s" download>The whole walk as one file</a> &#183; '
-      '<a href="%shampstead-heath-walk.gpx" download>the route as GPX</a> &#183; '
+      "the route as %s &#183; "
       '<a href="%sfeed.xml">the podcast feed</a></p>'
-      % (up, os.path.basename(FULL), up, up))
+      % (up, os.path.basename(FULL),
+         " / ".join('<a href="%s%s.%s" download title="%s">%s</a>'
+                    % (up, ROUTE, ext, esc(note), label)
+                    for ext, label, _, note in ROUTE_FORMATS),
+         up))
     w("    </div>")
 
     fig = figure(i, stop, pics)
@@ -3474,8 +3677,8 @@ def llms_txt(tracks):
     o = ["# %s" % SITE_NAME, "",
          "> A free self-guided walking audio guide to Hampstead Heath and Hampstead "
          "village, London NW3, in %d stops. %d tracks, %d minutes of narration, the full "
-         "transcript on the page, one photograph per stop, and a GPX route. A single "
-         "anticlockwise loop from Hampstead Underground station."
+         "transcript on the page, one photograph per stop, and the route to download as "
+         "GPX, KML or CSV. A single anticlockwise loop from Hampstead Underground station."
          % (STOP_COUNT, len(tracks), round(total / 60)), "",
          "Nineteen of the %d stops are free. Three more are free unless you get into the "
          "water. Two charge at the door. Opening hours were checked in August 2026. "
@@ -3495,9 +3698,11 @@ def llms_txt(tracks):
                  % (stop["n"], stop["title"], url(stop_path(stop)), stop["where"],
                     KIND[stop["kind"]][0].lower(), clock(dur), paid))
     o += ["", "## Files", "",
-          "- [The whole walk as one audio file](%s)" % url(os.path.basename(FULL)),
-          "- [The route as GPX](%s)" % url("hampstead-heath-walk.gpx"),
-          "- [Podcast feed](%s)" % url("feed.xml"),
+          "- [The whole walk as one audio file](%s)" % url(os.path.basename(FULL))]
+    o += ["- [The route as %s](%s): the %d stops in walking order, %s."
+          % (label, url("%s.%s" % (ROUTE, ext)), STOP_COUNT, note)
+          for ext, label, _, note in ROUTE_FORMATS]
+    o += ["- [Podcast feed](%s)" % url("feed.xml"),
           "- [Source, including the narration](https://github.com/mishablank/hampstead-heath)",
           ""]
     return "\n".join(o)
@@ -3572,10 +3777,18 @@ def build_page():
     open(os.path.join(SITE, "index.html"), "w").write(render(tracks))
     print("  index.html: %d tracks, %s" % (len(tracks), clock(sum(t[2] for t in tracks))))
 
-    route = gpx(tracks)
-    if route:
-        open(os.path.join(SITE, "hampstead-heath-walk.gpx"), "w").write(route)
-        print("  hampstead-heath-walk.gpx: %d waypoints" % STOP_COUNT)
+    # one loop, so a format cannot be generated and then not written, or
+    # written and then not offered: ROUTE_FORMATS is also what the page, the
+    # structured data and llms.txt list.
+    writers = {"gpx": gpx, "kml": kml, "csv": csv}
+    written = []
+    for ext, _, _, _ in ROUTE_FORMATS:
+        route = writers[ext](tracks)
+        if route:
+            open(os.path.join(SITE, "%s.%s" % (ROUTE, ext)), "w").write(route)
+            written.append(ext)
+    if written:
+        print("  %s.{%s}: %d stops each" % (ROUTE, ",".join(written), STOP_COUNT))
 
     pics = pictures()
     build_discovery(tracks, pics)

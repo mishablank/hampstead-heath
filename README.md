@@ -18,7 +18,9 @@ by a list of exclusions.
 - `public/stops/` – one page per stop, 24 of them, each with its own recording and transcript
 - `public/audio/` – the 27 tracks
 - `public/images/` – one photograph per track, plus `credits.json`
-- `public/hampstead-heath-walk.gpx` – the stops for a real navigation app
+- `public/hampstead-heath-walk.gpx`, `.kml`, `.csv` – the stops and their order,
+  in the three shapes something else will open: a walking app, Google Earth, a
+  spreadsheet
 - `public/hampstead-heath-full-walk.m4a` – all of it as one continuous file, for offline
 - `public/cover.jpg` – the artwork, also embedded in every track
 - `public/og.jpg` – the sharing card, and the favicon set beside it
@@ -131,13 +133,36 @@ signal, and a slippy map is the first thing to fail there. Drag or pinch to
 move it, tap a number to play that stop, and "Where am I" uses the browser's
 own geolocation – nothing leaves the phone.
 
-The dotted line is the order of the stops, not the path you walk. If you want
-turn-by-turn, take the GPX.
+The dotted line is the order of the stops, not the path you walk.
 
 Stop coordinates live in `STOPS_LL` in `fetch_map.py`. Hand-typed coordinates
 were out by up to 300 metres, so check any you change against the drawn roads
 and water rather than against memory. Map data © OpenStreetMap contributors,
 ODbL.
+
+## The route, to take away
+
+The same twenty-four stops leave the site in three notations, written by
+`build.py` from `STOPS` and `map.json` at the same moment as the page:
+
+- `hampstead-heath-walk.gpx` – waypoints and an `<rte>`, each waypoint linking
+  back to that stop's page. For Garmin, OsmAnd, Gaia, Komoot, Organic Maps.
+- `hampstead-heath-walk.kml` – the same stops with a style per kind, in the
+  four colours the drawn map uses, plus `ExtendedData` so Google My Maps builds
+  a table rather than one unsearchable balloon of prose.
+- `hampstead-heath-walk.csv` – one row per stop: coordinate, category, track,
+  duration, admission, and the URLs of its page and its audio. `latitude` and
+  `longitude` are named as such because that is what My Maps looks for.
+
+`ROUTE_FORMATS` at the top of `build.py` is the list all three come from, and
+it is also what the page, the JSON-LD `DataDownload` nodes and `llms.txt`
+enumerate: a format cannot be written and then not offered, or offered and not
+written. To add a fourth, add a row there and a generator beside `gpx()`.
+
+None of the three is the path you walk. They join the stops in straight lines,
+same as the dotted line on the map, because the walking directions are prose in
+the narration and were never a polyline. Turn-by-turn would mean tracing the
+Heath's own path network, which is a different and much larger job.
 
 ## Deploying
 

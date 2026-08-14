@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Hampstead Heath and its village</name>
+    <open>1</open>
+    <description><![CDATA[A self-guided walking audio guide in 24 stops: one anticlockwise loop from Hampstead Underground station, over the top of the Heath to Kenwood and back down past the swimming ponds. The line joins the stops in walking order and is not the path you walk. <a href="https://hampstead-heath.blankm.workers.dev/">Hampstead Heath, read aloud</a>]]></description>
+    <Style id="village">
+      <IconStyle><scale>1.1</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/grn-blank.png</href></Icon><hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/></IconStyle>
+      <ListStyle><ItemIcon><href>https://maps.google.com/mapfiles/kml/paddle/grn-blank-lv.png</href></ItemIcon></ListStyle>
+    </Style>
+    <Style id="high">
+      <IconStyle><scale>1.1</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/orange-blank.png</href></Icon><hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/></IconStyle>
+      <ListStyle><ItemIcon><href>https://maps.google.com/mapfiles/kml/paddle/orange-blank-lv.png</href></ItemIcon></ListStyle>
+    </Style>
+    <Style id="water">
+      <IconStyle><scale>1.1</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/blu-blank.png</href></Icon><hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/></IconStyle>
+      <ListStyle><ItemIcon><href>https://maps.google.com/mapfiles/kml/paddle/blu-blank-lv.png</href></ItemIcon></ListStyle>
+    </Style>
+    <Style id="house">
+      <IconStyle><scale>1.1</scale><Icon><href>https://maps.google.com/mapfiles/kml/paddle/red-blank.png</href></Icon><hotSpot x="32" y="1" xunits="pixels" yunits="pixels"/></IconStyle>
+      <ListStyle><ItemIcon><href>https://maps.google.com/mapfiles/kml/paddle/red-blank-lv.png</href></ItemIcon></ListStyle>
+    </Style>
+    <Style id="route">
+      <LineStyle><color>ff3a6b18</color><width>4</width></LineStyle>
+    </Style>
+    <Folder>
+      <name>The stops</name>
+      <open>1</open>
+      <Placemark>
+        <name>1. Hampstead Underground Station</name>
+        <description><![CDATA[Heath Street &#183; Village &#183; track 02, 1:36 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/hampstead-underground-station/">Listen to stop 1</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>1</value></Data>
+          <Data name="where"><value>Heath Street</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>02</value></Data>
+          <Data name="duration"><value>1:36</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/hampstead-underground-station/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17812,51.55654,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>2. Church Row and Saint John-at-Hampstead</name>
+        <description><![CDATA[Church Row &#183; Village &#183; track 03, 2:33 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/church-row-and-saint-john-at-hampstead/">Listen to stop 2</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>2</value></Data>
+          <Data name="where"><value>Church Row</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>03</value></Data>
+          <Data name="duration"><value>2:33</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/church-row-and-saint-john-at-hampstead/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18108,51.55618,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>3. Saint Mary's, Holly Walk</name>
+        <description><![CDATA[Holly Place &#183; Village &#183; track 04, 2:00 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/saint-mary-s-holly-walk/">Listen to stop 3</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>3</value></Data>
+          <Data name="where"><value>Holly Place</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>04</value></Data>
+          <Data name="duration"><value>2:00</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/saint-mary-s-holly-walk/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18029,51.55690,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>4. Holly Bush Hill</name>
+        <description><![CDATA[Holly Bush Hill &#183; House &amp; museum &#183; track 05, 2:19 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/holly-bush-hill/">Listen to stop 4</a>]]></description>
+        <styleUrl>#house</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>4</value></Data>
+          <Data name="where"><value>Holly Bush Hill</value></Data>
+          <Data name="category"><value>House &amp; museum</value></Data>
+          <Data name="track"><value>05</value></Data>
+          <Data name="duration"><value>2:19</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/holly-bush-hill/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17946,51.55800,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>5. Fenton House</name>
+        <description><![CDATA[Hampstead Grove &#183; House &amp; museum &#183; track 06, 1:49 &#183; charges at the door<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/fenton-house/">Listen to stop 5</a>]]></description>
+        <styleUrl>#house</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>5</value></Data>
+          <Data name="where"><value>Hampstead Grove</value></Data>
+          <Data name="category"><value>House &amp; museum</value></Data>
+          <Data name="track"><value>06</value></Data>
+          <Data name="duration"><value>1:49</value></Data>
+          <Data name="admission"><value>charges at the door</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/fenton-house/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17970,51.55888,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>6. Admiral's House</name>
+        <description><![CDATA[Admiral's Walk &#183; House &amp; museum &#183; track 07, 2:47 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/admiral-s-house/">Listen to stop 6</a>]]></description>
+        <styleUrl>#house</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>6</value></Data>
+          <Data name="where"><value>Admiral's Walk</value></Data>
+          <Data name="category"><value>House &amp; museum</value></Data>
+          <Data name="track"><value>07</value></Data>
+          <Data name="duration"><value>2:47</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/admiral-s-house/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18001,51.55976,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>7. Hampstead Observatory</name>
+        <description><![CDATA[Lower Terrace &#183; High ground &#183; track 08, 1:31 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/hampstead-observatory/">Listen to stop 7</a>]]></description>
+        <styleUrl>#high</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>7</value></Data>
+          <Data name="where"><value>Lower Terrace</value></Data>
+          <Data name="category"><value>High ground</value></Data>
+          <Data name="track"><value>08</value></Data>
+          <Data name="duration"><value>1:31</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/hampstead-observatory/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18004,51.56057,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>8. Whitestone Pond</name>
+        <description><![CDATA[the top of Heath Street &#183; High ground &#183; track 09, 2:11 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/whitestone-pond/">Listen to stop 8</a>]]></description>
+        <styleUrl>#high</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>8</value></Data>
+          <Data name="where"><value>the top of Heath Street</value></Data>
+          <Data name="category"><value>High ground</value></Data>
+          <Data name="track"><value>09</value></Data>
+          <Data name="duration"><value>2:11</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/whitestone-pond/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17920,51.56056,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>9. The Hill Garden and Pergola</name>
+        <description><![CDATA[Inverforth Close, North End Way &#183; High ground &#183; track 10, 2:04 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/">Listen to stop 9</a>]]></description>
+        <styleUrl>#high</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>9</value></Data>
+          <Data name="where"><value>Inverforth Close, North End Way</value></Data>
+          <Data name="category"><value>High ground</value></Data>
+          <Data name="track"><value>10</value></Data>
+          <Data name="duration"><value>2:04</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18397,51.56560,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>10. Golders Hill Park</name>
+        <description><![CDATA[North End Way &#183; High ground &#183; track 11, 1:42 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/golders-hill-park/">Listen to stop 10</a>]]></description>
+        <styleUrl>#high</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>10</value></Data>
+          <Data name="where"><value>North End Way</value></Data>
+          <Data name="category"><value>High ground</value></Data>
+          <Data name="track"><value>11</value></Data>
+          <Data name="duration"><value>1:42</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/golders-hill-park/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18938,51.56682,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>11. Jack Straw's Castle</name>
+        <description><![CDATA[North End Way &#183; Village &#183; track 12, 2:30 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/jack-straw-s-castle/">Listen to stop 11</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>11</value></Data>
+          <Data name="where"><value>North End Way</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>12</value></Data>
+          <Data name="duration"><value>2:30</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/jack-straw-s-castle/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.18010,51.56145,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>12. The Vale of Health</name>
+        <description><![CDATA[off East Heath Road &#183; Village &#183; track 13, 2:07 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-vale-of-health/">Listen to stop 12</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>12</value></Data>
+          <Data name="where"><value>off East Heath Road</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>13</value></Data>
+          <Data name="duration"><value>2:07</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-vale-of-health/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17628,51.56294,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>13. The Spaniards Inn</name>
+        <description><![CDATA[Spaniards Road &#183; Village &#183; track 14, 1:50 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-spaniards-inn/">Listen to stop 13</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>13</value></Data>
+          <Data name="where"><value>Spaniards Road</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>14</value></Data>
+          <Data name="duration"><value>1:50</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-spaniards-inn/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17372,51.57023,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>14. Kenwood House</name>
+        <description><![CDATA[Hampstead Lane &#183; House &amp; museum &#183; track 15, 2:11 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/kenwood-house/">Listen to stop 14</a>]]></description>
+        <styleUrl>#house</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>14</value></Data>
+          <Data name="where"><value>Hampstead Lane</value></Data>
+          <Data name="category"><value>House &amp; museum</value></Data>
+          <Data name="track"><value>15</value></Data>
+          <Data name="duration"><value>2:11</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/kenwood-house/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.16734,51.57155,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>15. Dido Elizabeth Belle</name>
+        <description><![CDATA[inside Kenwood &#183; House &amp; museum &#183; track 16, 2:27 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/dido-elizabeth-belle/">Listen to stop 15</a>]]></description>
+        <styleUrl>#house</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>15</value></Data>
+          <Data name="where"><value>inside Kenwood</value></Data>
+          <Data name="category"><value>House &amp; museum</value></Data>
+          <Data name="track"><value>16</value></Data>
+          <Data name="duration"><value>2:27</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/dido-elizabeth-belle/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.16734,51.57155,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>16. The Kenwood Ladies' Pond</name>
+        <description><![CDATA[off Millfield Lane &#183; Water &#183; track 17, 1:53 &#183; charges at the door<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-kenwood-ladies-pond/">Listen to stop 16</a>]]></description>
+        <styleUrl>#water</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>16</value></Data>
+          <Data name="where"><value>off Millfield Lane</value></Data>
+          <Data name="category"><value>Water</value></Data>
+          <Data name="track"><value>17</value></Data>
+          <Data name="duration"><value>1:53</value></Data>
+          <Data name="admission"><value>charges at the door</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-kenwood-ladies-pond/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.16042,51.56699,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>17. The Highgate Men's Pond</name>
+        <description><![CDATA[Millfield Lane &#183; Water &#183; track 18, 1:37 &#183; charges at the door<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-highgate-men-s-pond/">Listen to stop 17</a>]]></description>
+        <styleUrl>#water</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>17</value></Data>
+          <Data name="where"><value>Millfield Lane</value></Data>
+          <Data name="category"><value>Water</value></Data>
+          <Data name="track"><value>18</value></Data>
+          <Data name="duration"><value>1:37</value></Data>
+          <Data name="admission"><value>charges at the door</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-highgate-men-s-pond/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.15905,51.56475,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>18. The Tumulus</name>
+        <description><![CDATA[south of the Highgate Ponds &#183; High ground &#183; track 19, 1:51 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-tumulus/">Listen to stop 18</a>]]></description>
+        <styleUrl>#high</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>18</value></Data>
+          <Data name="where"><value>south of the Highgate Ponds</value></Data>
+          <Data name="category"><value>High ground</value></Data>
+          <Data name="track"><value>19</value></Data>
+          <Data name="duration"><value>1:51</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-tumulus/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.15760,51.56060,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>19. Parliament Hill</name>
+        <description><![CDATA[Parliament Hill Fields &#183; High ground &#183; track 20, 1:48 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/">Listen to stop 19</a>]]></description>
+        <styleUrl>#high</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>19</value></Data>
+          <Data name="where"><value>Parliament Hill Fields</value></Data>
+          <Data name="category"><value>High ground</value></Data>
+          <Data name="track"><value>20</value></Data>
+          <Data name="duration"><value>1:48</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/parliament-hill/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.15450,51.55940,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>20. Parliament Hill Lido</name>
+        <description><![CDATA[Gordon House Road &#183; Water &#183; track 21, 1:11 &#183; charges at the door<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/parliament-hill-lido/">Listen to stop 20</a>]]></description>
+        <styleUrl>#water</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>20</value></Data>
+          <Data name="where"><value>Gordon House Road</value></Data>
+          <Data name="category"><value>Water</value></Data>
+          <Data name="track"><value>21</value></Data>
+          <Data name="duration"><value>1:11</value></Data>
+          <Data name="admission"><value>charges at the door</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/parliament-hill-lido/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.15131,51.55644,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>21. The Hampstead Ponds and the River Fleet</name>
+        <description><![CDATA[the Hampstead chain &#183; Water &#183; track 22, 2:42 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-hampstead-ponds-and-the-river-fleet/">Listen to stop 21</a>]]></description>
+        <styleUrl>#water</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>21</value></Data>
+          <Data name="where"><value>the Hampstead chain</value></Data>
+          <Data name="category"><value>Water</value></Data>
+          <Data name="track"><value>22</value></Data>
+          <Data name="duration"><value>2:42</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-hampstead-ponds-and-the-river-fleet/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.16554,51.55758,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>22. Keats House</name>
+        <description><![CDATA[Keats Grove &#183; House &amp; museum &#183; track 23, 2:16 &#183; charges at the door<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/keats-house/">Listen to stop 22</a>]]></description>
+        <styleUrl>#house</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>22</value></Data>
+          <Data name="where"><value>Keats Grove</value></Data>
+          <Data name="category"><value>House &amp; museum</value></Data>
+          <Data name="track"><value>23</value></Data>
+          <Data name="duration"><value>2:16</value></Data>
+          <Data name="admission"><value>charges at the door</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/keats-house/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.16794,51.55552,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>23. The Cannon Lane Lock-Up</name>
+        <description><![CDATA[Cannon Lane &#183; Village &#183; track 24, 2:05 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/the-cannon-lane-lock-up/">Listen to stop 23</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>23</value></Data>
+          <Data name="where"><value>Cannon Lane</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>24</value></Data>
+          <Data name="duration"><value>2:05</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/the-cannon-lane-lock-up/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17455,51.56018,0</coordinates></Point>
+      </Placemark>
+      <Placemark>
+        <name>24. Well Walk and Burgh House</name>
+        <description><![CDATA[Well Walk and New End Square &#183; Village &#183; track 25, 2:11 &#183; free<br/><a href="https://hampstead-heath.blankm.workers.dev/stops/well-walk-and-burgh-house/">Listen to stop 24</a>]]></description>
+        <styleUrl>#village</styleUrl>
+        <ExtendedData>
+          <Data name="stop"><value>24</value></Data>
+          <Data name="where"><value>Well Walk and New End Square</value></Data>
+          <Data name="category"><value>Village</value></Data>
+          <Data name="track"><value>25</value></Data>
+          <Data name="duration"><value>2:11</value></Data>
+          <Data name="admission"><value>free</value></Data>
+          <Data name="page"><value>https://hampstead-heath.blankm.workers.dev/stops/well-walk-and-burgh-house/</value></Data>
+        </ExtendedData>
+        <Point><coordinates>-0.17504,51.55819,0</coordinates></Point>
+      </Placemark>
+    </Folder>
+    <Folder>
+      <name>The loop</name>
+      <Placemark>
+        <name>Hampstead Heath, 24 stops</name>
+        <description><![CDATA[The order of the stops, not the path you walk.]]></description>
+        <styleUrl>#route</styleUrl>
+        <LineString><tessellate>1</tessellate><coordinates>
+          -0.17812,51.55654,0
+          -0.18108,51.55618,0
+          -0.18029,51.55690,0
+          -0.17946,51.55800,0
+          -0.17970,51.55888,0
+          -0.18001,51.55976,0
+          -0.18004,51.56057,0
+          -0.17920,51.56056,0
+          -0.18397,51.56560,0
+          -0.18938,51.56682,0
+          -0.18010,51.56145,0
+          -0.17628,51.56294,0
+          -0.17372,51.57023,0
+          -0.16734,51.57155,0
+          -0.16734,51.57155,0
+          -0.16042,51.56699,0
+          -0.15905,51.56475,0
+          -0.15760,51.56060,0
+          -0.15450,51.55940,0
+          -0.15131,51.55644,0
+          -0.16554,51.55758,0
+          -0.16794,51.55552,0
+          -0.17455,51.56018,0
+          -0.17504,51.55819,0
+        </coordinates></LineString>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>
