@@ -351,6 +351,17 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .walk .lab{color:var(--heath)}
 .walk p{margin:0; font-size:.94rem; color:var(--ink-2); max-width:none}
 
+/* the only block here with a date on it, and so the only one that can vanish
+   of its own accord. Brick rather than heath, because it is not the walk */
+.evt{
+  margin:20px 0 0; padding:12px 0 13px 16px; border-left:2px solid var(--brick);
+  display:grid; gap:6px; max-width:62ch;
+}
+.evt .lab{color:var(--brick)}
+.evt p{margin:0; font-size:.94rem; color:var(--ink-2); max-width:none}
+.evt .evt-when{color:var(--ink)}
+.evt a{color:inherit; text-decoration-color:var(--brick)}
+
 /* ---- colophon ------------------------------------------------------ */
 .colo{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px;
   background:var(--rule-soft); border:1px solid var(--rule-soft); margin-top:22px}
@@ -379,7 +390,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   body{font-size:18px; line-height:1.62}
   .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig,.acts{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
-  .walk p{font-size:1.02rem}
+  .walk p,.evt p{font-size:1.02rem}
   .wrap{padding-bottom:72px}
   /* titles matter more than a tidy single line on a narrow screen */
   .row{padding:11px 4px 11px 0; align-items:start}
@@ -393,12 +404,12 @@ footer p{margin:0 0 8px; max-width:70ch}
   .trk{display:block; padding:26px 0 28px}
   .tmark{float:left; margin:1px 12px 2px 0; padding-top:0}
   /* the eyebrow and the title ride beside the badge; everything after it clears */
-  .trk .play,.trk .shot,.trk .walk,.trk .sa{clear:left}
+  .trk .play,.trk .shot,.trk .walk,.trk .evt,.trk .sa{clear:left}
   /* on a stop page the badge has no heading to sit beside and repeats what the
      masthead just said, so it buys nothing and costs a line */
   .trk.solo .tmark{display:none}
   .tn{width:30px; height:30px; font-size:.95rem}
-  .tbody p,.shot,.walk,.play{max-width:none}
+  .tbody p,.shot,.walk,.evt,.play{max-width:none}
   .colo div{padding:15px 16px 17px}
   .bar{padding:8px 12px; padding-bottom:calc(8px + env(safe-area-inset-bottom))}
   .bseek::-webkit-slider-thumb{width:16px; height:16px}
@@ -615,6 +626,14 @@ footer p{margin:0 0 8px; max-width:70ch}
     "@id": "https://hampstead-heath.blankm.workers.dev/#hampstead"
    },
    "description": "Inverforth Close, North End Way. Stop 9 of 24 on a walking audio guide to Hampstead Heath and its village.",
+   "event": [
+    {
+     "@id": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/#event-2026-09-12"
+    },
+    {
+     "@id": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/#event-2026-09-19"
+    }
+   ],
    "geo": {
     "@type": "GeoCoordinates",
     "latitude": 51.5656,
@@ -690,6 +709,60 @@ footer p{margin:0 0 8px; max-width:70ch}
    "representativeOfPage": true,
    "url": "https://hampstead-heath.blankm.workers.dev/images/09-the-hill-garden-and-pergola.jpg",
    "width": 1400
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/#event-2026-09-12",
+   "@type": "Event",
+   "description": "A guided hour on the Pergola and Inverforth House, starting at the top of the hill and finishing on the colonnade itself. It is led by Tom, a long-standing Hampstead resident who has been a volunteer at Sir John Soane's Museum since 2016. Meet at the Whitestone Pond flagpole, which is stop 8 of this walk.",
+   "endDate": "2026-09-12T12:30:00+01:00",
+   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+   "eventStatus": "https://schema.org/EventScheduled",
+   "isAccessibleForFree": true,
+   "location": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/#place"
+   },
+   "name": "Pergola Walking Tour",
+   "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStock",
+    "price": "0",
+    "priceCurrency": "GBP",
+    "url": "https://programme.openhouse.org.uk/listings/2106"
+   },
+   "organizer": {
+    "@type": "Organization",
+    "name": "Open House Festival",
+    "url": "https://programme.openhouse.org.uk/"
+   },
+   "startDate": "2026-09-12T11:00:00+01:00",
+   "url": "https://programme.openhouse.org.uk/listings/2106"
+  },
+  {
+   "@id": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/#event-2026-09-19",
+   "@type": "Event",
+   "description": "A guided hour on the Pergola and Inverforth House, starting at the top of the hill and finishing on the colonnade itself. It is led by Tom, a long-standing Hampstead resident who has been a volunteer at Sir John Soane's Museum since 2016. Meet at the Whitestone Pond flagpole, which is stop 8 of this walk.",
+   "endDate": "2026-09-19T12:30:00+01:00",
+   "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+   "eventStatus": "https://schema.org/EventScheduled",
+   "isAccessibleForFree": true,
+   "location": {
+    "@id": "https://hampstead-heath.blankm.workers.dev/stops/the-hill-garden-and-pergola/#place"
+   },
+   "name": "Pergola Walking Tour",
+   "offers": {
+    "@type": "Offer",
+    "availability": "https://schema.org/InStock",
+    "price": "0",
+    "priceCurrency": "GBP",
+    "url": "https://programme.openhouse.org.uk/listings/2106"
+   },
+   "organizer": {
+    "@type": "Organization",
+    "name": "Open House Festival",
+    "url": "https://programme.openhouse.org.uk/"
+   },
+   "startDate": "2026-09-19T11:00:00+01:00",
+   "url": "https://programme.openhouse.org.uk/listings/2106"
   }
  ]
 }
@@ -723,6 +796,12 @@ footer p{margin:0 0 8px; max-width:70ch}
     <p>The problem was the material. You cannot raise several acres of ground without an enormous quantity of spoil, and spoil is expensive to buy and ruinous to cart. And then in nineteen oh seven the tube arrived in Hampstead, which meant men digging a tunnel a mile away and no idea what to do with what came out of it. Lever did the deal. The terrace you are walking on is the inside of Hampstead's hill, taken out of the ground to make the Northern line, and stacked up here.</p>
     <p>He kept extending it until he died in nineteen twenty five, at which point it was about two hundred and thirty metres of colonnade and nobody wanted the upkeep. It went to the public in nineteen sixty three and it has been gently falling apart ever since, which is precisely why it looks like this. Wisteria in the joints, no roof in places, and the best decayed-grandeur photograph in London.</p>
     <p>Free. Open daily from half past eight until dusk, and it is at its ridiculous best in the first two weeks of June.</p>
+    <div class="evt"><span class="lab">While the festival is on</span>
+      <p class="evt-when"><b>Pergola Walking Tour</b>, Open House Festival &#183; Sat 12 and Sat 19 September 2026, 11:00&#8211;12:30 &#183; meet at the Whitestone Pond flagpole, which is stop 8 of this walk.</p>
+      <p>A guided hour on the Pergola and Inverforth House, starting at the top of the hill and finishing on the colonnade itself. It is led by Tom, a long-standing Hampstead resident who has been a volunteer at Sir John Soane's Museum since 2016.</p>
+      <p>Free, but ticketed, and booking needs an Open House visitor account, which is also free. Note the several steep steps inside the Pergola; there is accessible parking at Jack Straw's car park, stop 11 of this walk.</p>
+      <p><a href="https://programme.openhouse.org.uk/listings/2106" rel="noopener">The listing, and how to book</a></p>
+    </div>
     <div class="walk"><span class="lab">Walk on</span><p>Back out to North End Way and turn left, north-west, for about seven minutes. The gates of Golders Hill Park are on your left, opposite the end of West Heath Avenue.</p></div>
     <p class="geo">51.56560, -0.18397 &#183; <a href="https://www.openstreetmap.org/?mlat=51.56560&amp;mlon=-0.18397#map=17/51.56560/-0.18397">where this is on a map</a></p>
   </div>

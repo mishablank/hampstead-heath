@@ -114,6 +114,30 @@ image file after it, so the whole set has to be re-rendered and re-fetched
 before the page will build. Do that on a branch: a half-renumbered `main`
 deploys a page whose photographs and audio all 404.
 
+## Dated things
+
+A stop can carry an `event`: something with a date on it happening at that
+place. The Pergola has one, the Open House Festival's guided tour of it.
+
+It is never spoken. A date cannot go into a recording that will not be re-cut
+when it passes, so the `event` text is printed on the page, written into
+`guide.md` and emitted as schema.org `Event` nodes, and the audio ignores it
+entirely. It is also the one block on the page that uses figures rather than
+words, for the same reason.
+
+`build.py` drops each date the morning after it has gone, and the whole block
+once the last one has, so a rebuild in October publishes no trace of a
+September tour. Nothing expires without a rebuild, though: the page is static,
+so a stale notice sits there until the next `--page` run.
+
+```python
+event=dict(name="Pergola Walking Tour", host="Open House Festival",
+           url="https://programme.openhouse.org.uk/listings/2106",
+           dates=["2026-09-12", "2026-09-19"], start="11:00", end="12:30",
+           meet="the Whitestone Pond flagpole, which is stop 8 of this walk",
+           body=["...", "..."])
+```
+
 ## Pictures
 
 Every track has one photograph, chosen to show the thing you are standing in

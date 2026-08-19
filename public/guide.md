@@ -188,6 +188,8 @@ The problem was the material. You cannot raise several acres of ground without a
 He kept extending it until he died in nineteen twenty five, at which point it was about two hundred and thirty metres of colonnade and nobody wanted the upkeep. It went to the public in nineteen sixty three and it has been gently falling apart ever since, which is precisely why it looks like this. Wisteria in the joints, no roof in places, and the best decayed-grandeur photograph in London.
 Free. Open daily from half past eight until dusk, and it is at its ridiculous best in the first two weeks of June.
 
+**Pergola Walking Tour** (Open House Festival), Sat 12 and Sat 19 September 2026, 11:00-12:30. Meet at the Whitestone Pond flagpole, which is stop 8 of this walk. A guided hour on the Pergola and Inverforth House, starting at the top of the hill and finishing on the colonnade itself. It is led by Tom, a long-standing Hampstead resident who has been a volunteer at Sir John Soane's Museum since 2016. Free, but ticketed, and booking needs an Open House visitor account, which is also free. Note the several steep steps inside the Pergola; there is accessible parking at Jack Straw's car park, stop 11 of this walk. [The listing, and how to book](https://programme.openhouse.org.uk/listings/2106)
+
 **Walk on.** Back out to North End Way and turn left, north-west, for about seven minutes. The gates of Golders Hill Park are on your left, opposite the end of West Heath Avenue.
 
 ### 10. Golders Hill Park
