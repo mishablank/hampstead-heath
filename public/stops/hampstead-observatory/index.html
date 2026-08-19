@@ -351,6 +351,17 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .walk .lab{color:var(--heath)}
 .walk p{margin:0; font-size:.94rem; color:var(--ink-2); max-width:none}
 
+/* the only block here with a date on it, and so the only one that can vanish
+   of its own accord. Brick rather than heath, because it is not the walk */
+.evt{
+  margin:20px 0 0; padding:12px 0 13px 16px; border-left:2px solid var(--brick);
+  display:grid; gap:6px; max-width:62ch;
+}
+.evt .lab{color:var(--brick)}
+.evt p{margin:0; font-size:.94rem; color:var(--ink-2); max-width:none}
+.evt .evt-when{color:var(--ink)}
+.evt a{color:inherit; text-decoration-color:var(--brick)}
+
 /* ---- colophon ------------------------------------------------------ */
 .colo{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px;
   background:var(--rule-soft); border:1px solid var(--rule-soft); margin-top:22px}
@@ -379,7 +390,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   body{font-size:18px; line-height:1.62}
   .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig,.acts{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
-  .walk p{font-size:1.02rem}
+  .walk p,.evt p{font-size:1.02rem}
   .wrap{padding-bottom:72px}
   /* titles matter more than a tidy single line on a narrow screen */
   .row{padding:11px 4px 11px 0; align-items:start}
@@ -393,12 +404,12 @@ footer p{margin:0 0 8px; max-width:70ch}
   .trk{display:block; padding:26px 0 28px}
   .tmark{float:left; margin:1px 12px 2px 0; padding-top:0}
   /* the eyebrow and the title ride beside the badge; everything after it clears */
-  .trk .play,.trk .shot,.trk .walk,.trk .sa{clear:left}
+  .trk .play,.trk .shot,.trk .walk,.trk .evt,.trk .sa{clear:left}
   /* on a stop page the badge has no heading to sit beside and repeats what the
      masthead just said, so it buys nothing and costs a line */
   .trk.solo .tmark{display:none}
   .tn{width:30px; height:30px; font-size:.95rem}
-  .tbody p,.shot,.walk,.play{max-width:none}
+  .tbody p,.shot,.walk,.evt,.play{max-width:none}
   .colo div{padding:15px 16px 17px}
   .bar{padding:8px 12px; padding-bottom:calc(8px + env(safe-area-inset-bottom))}
   .bseek::-webkit-slider-thumb{width:16px; height:16px}

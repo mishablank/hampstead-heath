@@ -476,7 +476,28 @@ dict(kind="high", n=6, title="The Hill Garden and Pergola",
 
 "Free. Open daily from half past eight until dusk, and it is at its "
 "ridiculous best in the first two weeks of June.",
-], walk=
+],
+     # Not spoken, and therefore not in the recording: a date cannot go into a
+     # track that will not be re-cut when it passes. Printed only, which is
+     # also why this is the one block on the page that uses figures.
+     event=dict(
+         name="Pergola Walking Tour",
+         host="Open House Festival",
+         url="https://programme.openhouse.org.uk/listings/2106",
+         dates=["2026-09-12", "2026-09-19"],
+         start="11:00", end="12:30",
+         meet="the Whitestone Pond flagpole, which is stop 8 of this walk",
+         body=[
+"A guided hour on the Pergola and Inverforth House, starting at the top of the "
+"hill and finishing on the colonnade itself. It is led by Tom, a long-standing "
+"Hampstead resident who has been a volunteer at Sir John Soane's Museum "
+"since 2016.",
+
+"Free, but ticketed, and booking needs an Open House visitor account, which is "
+"also free. Note the several steep steps inside the Pergola; there is "
+"accessible parking at Jack Straw's car park, stop 11 of this walk.",
+         ]),
+     walk=
 "Back out to North End Way and turn left, north-west, for about seven minutes. "
 "The gates of Golders Hill Park are on your left, opposite the end of West "
 "Heath Avenue."),
@@ -1829,6 +1850,17 @@ section.blk > h2 span{font-family:var(--font-label); text-transform:uppercase;
 .walk .lab{color:var(--heath)}
 .walk p{margin:0; font-size:.94rem; color:var(--ink-2); max-width:none}
 
+/* the only block here with a date on it, and so the only one that can vanish
+   of its own accord. Brick rather than heath, because it is not the walk */
+.evt{
+  margin:20px 0 0; padding:12px 0 13px 16px; border-left:2px solid var(--brick);
+  display:grid; gap:6px; max-width:62ch;
+}
+.evt .lab{color:var(--brick)}
+.evt p{margin:0; font-size:.94rem; color:var(--ink-2); max-width:none}
+.evt .evt-when{color:var(--ink)}
+.evt a{color:inherit; text-decoration-color:var(--brick)}
+
 /* ---- colophon ------------------------------------------------------ */
 .colo{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1px;
   background:var(--rule-soft); border:1px solid var(--rule-soft); margin-top:22px}
@@ -1857,7 +1889,7 @@ footer p{margin:0 0 8px; max-width:70ch}
   body{font-size:18px; line-height:1.62}
   .lab,.rn,.rd,.rc,.sn,.trk .sub,.shot figcaption,.sig,.acts{font-size:12.5px}
   .colo p,footer p,#mcap{font-size:1rem}
-  .walk p{font-size:1.02rem}
+  .walk p,.evt p{font-size:1.02rem}
   .wrap{padding-bottom:72px}
   /* titles matter more than a tidy single line on a narrow screen */
   .row{padding:11px 4px 11px 0; align-items:start}
@@ -1871,12 +1903,12 @@ footer p{margin:0 0 8px; max-width:70ch}
   .trk{display:block; padding:26px 0 28px}
   .tmark{float:left; margin:1px 12px 2px 0; padding-top:0}
   /* the eyebrow and the title ride beside the badge; everything after it clears */
-  .trk .play,.trk .shot,.trk .walk,.trk .sa{clear:left}
+  .trk .play,.trk .shot,.trk .walk,.trk .evt,.trk .sa{clear:left}
   /* on a stop page the badge has no heading to sit beside and repeats what the
      masthead just said, so it buys nothing and costs a line */
   .trk.solo .tmark{display:none}
   .tn{width:30px; height:30px; font-size:.95rem}
-  .tbody p,.shot,.walk,.play{max-width:none}
+  .tbody p,.shot,.walk,.evt,.play{max-width:none}
   .colo div{padding:15px 16px 17px}
   .bar{padding:8px 12px; padding-bottom:calc(8px + env(safe-area-inset-bottom))}
   .bseek::-webkit-slider-thumb{width:16px; height:16px}
@@ -2762,6 +2794,71 @@ LINKS = (("https://www.linkedin.com/in/mishablank/", "LinkedIn", LI_MARK),
          ("https://github.com/mishablank/", "GitHub", GH_MARK))
 
 
+def event_days(stop):
+    """The dates of a stop's event that are still ahead. A notice with a date
+    on it is worth less than nothing the morning after, so the build drops it
+    by itself rather than waiting for somebody to remember."""
+    ev = stop.get("event")
+    if not ev:
+        return []
+    today = datetime.date.today().isoformat()
+    return [d for d in ev["dates"] if d >= today]
+
+
+def event_when(days):
+    """["2026-09-12", "2026-09-19"] -> "Sat 12 and Sat 19 September 2026"."""
+    ds = [datetime.date.fromisoformat(d) for d in days]
+    if len({(d.year, d.month) for d in ds}) > 1:
+        return ", ".join("%s %d %s" % (d.strftime("%a"), d.day, d.strftime("%B %Y"))
+                         for d in ds)
+    parts = ["%s %d" % (d.strftime("%a"), d.day) for d in ds]
+    when = " and ".join([", ".join(parts[:-1]), parts[-1]]) if len(parts) > 1 else parts[0]
+    return "%s %s" % (when, ds[-1].strftime("%B %Y"))
+
+
+def event_block(stop, pad=""):
+    """The dated thing at this stop, printed but never spoken."""
+    days = event_days(stop)
+    if not days:
+        return ""
+    ev = stop["event"]
+    o = ['%s<div class="evt"><span class="lab">While the festival is on</span>' % pad,
+         '%s  <p class="evt-when"><b>%s</b>, %s &#183; %s, %s&#8211;%s &#183; meet at %s.</p>'
+         % (pad, esc(ev["name"]), esc(ev["host"]), esc(event_when(days)),
+            esc(ev["start"]), esc(ev["end"]), esc(ev["meet"]))]
+    o += ["%s  <p>%s</p>" % (pad, esc(t)) for t in ev["body"]]
+    o.append('%s  <p><a href="%s" rel="noopener">The listing, and how to book</a></p>'
+             % (pad, esc(ev["url"])))
+    o.append("%s</div>" % pad)
+    return "\n".join(o)
+
+
+def node_events(stop, location, page):
+    """The same dates again, for a machine. London is on BST in September, so
+    the offset is written rather than left to be guessed."""
+    days = event_days(stop)
+    if not days:
+        return []
+    ev = stop["event"]
+    here = url(page)
+    return [{"@type": "Event", "@id": "%s#event-%s" % (here, d),
+             "name": ev["name"],
+             "startDate": "%sT%s:00+01:00" % (d, ev["start"]),
+             "endDate": "%sT%s:00+01:00" % (d, ev["end"]),
+             "eventStatus": "https://schema.org/EventScheduled",
+             "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+             "url": ev["url"],
+             "description": "%s Meet at %s." % (ev["body"][0], ev["meet"]),
+             "location": location,
+             "organizer": {"@type": "Organization", "name": ev["host"],
+                           "url": "https://programme.openhouse.org.uk/"},
+             "isAccessibleForFree": True,
+             "offers": {"@type": "Offer", "price": "0", "priceCurrency": "GBP",
+                        "availability": "https://schema.org/InStock",
+                        "url": ev["url"]}}
+            for d in days]
+
+
 def share_urls(here, title):
     """Plain intent links - no vendor SDK, no script from either company, so the
     page still fetches nothing from anywhere. u= and text= are what they read."""
@@ -3068,6 +3165,12 @@ def graph_index(tracks, pics, total):
                   "numberOfEpisodes": len(tracks), "inLanguage": "en-GB",
                   "about": {"@id": ORIGIN + "/#heath"},
                   "image": url("cover.jpg")})
+    # anything dated, so the home page carries it and not only the stop page
+    for stop, _, _ in tracks:
+        if not stop["n"]:
+            continue
+        nodes += node_events(stop, {"@type": "TouristAttraction", "name": stop["title"],
+                                    "url": url(stop_path(stop))}, stop_path(stop))
     # the route, one node per format. Three DataDownloads of the same walk
     # rather than one, because a machine looking for a KML should be able to
     # find that it exists without first knowing that a GPX does.
@@ -3124,6 +3227,10 @@ def graph_stop(i, stop, fn, dur, pics, coords):
         nodes.append(img)
         place["image"] = {"@id": url(page) + "#image"}
         webpage["primaryImageOfPage"] = {"@id": url(page) + "#image"}
+    events = node_events(stop, {"@id": here + "#place"}, page)
+    if events:
+        nodes += events
+        place["event"] = [{"@id": e["@id"]} for e in events]
     return nodes
 
 
@@ -3276,6 +3383,9 @@ def render(tracks):
              esc(stop["where"]), i, esc(stop["title"]), clock(dur)))
         w(figure(i, stop, pics))
         w("\n".join("<p>%s</p>" % esc(p) for p in stop["body"]))
+        evt = event_block(stop)
+        if evt:
+            w(evt)
         if stop.get("walk"):
             w('<div class="walk"><span class="lab">Walk on</span><p>%s</p></div>'
               % esc(stop["walk"]))
@@ -3444,6 +3554,9 @@ def stop_page(i, stop, fn, dur, tracks, pics, coords):
         w("    " + fig.replace('src="images/', 'src="%simages/' % up))
 
     w("\n".join("    <p>%s</p>" % esc(p) for p in stop["body"]))
+    evt = event_block(stop, "    ")
+    if evt:
+        w(evt)
     if stop.get("walk"):
         w('    <div class="walk"><span class="lab">Walk on</span><p>%s</p></div>'
           % esc(stop["walk"]))
@@ -3732,6 +3845,13 @@ def guide_md(tracks):
         if stop["n"]:
             o += ["Page: %s" % url(stop_path(stop)), ""]
         o += list(stop["body"]) + [""]
+        days = event_days(stop)
+        if days:
+            ev = stop["event"]
+            o += ["**%s** (%s), %s, %s-%s. Meet at %s. %s [The listing, and how to "
+                  "book](%s)"
+                  % (ev["name"], ev["host"], event_when(days), ev["start"], ev["end"],
+                     ev["meet"], " ".join(ev["body"]), ev["url"]), ""]
         if stop.get("walk"):
             o += ["**Walk on.** %s" % stop["walk"], ""]
     return "\n".join(o)
